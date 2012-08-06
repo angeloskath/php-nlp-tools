@@ -2,23 +2,29 @@
 
 include('../autoloader.php');
 
-$text = file_get_contents('test-doc');
+$text = file_get_contents('token-test');
 $tokenizer = new NlpTools\WhitespaceTokenizer();
 $tokens = $tokenizer->tokenize($text);
 
 $feats = new NlpTools\FunctionFeatures();
-$feats->add(function ($class, $tokens) {
-	return current($tokens);
+$feats->add(function ($class,NlpTools\Document $d) {
+	return current($d->getDocumentData());
 });
-$feats->add(function ($class, $tokens) {
-	$w = current($tokens);
+$feats->add(function ($class,NlpTools\Document $d) {
+	$w = current($d->getDocumentData());
 	if (ctype_upper($w[0]))
 		return "isCapitalized";
 });
 
-do
+$documents = array();
+foreach ($tokens as $index=>$token)
 {
-	echo current($tokens)." - [".implode(',',$feats->getFeatureArray('O',$tokens))."]\n";
-} while (next($tokens))
+	$documents[$index] = new NlpTools\WordDocument($tokens,$index,5);
+}
+
+foreach ($documents as $d)
+{
+	echo '['.implode(',',$feats->getFeatureArray('0',$d)).']',PHP_EOL;
+}
 
 ?>
