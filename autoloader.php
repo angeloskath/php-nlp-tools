@@ -6,10 +6,14 @@
  
  spl_autoload_register( function ($name) {
 	 static $files = array(
+		"NlpTools\FeatureBasedNB"=>"/models/feature_based_nb.php",
 		"NlpTools\LinearModel"=>"/models/linear_model.php",
+		"NlpTools\MultinomialNBModel"=>"/models/multinomial_nb.php",
 		"NlpTools\Maxent"=>"/models/maxent.php",
+		"NlpTools\DataAsFeatures"=>"/feature_factories/data_as_features.php",
 		"NlpTools\FeatureFactory"=>"/feature_factories/feature_factory.php",
 		"NlpTools\FunctionFeatures"=>"/feature_factories/callables_as_features.php",
+		"NlpTools\MultinomialNBClassifier"=>"/classifier/multinomial_nb_classifier.php",
 		"NlpTools\Classifier"=>"/classifier/classifier.php",
 		"NlpTools\FeatureBasedLinearClassifier"=>"/classifier/feature_based_linear_classifier.php",
 		"NlpTools\FeatureBasedLinearOptimizer"=>"/optimizers/feature_based_optimizer.php",
