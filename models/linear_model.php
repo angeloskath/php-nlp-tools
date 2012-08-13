@@ -16,6 +16,10 @@ class LinearModel
 		if (!isset($this->l[$feature])) return 0;
 		else return $this->l[$feature];
 	}
+	
+	public function getWeights() {
+		return $this->l;
+	}
 }
 
 ?>

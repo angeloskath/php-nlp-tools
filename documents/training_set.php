@@ -104,7 +104,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
 
 	// implementation of \Countable interface
 	public function count() {
-		return count($documents);
+		return count($this->documents);
 	}
 }
 
