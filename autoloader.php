@@ -18,6 +18,7 @@
 		"NlpTools\FeatureBasedLinearClassifier"=>"/classifier/feature_based_linear_classifier.php",
 		"NlpTools\FeatureBasedLinearOptimizer"=>"/optimizers/feature_based_optimizer.php",
 		"NlpTools\MaxentGradientDescent"=>"/optimizers/maxent_grad_descent.php",
+		"NlpTools\ExternalMaxentOptimizer"=>"/optimizers/external_maxent_optimizer.php",
 		"NlpTools\MaxentOptimizer"=>"/optimizers/maxent.php",
 		"NlpTools\GradientDescentOptimizer"=>"/optimizers/grad_descent.php",
 		"NlpTools\Tokenizer"=>"/tokenizer/tokenizer.php",
