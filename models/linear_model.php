@@ -5,6 +5,12 @@ namespace NlpTools;
 /*
  * This class represents a linear model of the following form
  * f(x_vec) = l1*x1 + l2*x2 + l3*x3 ...
+ * 
+ * Maybe the name is a bit off. What is really meant is that models of
+ * this type provide a set of weights that will be used by the classifier
+ * (probably through a linear combination) to decide the class of a
+ * given document.
+ * 
  */
 class LinearModel
 {

@@ -9,7 +9,7 @@ namespace NlpTools;
  * a language with great libraries (ex.: Matlab)
  * 
  * Output a json array that contains all the necessary information to
- * train the model and determine the weights that minimize the
+ * train the model and determine the weights that maximize the
  * conditional log likelihood of the training data
  * 
  * The array has one element for each training document. The element is

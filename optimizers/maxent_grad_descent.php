@@ -66,6 +66,20 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 		$this->denominators = array();
 		foreach ($feature_array as $offset=>$doc)
 		{
+			$numerator = array_fill_keys(array_keys($doc),0.0);
+			$denominator = 0.0;
+			foreach ($doc as $cl=>$f)
+			{
+				if (!is_array($f)) continue;
+				$tmp = 0.0;
+				foreach ($f as $i)
+				{
+					$tmp += $l[$i];
+				}
+				$tmp = exp($tmp);
+				$numerator[$cl] += $tmp;
+				$denominator += $tmp;
+			}
 			foreach ($doc as $class=>$features)
 			{
 				if (!is_array($features)) continue;
@@ -75,24 +89,7 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 					{
 						$this->denominators[$fi] = 0;
 					}
-					$numerator = 0.0;
-					$denominator = 0.0;
-					foreach ($doc as $cl=>$f)
-					{
-						if (!is_array($f)) continue;
-						$tmp = 0.0;
-						foreach ($f as $i)
-						{
-							$tmp += $l[$i];
-						}
-						$tmp = exp($tmp);
-						if ($cl==$class)
-						{
-							$numerator += $tmp;
-						}
-						$denominator += $tmp;
-					}
-					$this->denominators[$fi] += $numerator/$denominator;
+					$this->denominators[$fi] += $numerator[$class]/$denominator;
 				}
 			}
 		}

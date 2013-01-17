@@ -38,7 +38,7 @@ foreach ($tokens as $index=>$token)
 }
 
 $maxent = new Maxent(array());
-$maxent->train($feats, $s,new MaxentGradientDescent(0.01,1,10));
+$maxent->train($feats, $s,new MaxentGradientDescent(0.01,1,100000));
 
 $maxent->dumpWeights();
 

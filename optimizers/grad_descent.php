@@ -16,6 +16,9 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizer
 	// array that holds the current fprime
 	protected $fprime_vector;
 	
+	// report the improvement
+	protected $verbose=2;
+	
 	public function __construct($precision=0.001, $step=0.1, $maxiter = -1) {
 		$this->precision = $precision;
 		$this->step = $step;
@@ -84,8 +87,24 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizer
 				}
 			}
 			//fprintf(STDERR,"%f\n",microtime(true)-$start);
+			if ($this->verbose>0)
+				$this->reportProgress($itercount);
 		}
 		return $l;
+	}
+	
+	public function reportProgress($itercount) {
+		if ($itercount == 1)
+		{
+			echo "#\t|Fprime|\n------------------\n";
+		}
+		$norm = 0;
+		foreach ($this->fprime_vector as $fprime_i_val)
+		{
+			$norm += $fprime_i_val*$fprime_i_val;
+		}
+		$norm = sqrt($norm);
+		printf("%d\t%.3f\n",$itercount,$norm);
 	}
 }
 
