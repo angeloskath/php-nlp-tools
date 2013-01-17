@@ -180,12 +180,28 @@ $model->train($ff,$tset,$optimizer);
 ```
 
 After we have trained our model, in order to use it for classification
-we have to use it with a compatible classifier. In every possible
-parameter types and interfaces are explicitly declared in order to
-ensure that only compatible types will be used.
+we have to use it with a compatible classifier. Wherever possible
+parameter types are explicitly declared in order to ensure that only
+compatible types will be used (Which means that if not sure one can
+check what type of model does Maxent implement and then use any
+classifier that accepts that model as a parameter).
 
-Maxent is a linear model so we will use the FeatureBasedLinearClassifier.
-We also pass the feature factory to the classifier.
+Maxent creates a set of weights for each feature, the linear
+combination of the features with those weights decides the class of
+the document so we will use the FeatureBasedLinearClassifier. We also
+pass the feature factory to the classifier so that it can recreate
+which features would fire for a given class.
+
+Let's define some stuff:
+
+* _ff(d,c)_ is the feature factory function and returns a vector with
+   either 0 or 1 for each feature
+* _w_ is our model which is a vector of real numbers and the same size
+   as the one returned by the _ff(d,c)_ . It is calculated during
+   training.
+
+So the classification comes down to _argmax<sub>c</sub>(ff(d,c) • w)_
+where • denotes the inner product of two vectors.
 
 ```php
 $cls = new NlpTools\FeatureBasedLinearClassifier($ff,$model);
