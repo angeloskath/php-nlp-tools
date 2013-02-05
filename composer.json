@@ -1,0 +1,23 @@
+{
+	"name": "nlp-tools/nlp-tools",
+	"description": "NlpTools is a set of php 5.3+ classes for beginner to semi advanced natural language processing work.",
+	"keywords": ["nlp","machine learning"],
+	"license": "WTFPL",
+	"authors": [
+		{
+			"name": "Angelos Katharopoulos",
+			"email": "angelos@yourse.gr"
+		}
+	],
+	"require": {
+		"php": ">=5.3"
+	},
+	"autoload": {
+		"classmap": ["."]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
+}
