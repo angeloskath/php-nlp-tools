@@ -11,8 +11,9 @@
 include ('../../../autoloader.php');
 include('other_php_porter_stemmer.php');
 
+use NlpTools\Stemmers\PorterStemmer as OurPorterStemmer;
 
-$stemmer = new NlpTools\PorterStemmer();
+$stemmer = new OurPorterStemmer();
 $wordlist = file('words.txt',FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
 
 $start = microtime(true);

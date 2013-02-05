@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Documents;
 
 /*
  * A TrainingDocument is a document that "decorates" any other document

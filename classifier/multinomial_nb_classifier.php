@@ -1,6 +1,10 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Classifiers;
+
+use \NlpTools\Documents\Document;
+use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\Models\MultinomialNBModel;
 
 /*
  * Use a multinomia NB model to classify a document

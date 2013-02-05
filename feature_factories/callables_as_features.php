@@ -1,6 +1,8 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\FeatureFactories;
+
+use \NlpTools\Documents\Document;
 
 /*
  * An implementation of FeatureFactory that takes any number of callables

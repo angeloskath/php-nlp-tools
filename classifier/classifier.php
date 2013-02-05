@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Classifiers;
 
 interface Classifier
 {
@@ -12,7 +12,7 @@ interface Classifier
 	 * @param $d A Document
 	 * @return string A class
 	 */
-	public function classify(array $classes, Document $d);
+	public function classify(array $classes, \NlpTools\Documents\Document $d);
 }
 
 ?>

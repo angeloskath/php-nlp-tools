@@ -3,7 +3,9 @@
 include ('../../../autoloader.php');
 include ('../../testing.php');
 
-$sim = new NlpTools\CosineSimilarity();
+use NlpTools\Similarity\CosineSimilarity;
+
+$sim = new CosineSimilarity();
 
 $A = array(1,2,3);
 $A2 = array(1,2,3,1,2,3);

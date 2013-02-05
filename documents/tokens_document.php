@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Documents;
 
 /*
  * Represents a bag of words (tokens) document.

@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Documents;
 
 /*
  * A collection of TrainingDocument objects. It implements many built
@@ -82,17 +82,17 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
 				return key($this->documents);
 			default:
 				// we should never be here
-				throw new Exception("Undefined type as key");
+				throw new \Exception("Undefined type as key");
 		}
 	}
 	// === Implementation of \Iterator interface finished ===
 	
 	// ====== Implementation of \ArrayAccess interface =========
 	public function offsetSet($key,$value) {
-		throw new Exception("Shouldn't add documents this way, add them through addDocument()");
+		throw new \Exception("Shouldn't add documents this way, add them through addDocument()");
 	}
 	public function offsetUnset($key) {
-		throw new Exception("Cannot unset any document");
+		throw new \Exception("Cannot unset any document");
 	}
 	public function offsetGet($key) {
 		return $this->documents[$key];

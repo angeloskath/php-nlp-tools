@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Tokenizers;
 
 /*
  * Simple white space tokenizer. Breaks either on whitespace or on word

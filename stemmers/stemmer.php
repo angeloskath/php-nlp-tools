@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Stemmers;
 
 /*
  * http://en.wikipedia.org/wiki/Stemming

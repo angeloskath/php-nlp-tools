@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Optimizers;
 
 interface FeatureBasedLinearOptimizer
 {

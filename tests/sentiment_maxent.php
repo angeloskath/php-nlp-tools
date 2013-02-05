@@ -25,10 +25,19 @@
 // include the autoloader
 include("../autoloader.php");
 
+use NlpTools\Tokenizers\WhitespaceTokenizer;
+use NlpTools\FeatureFactories\FunctionFeatures;
+use NlpTools\Documents\Document;
+use NlpTools\Documents\TokensDocument;
+use NlpTools\Documents\TrainingSet;
+use NlpTools\Optimizers\ExternalMaxentOptimizer;
+use NlpTools\Models\Maxent;
+use NlpTools\Classifiers\FeatureBasedLinearClassifier;
+
 // create needed reusable objects, a tokenizer and a feature factory
-$tok = new NlpTools\WhitespaceTokenizer();
-$ff = new NlpTools\FunctionFeatures();
-$ff->add(function ($class, NlpTools\Document $d) {
+$tok = new WhitespaceTokenizer();
+$ff = new FunctionFeatures();
+$ff->add(function ($class, Document $d) {
 	$r = array();
 	foreach ($d->getDocumentData() as $tok)
 		$r[] = $class.$tok;
@@ -39,10 +48,10 @@ $ff->add(function ($class, NlpTools\Document $d) {
 //  1. an empty training set
 //  2. an optimizer
 //  3. an empty model
-$tset = new NlpTools\TrainingSet();
+$tset = new TrainingSet();
 $OPTIMIZER_PATH = isset($_ENV["GD_OPTIMIZER"]) ? $_ENV["GD_OPTIMIZER"] : 'gradient-descent';
-$optimizer = new NlpTools\ExternalMaxentOptimizer($OPTIMIZER_PATH);
-$model = new NlpTools\Maxent(array());
+$optimizer = new ExternalMaxentOptimizer($OPTIMIZER_PATH);
+$model = new Maxent(array());
 
 // argv[1] and argv[2] are paths to files that contain the paths
 // to the actual documents.
@@ -62,7 +71,7 @@ foreach ($train as $f)
 	}
 	$tset->addDocument(
 			$class,
-			new NlpTools\TokensDocument($tok->tokenize(file_get_contents($f)))
+			new TokensDocument($tok->tokenize(file_get_contents($f)))
 		);
 }
 
@@ -70,7 +79,7 @@ foreach ($train as $f)
 $model->train($ff,$tset,$optimizer);
 
 // to use the model we need a classifier
-$cls = new NlpTools\FeatureBasedLinearClassifier($ff,$model);
+$cls = new FeatureBasedLinearClassifier($ff,$model);
 
 // evaluate the model
 $correct = 0;
@@ -85,7 +94,7 @@ foreach ($test as $f)
 	{
 		$class = "pos";
 	}
-	$doc = new NlpTools\TokensDocument($tok->tokenize(file_get_contents($f)));
+	$doc = new TokensDocument($tok->tokenize(file_get_contents($f)));
 	$predicted = $cls->classify(array("pos","neg"),$doc);
 	if ($predicted == $class)
 	{

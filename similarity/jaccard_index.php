@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Similarity;
 
 /*
  * http://en.wikipedia.org/wiki/Jaccard_index

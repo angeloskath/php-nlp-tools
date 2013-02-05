@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Documents;
 
 /*
  * A Document that represents a single word but with a context of a

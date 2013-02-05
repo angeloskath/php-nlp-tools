@@ -3,7 +3,9 @@
 include ('../../../autoloader.php');
 include ('../../testing.php');
 
-$sim = new NlpTools\Simhash(64); //md5 is used by default
+use NlpTools\Similarity\Simhash;
+
+$sim = new Simhash(64); //md5 is used by default
 
 $A = array(1,2,3);
 $B = array(1,2,3,4,5,6);

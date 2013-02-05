@@ -10,7 +10,9 @@ include ('../../../autoloader.php');
 $words = fopen('words.txt','r');
 $stems = fopen('stems.txt','r');
 
-$stemmer = new NlpTools\PorterStemmer();
+use NlpTools\Stemmers\PorterStemmer;
+
+$stemmer = new PorterStemmer();
 
 while (!feof($words))
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Documents;
 
 /*
  * A Document is a representation of a Document to be classified.

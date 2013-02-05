@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Models;
 
 /*
  * This class represents a linear model of the following form

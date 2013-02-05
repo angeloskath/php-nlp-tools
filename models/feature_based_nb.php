@@ -1,6 +1,9 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Models;
+
+use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\Documents\TrainingSet;
 
 /*
  * Implement a MultinomialNBModel by training on a TrainingSet with a
@@ -32,6 +35,7 @@ class FeatureBasedNB implements MultinomialNBModel
 	public function getPrior($class) {
 		return $this->priors[$class];
 	}
+	
 	/*
 	 * Return the conditional probability of a term for a given class.
 	 * 
@@ -64,13 +68,51 @@ class FeatureBasedNB implements MultinomialNBModel
 	 * @return void
 	 */
 	public function train(FeatureFactory $ff, TrainingSet $tset, $a_smoothing=1) {
-		$classSet = $tset->getClassSet();
+		$class_set = $tset->getClassSet();
 		$ndocs = 0;
-		$ndocs_per_class = array_fill_keys($classSet,0);
-		$tc_per_class = array_fill_keys($classSet,0);
-		$tc = array_fill_keys($classSet,array());
+		$ndocs_per_class = array_fill_keys($class_set,0);
+		$termcount_per_class = array_fill_keys($class_set,0);
+		$termcount = array_fill_keys($class_set,array());
 		$voc = array();
 		
+		$this->countTrainingSet(
+								$ff,
+								$tset,
+								$termcount_per_class,
+								$termcount,
+								$ndocs_per_class,
+								$voc,
+								$ndocs
+							);
+		
+		$voccount = count($voc);
+		
+		$this->computeProbabilitiesFromCounts(
+									$class_set,
+									$termcount_per_class,
+									$termcount,
+									$ndocs_per_class,
+									$ndocs,
+									$voccount,
+									$a_smoothing
+								);
+	}
+	
+	/*
+	 * Count all the features for each document. All parameters are passed
+	 * by reference and they are filled in this function. Useful for not
+	 * making copies of big arrays.
+	 * 
+	 * @param FeatureFactory $ff A feature factory to create the features for each document in the set
+	 * @param TrainingSet $tset The training set (collection of labeled documents)
+	 * @param array $termcount_per_class The count of occurences of each feature in each class
+	 * @param array $termcount The total count of occurences of each term
+	 * @param array $ndocs_per_class The total number of documents per class
+	 * @param array $voc A set of the found features
+	 * @param int $ndocs The number of documents
+	 * @return void
+	 * */
+	protected function countTrainingSet(FeatureFactory $ff, TrainingSet $tset, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, array &$voc, &$ndocs) {
 		foreach ($tset as $tdoc)
 		{
 			$ndocs++;
@@ -82,30 +124,46 @@ class FeatureBasedNB implements MultinomialNBModel
 				if (!isset($voc[$f]))
 					$voc[$f] = 0;
 				
-				$tc_per_class[$c]++;
-				if (isset($tc[$c][$f]))
-					$tc[$c][$f]++;
+				$termcount_per_class[$c]++;
+				if (isset($termcount[$c][$f]))
+					$termcount[$c][$f]++;
 				else
-					$tc[$c][$f] = 1;
+					$termcount[$c][$f] = 1;
 			}
-		}
-		
-		$voccount = count($voc);
-		$denom_smoothing = $a_smoothing*$voccount;
-		foreach ($classSet as $class)
-		{
-			$this->priors[$class] = $ndocs_per_class[$class] / $ndocs;
-			foreach ($tc[$class] as $term=>$count)
-			{
-				$this->condprob[$term][$class] = ($count + $a_smoothing) / ($tc_per_class[$class] + $denom_smoothing);
-			}
-		}
-		foreach ($classSet as $class)
-		{
-			$this->unknown[$class] = $a_smoothing / ($tc_per_class[$class] + $denom_smoothing);
 		}
 	}
 	
+	/*
+	 * Compute the probabilities given the counts of the features in the
+	 * training set.
+	 * 
+	 * @param array $class_set Just the array that contains the classes
+	 * @param array $termcount_per_class The count of occurences of each feature in each class
+	 * @param array $termcount The total count of occurences of each term
+	 * @param array $ndocs_per_class The total number of documents per class
+	 * @param int $ndocs The total number of documents
+	 * @param int $voccount The total number of features found
+	 * @return void
+	 * */
+	protected function computeProbabilitiesFromCounts(array &$class_set, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, $ndocs, $voccount, $a_smoothing=1) {
+		$denom_smoothing = $a_smoothing*$voccount;
+		foreach ($class_set as $class)
+		{
+			$this->priors[$class] = $ndocs_per_class[$class] / $ndocs;
+			foreach ($termcount[$class] as $term=>$count)
+			{
+				$this->condprob[$term][$class] = ($count + $a_smoothing) / ($termcount_per_class[$class] + $denom_smoothing);
+			}
+		}
+		foreach ($class_set as $class)
+		{
+			$this->unknown[$class] = $a_smoothing / ($termcount_per_class[$class] + $denom_smoothing);
+		}
+	}
+	
+	/*
+	 * Just save the probabilities for reuse
+	 * */
 	public function __sleep() {
 		return array('priors','condprob','unknown');
 	}

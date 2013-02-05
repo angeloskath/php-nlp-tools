@@ -1,6 +1,8 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\FeatureFactories;
+
+use \NlpTools\Documents\Document;
 
 class DataAsFeatures implements FeatureFactory
 {

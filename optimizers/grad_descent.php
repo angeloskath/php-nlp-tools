@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Optimizers;
 
 /*
  * Implements gradient descent with fixed step.

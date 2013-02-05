@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Tokenizers;
 
 /*
  * Simple white space tokenizer.

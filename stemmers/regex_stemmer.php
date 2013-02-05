@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Stemmers;
 
 /*
  * This stemmer removes affixes according to a regular expression.

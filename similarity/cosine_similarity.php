@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Similarity;
 
 /*
  * Given two vectors compute cos(theta) where theta is the angle

@@ -1,6 +1,10 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Models;
+
+use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\Documents\TrainingSet;
+use \NlpTools\Optimizers\MaxentOptimizer;
 
 class Maxent extends LinearModel
 {
@@ -87,7 +91,7 @@ class Maxent extends LinearModel
 	 * 	result += log( $this->P(..., ..., ...) ) for every doc in TrainingSet
 	 */
 	public function CLogLik(TrainingSet $tset,FeatureFactory $ff) {
-		throw new Exception("Unimplemented");
+		throw new \Exception("Unimplemented");
 	}
 
 	/*

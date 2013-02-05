@@ -2,7 +2,9 @@
 
 include ('../../../autoloader.php');
 
-$sim = new NlpTools\Simhash(64);
+use NlpTools\Similarity\Simhash;
+
+$sim = new Simhash(64);
 $A = array(1,2,3);
 
 $start = microtime(true);

@@ -1,6 +1,10 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Classifiers;
+
+use \NlpTools\Documents\Document;
+use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\Models\LinearModel;
 
 /*
  * Classify using a linear model. A model that assigns a weight l for

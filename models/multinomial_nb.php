@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Models;
 
 /*
  * Interface that describes a NB model.

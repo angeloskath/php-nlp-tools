@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Similarity;
 
 /*
  * Simhash is an implementation of the locality sensitive hash function

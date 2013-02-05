@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Optimizers;
 
 /*
  * Implement a gradient descent algorithm that maximizes the conditional

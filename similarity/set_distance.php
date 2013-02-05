@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Similarity;
 
 /*
  * SetDistance should return a number proportional to how dissimilar

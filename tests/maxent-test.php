@@ -1,8 +1,14 @@
 <?php
 
-namespace NlpTools;
-
 include('../autoloader.php');
+
+use NlpTools\Documents\Document;
+use NlpTools\Documents\TrainingSet;
+use NlpTools\Documents\WordDocument;
+use NlpTools\FeatureFactories\FunctionFeatures;
+use NlpTools\Models\Maxent;
+use NlpTools\Optimizers\MaxentGradientDescent;
+use NlpTools\Classifiers\FeatureBasedLinearClassifier;
 
 $tokens = array();
 $classes = array();

@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Stemmers;
 
 /*
  * Copyright 2013 Katharopoulos Angelos <katharas@gmail.com>

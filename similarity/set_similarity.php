@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Similarity;
 
 /*
  * Set similarity should return a number that is proportional to how

@@ -1,6 +1,6 @@
 <?php
 
-namespace NlpTools;
+namespace NlpTools\Optimizers;
 
 /*
  * This class enables the use of a program written in a different

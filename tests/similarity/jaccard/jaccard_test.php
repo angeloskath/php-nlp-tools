@@ -3,7 +3,9 @@
 include ('../../../autoloader.php');
 include ('../../testing.php');
 
-$sim = new NlpTools\JaccardIndex();
+use NlpTools\Similarity\JaccardIndex;
+
+$sim = new JaccardIndex();
 
 $A = array(1,2,3);
 $B = array(1,2,3,4,5,6);
