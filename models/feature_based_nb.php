@@ -52,6 +52,46 @@ class FeatureBasedNB implements MultinomialNBModel
 	}
 	
 	/*
+	 * Train on the given set and fill the model's variables. Use the
+	 * training context provided to update the counts as if the training
+	 * set was appended to the previous one that provided the context.
+	 * 
+	 * It can be used for incremental training. It should *not* be used
+	 * with the same training set twice.
+	 * 
+	 * @param array $train_ctx The previous training context
+	 * @param FeatureFactory $ff A feature factory to compute features from a training document
+	 * @param TrainingSet The training set
+	 * @param $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
+	 * @return array Return a training context to be used for further incremental training,
+	 *               although this is not necessary since the changes also happen in place
+	 * */
+	public function train_with_context(array &$train_ctx, FeatureFactory $ff, TrainingSet $tset, $a_smoothing=1) {
+		$this->countTrainingSet(
+								$ff,
+								$tset,
+								$train_ctx['termcount_per_class'],
+								$train_ctx['termcount'],
+								$train_ctx['ndocs_per_class'],
+								$train_ctx['voc'],
+								$train_ctx['ndocs']
+							);
+		
+		$voccount = count($train_ctx['voc']);
+		
+		$this->computeProbabilitiesFromCounts(
+									$tset->getClassSet(),
+									$train_ctx['termcount_per_class'],
+									$train_ctx['termcount'],
+									$train_ctx['ndocs_per_class'],
+									$train_ctx['ndocs'],
+									$voccount,
+									$a_smoothing
+								);
+		return $train_ctx;
+	}
+	
+	/*
 	 * Train on the given set and fill the models variables
 	 * 
 	 * priors[c] = NDocs[c]/NDocs
@@ -65,37 +105,20 @@ class FeatureBasedNB implements MultinomialNBModel
 	 * @param FeatureFactory A feature factory to compute features from a training document
 	 * @param TrainingSet The training set
 	 * @param $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
-	 * @return void
+	 * @return array Return a training context to be used for incremental training
 	 */
 	public function train(FeatureFactory $ff, TrainingSet $tset, $a_smoothing=1) {
 		$class_set = $tset->getClassSet();
-		$ndocs = 0;
-		$ndocs_per_class = array_fill_keys($class_set,0);
-		$termcount_per_class = array_fill_keys($class_set,0);
-		$termcount = array_fill_keys($class_set,array());
-		$voc = array();
 		
-		$this->countTrainingSet(
-								$ff,
-								$tset,
-								$termcount_per_class,
-								$termcount,
-								$ndocs_per_class,
-								$voc,
-								$ndocs
-							);
+		$ctx = array(
+			'termcount_per_class'=>array_fill_keys($class_set,0),
+			'termcount'=>array_fill_keys($class_set,array()),
+			'ndocs_per_class'=>array_fill_keys($class_set,0),
+			'voc'=>array(),
+			'ndocs'=>0
+		);
 		
-		$voccount = count($voc);
-		
-		$this->computeProbabilitiesFromCounts(
-									$class_set,
-									$termcount_per_class,
-									$termcount,
-									$ndocs_per_class,
-									$ndocs,
-									$voccount,
-									$a_smoothing
-								);
+		return $this->train_with_context($ctx,$ff,$tset,$a_smoothing);
 	}
 	
 	/*
