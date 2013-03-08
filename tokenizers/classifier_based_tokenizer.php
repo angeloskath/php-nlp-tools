@@ -3,6 +3,7 @@
 namespace NlpTools\Tokenizers;
 
 use \NlpTools\Classifiers\Classifier;
+use \NlpTools\Documents\WordDocument;
 
 /*
  * A tokenizer that uses a classifier (of any type) to determine if
