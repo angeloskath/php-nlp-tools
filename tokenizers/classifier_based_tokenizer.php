@@ -50,7 +50,10 @@ class ClassifierBasedTokenizer implements Tokenizer
 	
 	protected $classifier;
 	
-	public function __construct(Classifier $cls, Tokenizer $tok=null) {
+	// used when joining the tokens into one
+	protected $sep;
+	
+	public function __construct(Classifier $cls, Tokenizer $tok=null,$sep=' ') {
 		if ($tok == null)
 		{
 			$this->tok = new WhitespaceAndPunctuationTokenizer();
@@ -60,6 +63,7 @@ class ClassifierBasedTokenizer implements Tokenizer
 			$this->tok  = $tok;
 		}
 		$this->classifier = $cls;
+		$this->sep = $sep;
 	}
 	
 	/*
@@ -87,14 +91,14 @@ class ClassifierBasedTokenizer implements Tokenizer
 		
 		// merge O and EOW into real tokens
 		$realtokens = array();
-		$currentToken = '';
+		$currentToken = array();
 		foreach ($tokens as $offset=>$tok)
 		{
-			$currentToken .= $tok;
+			$currentToken[] = $tok;
 			if ($tags[$offset] == self::EOW)
 			{
-				$realtokens[] = $currentToken;
-				$currentToken = '';
+				$realtokens[] = implode($this->sep,$currentToken);
+				$currentToken = array();
 			}
 		}
 		
