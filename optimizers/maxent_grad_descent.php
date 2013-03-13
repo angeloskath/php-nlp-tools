@@ -2,11 +2,12 @@
 
 namespace NlpTools\Optimizers;
 
-/*
+/**
  * Implement a gradient descent algorithm that maximizes the conditional
  * log likelihood of the training data.
  * 
  * See page 24 - 28 of http://nlp.stanford.edu/pubs/maxent-tutorial-slides.pdf
+ * @see NlpTools\Models\Maxent
  */
 class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOptimizer
 {
@@ -16,13 +17,12 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 	// depend on the weights
 	protected $denominators;
 	
-	/*
+	/**
 	 * We initialize all weight for any feature we find to 0. We also
 	 * compute the empirical expectation (the count) for each feature in
 	 * the training data (which of course remains constant for a
 	 * specific set of data).
 	 * 
-	 * name: initParameters
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void
@@ -52,12 +52,11 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 		}
 	}
 	
-	/*
+	/**
 	 * Compute the denominators which is the predicted expectation of
 	 * each feature given a set of weights L and a set of features for
 	 * each document for each class.
 	 * 
-	 * name: prepareFprime
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void
@@ -95,7 +94,7 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 		}
 	}
 	
-	/*
+	/**
 	 * The partial Fprime for each i is
 	 * empirical expectation - predicted expectation . We need to
 	 * maximize the CLogLik (CLogLik is the f whose Fprime we calculate)
@@ -103,7 +102,6 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
 	 * 
 	 * See page 28 of http://nlp.stanford.edu/pubs/maxent-tutorial-slides.pdf
 	 * 
-	 * name: Fprime
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void

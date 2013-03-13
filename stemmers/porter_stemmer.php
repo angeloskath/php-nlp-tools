@@ -2,7 +2,7 @@
 
 namespace NlpTools\Stemmers;
 
-/*
+/**
  * Copyright 2013 Katharopoulos Angelos <katharas@gmail.com>
  * 
  * This class implements the Porter stemming algorithm. It is almost a
@@ -18,13 +18,13 @@ namespace NlpTools\Stemmers;
  * The result is a bit more than 25% faster algorithm with php 5.3 (not
  * that much but since I wrote I thought I'd keep it).
  * 
- * */
+ */
 class PorterStemmer extends Stemmer
 {
 	// isset is faster than switch in php even for one character switches
 	protected static $vowels = array('a'=>'a','e'=>'e','i'=>'i','o'=>'o','u'=>'u');
 	
-	/*
+	/**
 	 * Quoting from the original C implementation.
 	 * 
 	 *	> The main part of the stemming algorithm starts here. b is a buffer
@@ -41,7 +41,7 @@ class PorterStemmer extends Stemmer
 	 * of the string and b is changed so at the end b[0:k] will hold
 	 * the stem.
 	 * 
-	 * */
+	 */
 	private $b;
 	private $k,$j;
 	
@@ -410,11 +410,11 @@ class PorterStemmer extends Stemmer
 			$this->k--;
 	}
 
-	/*
+	/**
 	 * The word must be a lower case one byte per character string (in
 	 * English).
 	 * 
-	 * */
+	 */
 	public function stem($word) {
 		$this->j=0;
 		$this->b = $word;

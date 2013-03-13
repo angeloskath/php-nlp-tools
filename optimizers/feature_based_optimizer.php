@@ -4,7 +4,7 @@ namespace NlpTools\Optimizers;
 
 interface FeatureBasedLinearOptimizer
 {
-	/*
+	/**
 	 * This function receives an array that contains an array for
 	 * each document which contains an array of feature identifiers for
 	 * each class and at the special key '__label__' the actual class
@@ -15,7 +15,6 @@ interface FeatureBasedLinearOptimizer
 	 * model we would try to maximize the CLogLik that can be calculated
 	 * from this array. 
 	 * 
-	 * name: optimize
 	 * @param array &$feature_array
 	 * @return array The parameteres $l
 	 */

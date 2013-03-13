@@ -2,7 +2,7 @@
 
 namespace NlpTools\Documents;
 
-/*
+/**
  * A Document that represents a single word but with a context of a
  * larger document. Useful for Named Entity Recognition
  */
@@ -28,12 +28,11 @@ class WordDocument implements Document
 		}
 	}
 	
-	/*
+	/**
 	 * It returns an array with the first element being the actual word,
 	 * the second element being an array of previous words, and the
 	 * third an array of following words
 	 * 
-	 * name: getDocumentData
 	 * @return array
 	 */
 	public function getDocumentData() {

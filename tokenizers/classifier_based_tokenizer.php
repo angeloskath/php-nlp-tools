@@ -5,7 +5,7 @@ namespace NlpTools\Tokenizers;
 use \NlpTools\Classifiers\Classifier;
 use \NlpTools\Documents\WordDocument;
 
-/*
+/**
  * A tokenizer that uses a classifier (of any type) to determine if
  * there is an "end of word" (EOW). It takes as a parameter an initial
  * tokenizer and then determines if any two following tokens should in
@@ -66,10 +66,15 @@ class ClassifierBasedTokenizer implements Tokenizer
 		$this->sep = $sep;
 	}
 	
-	/*
+	/**
+	 * Tokenize the string.
+	 * 
 	 * 1. Break up the string in tokens using the initial tokenizer
 	 * 2. Classify each token if it is an EOW
-	 * 3. For each token that is not an EOW add it to the next EOW token
+	 * 3. For each token that is not an EOW add it to the next EOW token using a separator
+	 * 
+	 * @param string $str The character sequence to be broken in tokens
+	 * @return array The token array
 	 */
 	public function tokenize($str) {
 		

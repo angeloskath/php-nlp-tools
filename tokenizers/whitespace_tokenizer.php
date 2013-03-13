@@ -2,7 +2,7 @@
 
 namespace NlpTools\Tokenizers;
 
-/*
+/**
  * Simple white space tokenizer.
  * Break on every white space
  */

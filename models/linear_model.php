@@ -2,7 +2,7 @@
 
 namespace NlpTools\Models;
 
-/*
+/**
  * This class represents a linear model of the following form
  * f(x_vec) = l1*x1 + l2*x2 + l3*x3 ...
  * 
@@ -18,11 +18,22 @@ class LinearModel
 	public function __construct(array $l) {
 		$this->l = $l;
 	}
+	/**
+	 * Get the weight for a given feature
+	 * 
+	 * @param string $feature The feature for which the weight will be returned
+	 * @return float The weight
+	 */
 	public function getWeight($feature) {
 		if (!isset($this->l[$feature])) return 0;
 		else return $this->l[$feature];
 	}
 	
+	/**
+	 * Get all the weights as an array.
+	 * 
+	 * @return array The weights as an associative array
+	 */
 	public function getWeights() {
 		return $this->l;
 	}

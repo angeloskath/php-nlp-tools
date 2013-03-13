@@ -2,7 +2,7 @@
 
 namespace NlpTools\Similarity;
 
-/*
+/**
  * Simhash is an implementation of the locality sensitive hash function
  * families proposed by Moses Charikar using the Earth Mover's Distance
  * http://www.cs.princeton.edu/courses/archive/spring04/cos598B/bib/CharikarEstim.pdf
@@ -13,7 +13,7 @@ namespace NlpTools\Similarity;
  * The current implementation uses md5 by default to hash the documents
  * features. Weighted features are not supported (unless duplicating a
  * feature is considered adding weight to it).
- * */
+ */
 class Simhash implements SetSimilarity, SetDistance
 {
 	// The length in bits of the simhash
@@ -31,16 +31,16 @@ class Simhash implements SetSimilarity, SetDistance
 		return str_replace(self::$search,self::$replace,md5($w));
 	}
 	
-	/*
-	 * @param $len The length of the simhash in bits
-	 * @param $hash The hash function to compute the hashes of the features
-	 * */
+	/**
+	 * @param integer $len The length of the simhash in bits
+	 * @param callable $hash The hash function to compute the hashes of the features
+	 */
 	public function __construct($len,$hash='self::md5') {
 		$this->length = $len;
 		$this->h = $hash;
 	}
 	
-	/*
+	/**
 	 * Compute the locality sensitive hash for this set.
 	 * Maintain a vector ($boxes) of length $this->length initialized to
 	 * 0. Each member of the set is hashed to a {$this->length} bit vector.
@@ -75,13 +75,13 @@ class Simhash implements SetSimilarity, SetDistance
 		return $s;
 	}
 	
-	/*
+	/**
 	 * Computes the hamming distance of the simhashes of two sets.
 	 * 
 	 * @param array $setA
 	 * @param array $setB
 	 * @return int [0,$this->length]
-	 * */
+	 */
 	public function dist(array &$setA, array &$setB) {
 		$h1 = $this->simhash($setA);
 		$h2 = $this->simhash($setB);
@@ -93,14 +93,14 @@ class Simhash implements SetSimilarity, SetDistance
 		return $d;
 	}
 	
-	/*
+	/**
 	 * Computes a similarity measure from two sets. The similarity is
 	 * computed as 1 - (sets' distance) / (maximum possible distance).
 	 * 
 	 * @param array $setA
 	 * @param array $setB
 	 * @return float [0,1]
-	 * */
+	 */
 	public function similarity(array &$setA, array &$setB) {
 		return ($this->length-$this->dist($setA,$setB))/$this->length;
 	}

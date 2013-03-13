@@ -4,7 +4,7 @@ namespace NlpTools\FeatureFactories;
 
 use \NlpTools\Documents\Document;
 
-/*
+/**
  * An implementation of FeatureFactory that takes any number of callables
  * (function names, closures, array($object,'func_name'), etc.) and
  * calls them consecutively using the return value as a feature's unique
@@ -17,19 +17,25 @@ class FunctionFeatures implements FeatureFactory
 	public function __construct(array $f=array()) {
 		$this->functions=$f;
 	}
+	/**
+	 * Add a function as a feature
+	 * 
+	 * @param callable $feature
+	 */
 	public function add( $feature ) {
 		$this->functions[] = $feature;
 	}
 	
-	/*
+	/**
+	 * Compute the features that "fire" for a given class,document pair.
+	 * 
 	 * Call each function one by one. Eliminate each return value that
 	 * evaluates to false. If the return value is a string add it to
 	 * the feature set. If the return value is an array iterate over it
 	 * and add each value to the feature set.
 	 * 
-	 * name: getFeatureArray
-	 * @param $class The class for which we are calculating features
-	 * @param $d The document for which we are calculating features
+	 * @param string $class The class for which we are calculating features
+	 * @param Document $d The document for which we are calculating features
 	 * @return array
 	 */
 	public function getFeatureArray($class, Document $d) {

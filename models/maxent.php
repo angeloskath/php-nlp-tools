@@ -6,16 +6,21 @@ use \NlpTools\FeatureFactories\FeatureFactory;
 use \NlpTools\Documents\TrainingSet;
 use \NlpTools\Optimizers\MaxentOptimizer;
 
+/**
+ * Maxent is a model that assigns a weight for each feature such that all
+ * the weights maximize the Conditional Log Likelihood of the training
+ * data. Because it does that without making any assumptions about the data
+ * it is named maximum entropy model (maximum ignorance).
+ */
 class Maxent extends LinearModel
 {
 	const INITIAL_PARAM_VALUE = 0;
 
-	/*
+	/**
 	 * Calculate all the features for every possible class. Pass the
 	 * information to the optimizer to find the weights that satisfy the
 	 * constraints and maximize the entropy 
 	 * 
-	 * name: train
 	 * @param $ff The feature factory
 	 * @param $tset A collection of training documents
 	 * @param $opt An optimizer, we need a maxent optimizer
@@ -28,7 +33,7 @@ class Maxent extends LinearModel
 		$this->l = $opt->optimize($features);
 	}
 	
-	/*
+	/**
 	 * Calculate all the features for each possible class of each
 	 * document. This is done so that we can optimize without the need
 	 * of the FeatureFactory.
@@ -38,7 +43,6 @@ class Maxent extends LinearModel
 	 * because we want to be able to optimize externally to
 	 * gain speed (PHP is slow!).
 	 * 
-	 * name: calculateFeatureArray
 	 * @param $classes A set of the classes in the training set
 	 * @param $tset A collection of training documents
 	 * @param $ff The feature factory
@@ -59,16 +63,15 @@ class Maxent extends LinearModel
 		return $features;
 	}
 	
-	/*
+	/**
 	 * Calculate the probability that document $d belongs to the class
 	 * $class given a set of possible classes, a feature factory and
 	 * the model's weights l[i]
 	 * 
-	 * name: P
 	 * @param $classes The set of possible classes
 	 * @param $ff The feature factory
 	 * @param $d The document
-	 * @param $class A class for which we calculate the probability
+	 * @param string $class A class for which we calculate the probability
 	 * @return float The probability that document $d belongs to class $class
 	 */
 	public function P(array $classes,FeatureFactory $ff,Document $d,$class) {
@@ -85,16 +88,18 @@ class Maxent extends LinearModel
 		return $exps[$class]/array_sum($exps);
 	}
 	
-	/*
+	/**
 	 * Not implemented yet.
 	 * Simply put:
 	 * 	result += log( $this->P(..., ..., ...) ) for every doc in TrainingSet
+	 * 
+	 * @throws \Exception
 	 */
 	public function CLogLik(TrainingSet $tset,FeatureFactory $ff) {
 		throw new \Exception("Unimplemented");
 	}
 
-	/*
+	/**
 	 * Simply print_r weights. Usefull for some kind of debugging when
 	 * working with small training sets and few features
 	 */

@@ -2,7 +2,7 @@
 
 namespace NlpTools\Tokenizers;
 
-/*
+/**
  * Simple white space tokenizer. Breaks either on whitespace or on word
  * boundaries (ex.: dots, commas, etc)
  * Does not include white space in tokens.

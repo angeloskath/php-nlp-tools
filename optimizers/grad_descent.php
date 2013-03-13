@@ -2,9 +2,9 @@
 
 namespace NlpTools\Optimizers;
 
-/*
+/**
  * Implements gradient descent with fixed step.
- * Leaves the computation of the fprime tp the children classes.
+ * Leaves the computation of the fprime to the children classes.
  */
 abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizer
 {
@@ -25,43 +25,39 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizer
 		$this->maxiter = $maxiter;
 	}
 	
-	/*
+	/**
 	 * Should initialize the weights and compute any constant
 	 * expressions needed for the fprime calculation.
 	 * 
-	 * name: initParameters
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void
 	 */
 	abstract protected function initParameters(array &$feature_array, array &$l);
-	/*
+	/**
 	 * Should calculate any parameter needed by Fprime that cannot be
 	 * calculated by initParameters because it is not constant.
 	 * 
-	 * name: prepareFprime
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void
 	 */
 	abstract protected function prepareFprime(array &$feature_array, array &$l);
-	/*
+	/**
 	 * Actually compute the fprime_vector. Set for each $l[$i] the
 	 * value of the partial derivative of f for delta $l[$i]
 	 * 
-	 * name: Fprime
 	 * @param $feature_array All the data known about the training set
 	 * @param $l The current set of weights to be initialized
 	 * @return void
 	 */
 	abstract protected function Fprime(array &$feature_array, array &$l);
 	
-	/*
+	/**
 	 * Actually do the gradient descent algorithm.
 	 * l[i] = l[i] - learning_rate*( theta f/delta l[i] ) for each i
 	 * Could possibly benefit from a vetor add/scale function.
 	 * 
-	 * name: optimize
 	 * @param $feature_array All the data known about the training set
 	 * @return array The parameters $l[$i] that minimize F
 	 */

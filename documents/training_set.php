@@ -2,7 +2,7 @@
 
 namespace NlpTools\Documents;
 
-/*
+/**
  * A collection of TrainingDocument objects. It implements many built
  * in php interfaces for ease of use.
  */
@@ -26,10 +26,9 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
 		$this->keytype = self::CLASS_AS_KEY;
 	}
 	
-	/*
+	/**
 	 * Add a document to the set.
 	 * 
-	 * name: addDocument
 	 * @param $class The documents actual class
 	 * @param $d The Document
 	 * @return void
@@ -43,7 +42,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
 		return array_keys($this->classSet);
 	}
 	
-	/*
+	/**
 	 * Decide what should be returned as key when iterated upon
 	 */
 	public function setAsKey($what) {

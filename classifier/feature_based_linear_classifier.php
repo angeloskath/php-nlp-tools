@@ -6,7 +6,7 @@ use \NlpTools\Documents\Document;
 use \NlpTools\FeatureFactories\FeatureFactory;
 use \NlpTools\Models\LinearModel;
 
-/*
+/**
  * Classify using a linear model. A model that assigns a weight l for
  * each feature f.
  */
@@ -22,13 +22,12 @@ class FeatureBasedLinearClassifier implements Classifier
 		$this->model = $m;
 	}
 	
-	/*
+	/**
 	 * Compute the vote for every class. Return the class that
 	 * receive the maximum vote.
 	 * 
-	 * name: classify
-	 * @param $classes A set of classes
-	 * @param $d A Document
+	 * @param array $classes A set of classes
+	 * @param Document $d A Document
 	 * @return string A class
 	 */
 	public function classify(array $classes, Document $d) {
@@ -46,13 +45,12 @@ class FeatureBasedLinearClassifier implements Classifier
 		return $maxclass;
 	}
 	
-	/*
+	/**
 	 * Compute the features that fire for the Document $d. The sum of
 	 * the weights of the features is the vote.
 	 * 
-	 * name: getVote
-	 * @param $class The vote for class $class
-	 * @param $d The vote for Document $d
+	 * @param string $class The vote for class $class
+	 * @param Document $d The vote for Document $d
 	 * @return float The vote of the model for class $class and Document $d
 	 */
 	public function getVote($class, Document $d) {

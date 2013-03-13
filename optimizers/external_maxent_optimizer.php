@@ -2,7 +2,7 @@
 
 namespace NlpTools\Optimizers;
 
-/*
+/**
  * This class enables the use of a program written in a different
  * language to optimize our model and return the weights for use in php.
  * Mostly common use: Optimize in a fast compiled language (ex.: C) or
@@ -45,13 +45,19 @@ class ExternalMaxentOptimizer implements MaxentOptimizer
 	// holds the program name to be run
 	protected $optimizer;
 	
+	/**
+	 * @param string $optimizer The path for an external optimizer executable
+	 */
 	public function __construct($optimizer) {
 		$this->optimizer = $optimizer;
 	}
 	
-	/*
+	/**
 	 * Open a pipe to the optimizer, send him the data encoded in json
 	 * and then read the stdout to get the results encoded in json
+	 * 
+	 * @param array $feature_array The features that fired for any document for any class @see NlpTools\Models\Maxent
+	 * @return array The optimized weights
 	 */
 	public function optimize(array &$feature_array) {
 		// whete we will read from where we will write to

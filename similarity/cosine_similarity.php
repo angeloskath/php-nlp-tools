@@ -2,7 +2,7 @@
 
 namespace NlpTools\Similarity;
 
-/*
+/**
  * Given two vectors compute cos(theta) where theta is the angle
  * between the two vectors in a N-dimensional vector space.
  * 
@@ -14,18 +14,18 @@ namespace NlpTools\Similarity;
  * feature. Moreover, there cannot be negative frequency of occurence so
  * there cannot be negative vector coefficients and the angle will
  * always be between 0 and pi/2.
- * */
+ */
 class CosineSimilarity implements SetSimilarity
 {
 	
-	/*
+	/**
 	 * Returns a number between 0,1 that corresponds to the cos(theta)
 	 * where theta is the angle between the two sets if they are treated
 	 * as n-dimensional vectors.
 	 * 
 	 * See the class comment about why the number is in [0,1] and not
 	 * in [-1,1] as it normally should.
-	 * */
+	 */
 	public function similarity(array &$setA, array &$setB) {
 		$v1 = array_count_values($setA);
 		$v2 = array_count_values($setB);
