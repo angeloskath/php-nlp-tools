@@ -10,7 +10,7 @@ class WhitespaceTokenizer implements Tokenizer
 {
 	public function tokenize($str) {
 		$arr = array();
-		return preg_split('/\s+/',$str,null,PREG_SPLIT_NO_EMPTY);
+		return preg_split('/[\pZ\pC]+/u',$str,null,PREG_SPLIT_NO_EMPTY);
 	}
 }
 

@@ -12,7 +12,22 @@ class WhitespaceAndPunctuationTokenizer implements Tokenizer
 {
 	public function tokenize($str) {
 		$arr = array();
-		preg_match_all('/(\s*)([^\pP\s]+|.)(\s*)/u',$str,$arr);
+		// for the character classes
+		// see http://php.net/manual/en/regexp.reference.unicode.php
+		$pat = '/
+					([\pZ\pC]*)			# match any separator or other
+										# in sequence
+					(
+						[^\pP\pZ\pC]+ |	# match a sequence of characters
+										# that are not punctuation,
+										# separator or other
+						
+						.				# match punctuations one by one
+					)
+					([\pZ\pC]*)			# match a sequence of separators
+										# that follows
+				/xu';
+		preg_match_all($pat,$str,$arr);
 		return $arr[2];
 	}
 }
