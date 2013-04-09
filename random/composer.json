@@ -1,0 +1,24 @@
+{
+	"name": "nlp-tools/random",
+	"type": "library",
+	"description": "Implement pseudo-random number generators for various distributions.",
+	"keywords": ["random","probability","distribution"],
+	"license": "WTFPL",
+	"authors": [
+		{
+			"name": "Angelos Katharopoulos",
+			"email": "angelos@yourse.gr"
+		}
+	],
+	"require": {
+		"php": ">=5.3"
+	},
+	"autoload": {
+		"psr-0": { "NlpTools": "src/" }
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
+}
