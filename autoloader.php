@@ -19,6 +19,7 @@
 		"NlpTools\FeatureFactories\FeatureFactory"=>"/feature_factories/feature_factory.php",
 		"NlpTools\FeatureFactories\FunctionFeatures"=>"/feature_factories/callables_as_features.php",
 		"NlpTools\Random\Generators\GeneratorI"=>"/random/src/NlpTools/Random/Generators/GeneratorI.php",
+		"NlpTools\Random\Generators\FromFile"=>"/random/src/NlpTools/Random/Generators/FromFile.php",
 		"NlpTools\Random\Generators\MersenneTwister"=>"/random/src/NlpTools/Random/Generators/MersenneTwister.php",
 		"NlpTools\Random\Distributions\Normal"=>"/random/src/NlpTools/Random/Distributions/Normal.php",
 		"NlpTools\Random\Distributions\Gamma"=>"/random/src/NlpTools/Random/Distributions/Gamma.php",
