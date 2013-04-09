@@ -1,3 +1,0 @@
-[submodule "random"]
-	path = random
-	url = https://github.com/angeloskath/php-random.git
