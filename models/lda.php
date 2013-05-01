@@ -199,7 +199,11 @@ class Lda
 			 $denom = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
 			 foreach ($this->voc as $w)
 			 {
-				 $p[$w] = ($this->count_topics_words[$topic][$w] + $this->b)/$denom;
+				 if (isset($this->count_topics_words[$topic][$w]))
+					$p[$w] = $this->count_topics_words[$topic][$w]+$this->b;
+				 else
+					$p[$w] = $this->b;
+				 $p[$w] /= $denom;
 			 }
 			 if ($limit_words>0)
 			 {
@@ -308,13 +312,17 @@ class Lda
 		 $p = array_fill_keys(range(0,$this->ntopics-1),0);
 		 for ($topic=0;$topic<$this->ntopics;$topic++)
 		 {
-			 $numerator = $this->count_topics_words[$topic][$w]+$this->b;
-			 $numerator *= $this->count_docs_topics[$i][$topic]+$this->a;
-			 
-			 $denominator = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
-			 $denominator *= $this->words_in_doc[$i]+$this->ntopics*$this->a;
-			 
-			 $p[$topic] = $numerator/$denominator;
+			if (isset($this->count_topics_words[$topic][$w]))
+				$numerator = $this->count_topics_words[$topic][$w]+$this->b;
+			else
+				$numerator = $this->b;
+			
+			$numerator *= $this->count_docs_topics[$i][$topic]+$this->a;
+			
+			$denominator = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
+			$denominator *= $this->words_in_doc[$i]+$this->ntopics*$this->a;
+			
+			$p[$topic] = $numerator/$denominator;
 		 }
 		 
 		 // divide by sum to obtain probabilities
