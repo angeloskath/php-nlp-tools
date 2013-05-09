@@ -15,7 +15,7 @@ namespace NlpTools\Similarity;
  * there cannot be negative vector coefficients and the angle will
  * always be between 0 and pi/2.
  */
-class CosineSimilarity implements SetSimilarity
+class CosineSimilarity implements Similarity, Distance
 {
 	
 	/**
@@ -26,9 +26,17 @@ class CosineSimilarity implements SetSimilarity
 	 * See the class comment about why the number is in [0,1] and not
 	 * in [-1,1] as it normally should.
 	 */
-	public function similarity(array &$setA, array &$setB) {
-		$v1 = array_count_values($setA);
-		$v2 = array_count_values($setB);
+	public function similarity(&$A, &$B) {
+		// This means they are simple text vectors
+		// so we need to count to make them vectors
+		if (key($A)===0)
+			$v1 = array_count_values($A);
+		else
+			$v1 = &$A;
+		if (key($B)===0)
+			$v2 = array_count_values($B);
+		else
+			$v2 = &$B;
 		
 		$prod = 0.0;
 		$v1_norm = 0.0;
@@ -49,6 +57,12 @@ class CosineSimilarity implements SetSimilarity
 		return $prod/($v1_norm*$v2_norm);
 	}
 	
+	/**
+	 * Cosine distance is simply 1-cosine similarity
+	 */
+	public function dist(&$A, &$B) {
+		return 1-$this->similarity($A,$B);
+	}
 }
 
 ?>

@@ -4,11 +4,11 @@ namespace NlpTools\Similarity;
 
 /**
  * SetDistance should return a number proportional to how dissimilar
- * the two sets are (with any metric)
+ * the two instances are(with any metric)
  */
-interface SetDistance
+interface Distance
 {
-	public function dist(array &$setA, array &$setB);
+	public function dist(&$A, &$B);
 }
 
 ?>

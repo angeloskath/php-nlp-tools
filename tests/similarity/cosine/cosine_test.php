@@ -18,6 +18,8 @@ $B = array(1,2,3,4,5,6);
 // 1 will be x and 2 will be y
 $ba = array(1,1,2,2,2,2); // ba = (2,4)
 $bc = array(1,1,1,2,2); // bc = (3,2)
+$bba = array('0'=>2,'1'=>4);
+$bbc = array('0'=>3,'1'=>2);
 $ba_to_bc = cos(0.5191461142); // approximately 30 deg
 
 
@@ -31,5 +33,6 @@ _assert($sim->similarity($A,$B)-$sim->similarity($A2,$B) < $rt,"Parallel vectors
 // Test the triangle
 _assert($sim->similarity($ba,$bc)-$ba_to_bc < $rt,"CosineSim[{2,4},{3,2}]=0.8682431421244593 instead of {$sim->similarity($ba,$bc)}");
 
+// Same as above just passing already made vectors
+_assert($sim->similarity($bba,$bbc)-$ba_to_bc < $rt,"CosineSim[{2,4},{3,2}]=0.8682431421244593 instead of {$sim->similarity($bba,$bbc)}");
 
-?>

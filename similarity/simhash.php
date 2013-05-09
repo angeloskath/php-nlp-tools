@@ -14,7 +14,7 @@ namespace NlpTools\Similarity;
  * features. Weighted features are not supported (unless duplicating a
  * feature is considered adding weight to it).
  */
-class Simhash implements SetSimilarity, SetDistance
+class Simhash implements Similarity, Distance
 {
 	// The length in bits of the simhash
 	protected $length;
@@ -78,13 +78,13 @@ class Simhash implements SetSimilarity, SetDistance
 	/**
 	 * Computes the hamming distance of the simhashes of two sets.
 	 * 
-	 * @param array $setA
-	 * @param array $setB
+	 * @param array $A
+	 * @param array $B
 	 * @return int [0,$this->length]
 	 */
-	public function dist(array &$setA, array &$setB) {
-		$h1 = $this->simhash($setA);
-		$h2 = $this->simhash($setB);
+	public function dist(&$A, &$B) {
+		$h1 = $this->simhash($A);
+		$h2 = $this->simhash($B);
 		$d = 0;
 		for ($i=0;$i<$this->length;$i++) {
 			if ($h1[$i]!=$h2[$i])
@@ -97,12 +97,12 @@ class Simhash implements SetSimilarity, SetDistance
 	 * Computes a similarity measure from two sets. The similarity is
 	 * computed as 1 - (sets' distance) / (maximum possible distance).
 	 * 
-	 * @param array $setA
-	 * @param array $setB
+	 * @param array $A
+	 * @param array $B
 	 * @return float [0,1]
 	 */
-	public function similarity(array &$setA, array &$setB) {
-		return ($this->length-$this->dist($setA,$setB))/$this->length;
+	public function similarity(&$A, &$B) {
+		return ($this->length-$this->dist($A,$B))/$this->length;
 	}
 	
 }
