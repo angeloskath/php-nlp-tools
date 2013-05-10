@@ -6,6 +6,7 @@ include ('../../testing.php');
 use NlpTools\Clustering\KMeans;
 use NlpTools\Similarity\Euclidean;
 use NlpTools\Similarity\CosineSimilarity;
+use NlpTools\Clustering\CentroidFactories\MeanAngle;
 use NlpTools\Clustering\CentroidFactories\Euclidean as EuclidCF;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\FeatureFactories\DataAsFeatures;
@@ -49,7 +50,7 @@ $clust = new Kmeans(
 	$NC,
 	new Euclidean(),
 	new EuclidCF(),
-	0.1
+	0.001
 );
 
 $tset = new TrainingSet();
@@ -86,7 +87,15 @@ if (function_exists('imagecreate'))
 			$data = $tset[$idx]->getDocumentData();
 			imagesetpixel($im,$data['x'],$data['y'],$colors[$cid]);
 		}
-		imagefilledarc($im,$centroids[$cid]['x'],$centroids[$cid]['y'],10,10,0,360,$colors[$cid],0);
+		$x = $centroids[$cid]['x'];
+		$y = $centroids[$cid]['y'];
+		// draw line
+		// for cosine similarity
+		//imagesetthickness($im,5);
+		//imageline($im,0,0,$x*400,$y*400,$colors[$cid]);
+		
+		// draw circle for euclidean
+		imagefilledarc($im,$x,$y,10,10,0,360,$colors[$cid],0);
 	}
 
 	imagepng($im,'clusters.png');

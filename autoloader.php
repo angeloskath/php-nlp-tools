@@ -30,6 +30,7 @@
 		"NlpTools\Clustering\CentroidFactories\CentroidFactory"=>"/clustering/centroid_factory.php",
 		"NlpTools\Clustering\Clusterer"=>"/clustering/cluster.php",
 		"NlpTools\Clustering\KMeans"=>"/clustering/k_means.php",
+		"NlpTools\Clustering\CentroidFactories\MeanAngle"=>"/clustering/mean_angle_centroid.php",
 		"NlpTools\Classifiers\MultinomialNBClassifier"=>"/classifier/multinomial_nb_classifier.php",
 		"NlpTools\Classifiers\Classifier"=>"/classifier/classifier.php",
 		"NlpTools\Classifiers\FeatureBasedLinearClassifier"=>"/classifier/feature_based_linear_classifier.php",
