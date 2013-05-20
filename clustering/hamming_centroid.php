@@ -18,7 +18,7 @@ class Hamming implements CentroidFactory
 	 * 			 binary (they should all be the same length).
 	 */
 	public function getCentroid(array &$docs, array $choose=array()) {
-		$bitl = count($docs[0]);
+		$bitl = strlen($docs[0]);
 		$buckets = array_fill_keys(
 			range(0,$bitl-1),
 			0
