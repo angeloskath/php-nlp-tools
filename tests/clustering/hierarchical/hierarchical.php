@@ -7,7 +7,7 @@ use NlpTools\Documents\TrainingSet;
 use NlpTools\FeatureFactories\DataAsFeatures;
 use NlpTools\Documents\TokensDocument;
 use NlpTools\Clustering\Hierarchical as HierarchicalClusterer;
-use NlpTools\Similarity\SingleLink;
+use NlpTools\Clustering\MergeStrategies\SingleLink;
 use NlpTools\Similarity\Euclidean;
 
 $points = array(
@@ -38,9 +38,8 @@ foreach ($points as $p)
 
 
 $hc = new HierarchicalClusterer(
-	new SingleLink( // use the single link strategy
-		new Euclidean() // with euclidean distance
-	)
+	new SingleLink(), // use the single link strategy
+	new Euclidean() // with euclidean distance
 );
 
 list($clusters) = $hc->cluster($tset,new DataAsFeatures());
@@ -56,8 +55,8 @@ _assert(
 				2
 			),
 			array(
-				4,
-				3
+				3,
+				4
 			)
 		)
 	),

@@ -2,76 +2,54 @@
 
 namespace NlpTools\Clustering;
 
-use NlpTools\Similarity\DistanceMatrix;
+use NlpTools\Clustering\MergeStrategies\MergeStrategy;
+use NlpTools\Similarity\Distance;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\FeatureFactories\FeatureFactory;
 
 /**
  * This class implements hierarchical agglomerative clustering.
- * It receives a DistanceMatrix instance as a parameter which
- * defines the strategy for the agglomeration (Single link,
- * Complete link, etc).
+ * It receives a MergeStrategy as a parameter and a Distance metric.
  */
 class Hierarchical extends Clusterer
 {
-	protected $dm;
+	protected $strategy;
+	protected $dist;
 
-	public function __construct(DistanceMatrix $dm) {
-		$this->dm = $dm;
+	public function __construct(MergeStrategy $ms, Distance $d) {
+		$this->strategy = $ms;
+		$this->dist = $d;
 	}
 
+	/**
+	 * Iteratively merge documents together to create an hierarchy of clusters.
+	 * While hierarchical clustering only returns one element, it still wraps it
+	 * in an array to be consistent with the rest of the clustering methods.
+	 *
+	 * @return array An array containing one element which is the resulting dendrogram
+	 */
 	public function cluster(TrainingSet $documents, FeatureFactory $ff) {
 		// what a complete waste of memory here ...
 		// the same data exists in $documents, $docs and
-		// the only useful parts are in $this->dm
+		// the only useful parts are in $this->strategy
 		$docs = $this->getDocumentArray($documents, $ff);
-		$this->dm->initializeMatrix($docs);
+		$this->strategy->initializeStrategy($this->dist,$docs);
 		unset($docs); // perhaps save some memory
 
 		// start with all the documents being in their
-		// own cluster
+		// own cluster we 'll merge later
 		$clusters = range(0,count($documents)-1);
 		$c = count($clusters);
 		while ($c>1)
 		{
-			echo $c,PHP_EOL;
-			// foreach cluster
-			// compute its distance from any other cluster
-			// using the distance matrix
-			$mini = 0;
-			$minj = 1;
-			$mind = INF;
-			for ($i=0;$i<$c;$i++)
-			{
-				for ($j=$i+1;$j<$c;$j++)
-				{
-					$d = $this->dm->dist(
-						new \RecursiveIteratorIterator(
-							new \RecursiveArrayIterator(
-								array($clusters[$i])
-							)
-						),
-						new \RecursiveIteratorIterator(
-							new \RecursiveArrayIterator(
-								array($clusters[$j])
-							)
-						)
-					);
-					if ($d < $mind)
-					{
-						$mini = $i;
-						$minj = $j;
-						$mind = $d;
-					}
-				}
-			}
-			// merge the two clusters with the smallest distance
-			$clusters[$mini] = array($clusters[$mini],$clusters[$minj]);
+			// ask the strategy which to merge. The strategy
+			// will assume that we will indeed merge the returned clusters
+			list($i,$j) = $this->strategy->getNextMerge();
+			$clusters[$i] = array($clusters[$i],$clusters[$j]);
+			unset($clusters[$j]);
 			$c--;
-			$clusters[$minj] = $clusters[$c];
-			unset($clusters[$c]);
 		}
-		$clusters = array($clusters[0]);
+		$clusters = array($clusters[$i]);
 
 		// return the dendrogram
 		return array($clusters);
