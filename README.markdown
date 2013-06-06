@@ -17,6 +17,18 @@ Contents
 1. [Multinomial Naive Bayes](http://php-nlp-tools.com/documentation/bayesian-model.html)
 2. [Maximum Entropy (Conditional Exponential model)](http://php-nlp-tools.com/documentation/maximum-entropy-model.html)
 
+### Topic Modeling ###
+
+Lda is still experimental and quite slow but it works. [See an example](http://php-nlp-tools.com/posts/introducing-latent-dirichlet-allocation.html).
+
+1. [Latent Dirichlet Allocation](http://php-nlp-tools.com/documentation/api/#NlpTools/Models/Lda)
+
+### Clustering ###
+
+Hierarchical and Expectations Maximization are coming soon.
+
+1. [K-Means](http://php-nlp-tools.com/documentation/clustering.html)
+
 ### Tokenizers ###
 
 1. [WhitespaceTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/WhitespaceTokenizer)
@@ -48,6 +60,8 @@ Contents
 1. [Jaccard Index](http://php-nlp-tools.com/documentation/api/#NlpTools/Similarity/JaccardIndex)
 2. [Cosine similarity](http://php-nlp-tools.com/documentation/api/#NlpTools/Similarity/CosineSimilarity)
 3. [Simhash](http://php-nlp-tools.com/documentation/api/#NlpTools/Similarity/Simhash)
+4. [Euclidean](http://php-nlp-tools.com/documentation/api/#NlpTools/Similarity/Euclidean)
+5. [HammingDistance](http://php-nlp-tools.com/documentation/api/#NlpTools/Similarity/HammingDistance)
 
 ### Stemmers ###
 
