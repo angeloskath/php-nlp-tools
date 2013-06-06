@@ -40,13 +40,16 @@ $s = microtime(true);
 list($clusters) = $hc->cluster($tset,new DataAsFeatures());
 echo microtime(true)-$s,PHP_EOL;
 
+$dendrogram = draw_dendrogram($tset,$clusters,600);
+
 $clusters = HierarchicalClusterer::dendrogramToClusters($clusters,2);
 
 $im = draw_clusters(
 	$tset,
 	$clusters,
 	null, // no centroids
-	false // no lines
+	false, // no lines
+	10 // emphasize points (for little points)
 );
 
 if ($im)
@@ -54,4 +57,6 @@ if ($im)
 else
 	print_r($clusters);
 
+if ($dendrogram)
+	imagepng($dendrogram, 'dendrogram.png');
 
