@@ -45,11 +45,11 @@ class CosineSimilarity implements Similarity, Distance
 	public function similarity(&$A, &$B) {
 		// This means they are simple text vectors
 		// so we need to count to make them vectors
-		if (key($A)===0)
+		if (is_int(key($A)))
 			$v1 = array_count_values($A);
 		else
 			$v1 = &$A;
-		if (key($B)===0)
+		if (is_int(key($B)))
 			$v2 = array_count_values($B);
 		else
 			$v2 = &$B;

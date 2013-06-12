@@ -60,9 +60,11 @@ class MultinomialNBClassifier implements Classifier
 	public function getScore($class, Document $d) {
 		$score = log($this->model->getPrior($class));
 		$features = $this->feature_factory->getFeatureArray($class,$d);
-		foreach ($features as $f)
+		if (is_int(key($features)))
+			$features = array_count_values($features);
+		foreach ($features as $f=>$fcnt)
 		{
-			$score += log($this->model->getCondProb($f,$class));
+			$score += $fcnt*log($this->model->getCondProb($f,$class));
 		}
 		return $score;
 	}
