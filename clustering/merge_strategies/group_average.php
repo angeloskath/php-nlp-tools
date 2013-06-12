@@ -20,7 +20,9 @@ class GroupAverage extends HeapLinkage
 	}
 
 	protected function newDistance($xi,$yi,$x,$y) {
-		return $this->heap[$xi]*$this->cluster_size[$x] + $this->heap[$yi]*$this->cluster_size[$y];
+		$size_x = $this->cluster_size[$x];
+		$size_y = $this->cluster_size[$y];
+		return ($this->heap[$xi]*$size_x + $this->heap[$yi]*$size_y)/($size_x + $size_y);
 	}
 
 	public function getNextMerge() {
