@@ -11,6 +11,7 @@
 		"NlpTools\Models\MultinomialNBModel"=>"/models/multinomial_nb.php",
 		"NlpTools\Models\Lda"=>"/models/lda.php",
 		"NlpTools\Models\Maxent"=>"/models/maxent.php",
+		"MatrixHeap"=>"/util/matrix_heap/matrix_heap.php",
 		"AssociativeHeap\MaxHeap"=>"/util/associative-heap/AssociativeHeap/MaxHeap.php",
 		"AssociativeHeap\MinHeap"=>"/util/associative-heap/AssociativeHeap/MinHeap.php",
 		"AssociativeHeap\Heap"=>"/util/associative-heap/AssociativeHeap/Heap.php",
