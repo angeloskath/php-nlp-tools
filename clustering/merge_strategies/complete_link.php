@@ -9,7 +9,7 @@ use NlpTools\Similarity\Distance;
 class CompleteLink extends HeapLinkage
 {
 	protected function newDistance($xi,$yi,$x,$y) {
-		return max($this->heap[$xi],$this->heap[$yi]);
+		return max($this->dm[$xi],$this->dm[$yi]);
 	}
 }
 
