@@ -5,19 +5,19 @@ namespace NlpTools\Clustering\MergeStrategies;
 use NlpTools\Similarity\Distance;
 
 /**
-HeapLinkage is an abstract merge strategy.
-
-It creates a pairwise distance matrix. It then uses a heap to compute
-efficiently the minimum in the distance matrix. Then the two clusters
-with the minimum distance are merged and the distance of the new cluster
-with every other cluster i is recomputed. This recomputation is delegated
-to the children classes through the abstract function newDistance().
-
-The class uses an SplFixedArray that is filled with the lower triangle of
-the distance matrix. This is done to save memory. The index of a pair x,y
-is computed as follows:
- 1. if x>y swap x,y
- 2. index = y*(y-1)/2 + x
+ * HeapLinkage is an abstract merge strategy.
+ * 
+ * It creates a pairwise distance matrix. It then uses a heap to compute
+ * efficiently the minimum in the distance matrix. Then the two clusters
+ * with the minimum distance are merged and the distance of the new cluster
+ * with every other cluster i is recomputed. This recomputation is delegated
+ * to the children classes through the abstract function newDistance().
+ * 
+ * The class uses an SplFixedArray that is filled with the lower triangle of
+ * the distance matrix. This is done to save memory. The index of a pair x,y
+ * is computed as follows:
+ *  1. if x>y swap x,y
+ *  2. index = y*(y-1)/2 + x
  */
 abstract class HeapLinkage implements MergeStrategy
 {

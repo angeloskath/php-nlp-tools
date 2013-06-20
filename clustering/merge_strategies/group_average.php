@@ -5,6 +5,12 @@ namespace NlpTools\Clustering\MergeStrategies;
 use NlpTools\Similarity\Distance;
 
 /**
+ * In single linkage clustering the new distance of the merged cluster with
+ * cluster i is the average distance of all points in cluster x to i and y to i.
+ *
+ * The average distance is efficiently computed by assuming that every point from
+ * every other point in each cluster have the same distance (the average distance).
+ * Then the computation is simply a weighted average of the average distances.
  */
 class GroupAverage extends HeapLinkage
 {

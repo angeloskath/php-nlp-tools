@@ -4,6 +4,12 @@ namespace NlpTools\Clustering\MergeStrategies;
 
 use NlpTools\Similarity\Distance;
 
+/**
+ * In hierarchical agglomerative clustering each document starts in its own
+ * cluster and then it is subsequently merged with the "closest" cluster.
+ * The MergeStrategy defines how a new distance for the merged cluster is
+ * going to be calculated based on the distances of the individual clusters.
+ */
 interface MergeStrategy
 {
 	/**
