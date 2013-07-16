@@ -13,7 +13,9 @@
 		"php": ">=5.3"
 	},
 	"autoload": {
-		"classmap": ["."]
+		"psr-0": {
+			"NlpTools\\": "src/"
+		}
 	},
 	"extra": {
 		"branch-alias": {
