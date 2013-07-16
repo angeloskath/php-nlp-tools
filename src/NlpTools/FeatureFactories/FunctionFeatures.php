@@ -9,13 +9,33 @@ use \NlpTools\Documents\Document;
  * (function names, closures, array($object,'func_name'), etc.) and
  * calls them consecutively using the return value as a feature's unique
  * string.
+ *
+ * The class can model both feature frequency and presence
  */
 class FunctionFeatures implements FeatureFactory
 {
-	
+
 	protected $functions;
+	protected $frequency;
+
+	/**
+	 * @param array $f An array of feature functions
+	 */
 	public function __construct(array $f=array()) {
 		$this->functions=$f;
+		$this->frequency=false;
+	}
+	/**
+	 * Set the feature factory to model frequency instead of presence
+	 */
+	public function modelFrequency() {
+		$this->frequency = true;
+	}
+	/**
+	 * Set the feature factory to model presence instead of frequency
+	 */
+	public function modelPresence() {
+		$this->frequency = false;
 	}
 	/**
 	 * Add a function as a feature
@@ -52,15 +72,22 @@ class FunctionFeatures implements FeatureFactory
 			{
 				foreach ($f as $ff)
 				{
-					$set[$ff] = 1;
+					if (!isset($set[$ff]))
+						$set[$ff] = 0;
+					$set[$ff]++;
 				}
 			}
 			else
 			{
-				$set[$f] = 1;
+				if (!isset($set[$f]))
+					$set[$f] = 0;
+				$set[$f]++;
 			}
 		}
-		return array_keys($set);
+		if ($this->frequency)
+			return $set;
+		else
+			return array_keys($set);
 	}
 	
 }

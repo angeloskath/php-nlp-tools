@@ -14,6 +14,16 @@ namespace NlpTools\Similarity;
  * feature. Moreover, there cannot be negative frequency of occurence so
  * there cannot be negative vector coefficients and the angle will
  * always be between 0 and pi/2.
+ *
+ * If the current key of the passed array is not the number 0 then the feature
+ * vector is supposed to have been passed as a mapping between the feature name
+ * and a value like the following
+ * array(
+ * 	'feature_1'=>1,
+ * 	'feature_2'=>0.55,
+ * 	'feature_3'=>12.7,
+ * 	....
+ * )
  */
 class CosineSimilarity implements Similarity, Distance
 {
@@ -25,15 +35,21 @@ class CosineSimilarity implements Similarity, Distance
 	 * 
 	 * See the class comment about why the number is in [0,1] and not
 	 * in [-1,1] as it normally should.
+	 *
+	 * TODO: Assert $A, $B are arrays
+	 *
+	 * @param array $A Either feature vector or simply vector
+	 * @param array $B Either feature vector or simply vector
+	 * @return float The cosinus of the angle between the two vectors
 	 */
 	public function similarity(&$A, &$B) {
 		// This means they are simple text vectors
 		// so we need to count to make them vectors
-		if (key($A)===0)
+		if (is_int(key($A)))
 			$v1 = array_count_values($A);
 		else
 			$v1 = &$A;
-		if (key($B)===0)
+		if (is_int(key($B)))
 			$v2 = array_count_values($B);
 		else
 			$v2 = &$B;

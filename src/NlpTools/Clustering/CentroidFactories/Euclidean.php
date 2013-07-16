@@ -18,7 +18,7 @@ class Euclidean implements CentroidFactory
 	 * @return array A sparse vector representing the document to the n-dimensional euclidean space
 	 */
 	protected function getVector(array $doc) {
-		if (key($doc)===0)
+		if (is_int(key($doc)))
 			return array_count_values($doc);
 		else
 			return $doc;

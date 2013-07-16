@@ -1,11 +1,13 @@
 <?php
 
+namespace NlpTools\Utils;
+
 /**
  * MatrixHeap wraps anything that implements the array access interface
  * and adds the heap functionality. One can insert keys and then use extract
  * to get them ordered by the values of the wrapped array.
  */
-class MatrixHeap extends SplMinHeap implements ArrayAccess
+class MatrixHeap extends \SplMinHeap implements \ArrayAccess
 {
 	// the object that implements the ArrayAccess interface
 	protected $matrix;

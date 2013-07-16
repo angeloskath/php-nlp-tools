@@ -3,6 +3,7 @@
 namespace NlpTools\Clustering\MergeStrategies;
 
 use NlpTools\Similarity\Distance;
+use NlpTools\Utils\MatrixHeap;
 
 /**
  * HeapLinkage is an abstract merge strategy.
@@ -50,7 +51,7 @@ abstract class HeapLinkage implements MergeStrategy
 		$elements = (int)($this->L*($this->L-1))/2;
 		// the containers that will hold the distances
 		$this->dm = new \SplFixedArray($elements);
-		$this->heap = new \MatrixHeap($this->dm);
+		$this->heap = new MatrixHeap($this->dm);
 
 		// for each unique pair of documents calculate the distance and
 		// save it in the heap and distance matrix

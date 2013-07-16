@@ -139,16 +139,18 @@ class FeatureBasedNB implements MultinomialNBModel
 			$c = $tdoc->getClass();
 			$ndocs_per_class[$c]++;
 			$features = $ff->getFeatureArray($c,$tdoc);
-			foreach ($features as $f)
+			if (is_int(key($features)))
+				$features = array_count_values($features);
+			foreach ($features as $f=>$fcnt)
 			{
 				if (!isset($voc[$f]))
 					$voc[$f] = 0;
 				
-				$termcount_per_class[$c]++;
+				$termcount_per_class[$c]+=$fcnt;
 				if (isset($termcount[$c][$f]))
-					$termcount[$c][$f]++;
+					$termcount[$c][$f]+=$fcnt;
 				else
-					$termcount[$c][$f] = 1;
+					$termcount[$c][$f] = $fcnt;
 			}
 		}
 	}

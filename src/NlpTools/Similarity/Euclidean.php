@@ -15,11 +15,11 @@ class Euclidean implements Distance
 	 * @return float The euclidean distance between $A and $B
 	 */
 	public function dist(&$A, &$B) {
-		if (key($A)===0)
+		if (is_int(key($A)))
 			$v1 = array_count_values($A);
 		else
 			$v1 = &$A;
-		if (key($B)===0)
+		if (is_int(key($B)))
 			$v2 = array_count_values($B);
 		else
 			$v2 = &$B;
