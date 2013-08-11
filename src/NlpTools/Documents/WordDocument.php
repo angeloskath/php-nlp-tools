@@ -21,7 +21,7 @@ class WordDocument implements Document
 		}
 		
 		$this->after = array();
-		$end = min($index+$context,count($tokens));
+		$end = min($index+$context+1,count($tokens));
 		for ($start = $index+1;$start<$end;$start++)
 		{
 			$this->after[] = $tokens[$start];
