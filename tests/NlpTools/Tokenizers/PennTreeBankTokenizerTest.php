@@ -6,7 +6,7 @@ use NlpTools\Tokenizers\PennTreeBankTokenizer;
 
 /**
  * 
- * @author yooper
+ * @author Dan Cardin
  */
 class PennBankTokenizerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
-namespace TextAnalysis\Exceptions;
+namespace NlpTools\Exceptions;
 
 /**
  * Used by the tokenization, primarily
- * @author dcardin
+ * @author Dan Cardin
  */
 class InvalidExpression extends \Exception
 {

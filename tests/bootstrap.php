@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author yooper
+ * @author Dan Cardin
  * Bootstrap file for running unit tests
  */
 
