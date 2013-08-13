@@ -8,9 +8,11 @@ namespace NlpTools\Tokenizers;
  */
 class WhitespaceTokenizer implements Tokenizer
 {
+	const PATTERN = '/[\pZ\pC]+/u';
+
 	public function tokenize($str) {
 		$arr = array();
-		return preg_split('/[\pZ\pC]+/u',$str,null,PREG_SPLIT_NO_EMPTY);
+		return preg_split(self::PATTERN,$str,null,PREG_SPLIT_NO_EMPTY);
 	}
 }
 
