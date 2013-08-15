@@ -11,20 +11,29 @@ use NlpTools\Exceptions\InvalidExpression;
  */
 class PennTreeBankTokenizer extends WhitespaceTokenizer
 {
+    /**
+     *
+     * @var array An array that holds the patterns and replacements 
+     */
     protected $patternsAndReplacements = array();
+
+    public function __construct()
+    {
+        $this->initPatternReplacement();
+    }
+
 
     /**
      * Calls internal functions to handle data processing
      * @param type $string 
      */
-    public function tokenize($string)
+    public function tokenize($str)
     {
-        $this->initPatternReplacement();
-        return parent::tokenize($this->execute($string));
+        return parent::tokenize($this->execute($str));
     }
     /**
      * Handles the data processing
-     * @param string $string 
+     * @param string $string The raw text to get parsed
      */
     protected function execute($string)
     {
@@ -83,8 +92,8 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
     }
     
     /**
-     * Appends \stdClass objects to the internal data structure
-     * @param string $pattern
+     * Appends \stdClass objects to the internal data structure $patternsAndReplacements
+     * @param string $pattern 
      * @param string $replacement 
      */
     protected function addPatternAndReplacement($pattern, $replacement)
