@@ -1,0 +1,13 @@
+<phpunit bootstrap="./bootstrap.php" colors="true">
+
+        <testsuite name="NlpTools" >
+                <directory>./NlpTools/</directory>
+        </testsuite>
+
+        <filter>
+            <whitelist>
+                <directory suffix=".php">../../NlpTools/</directory>
+            </whitelist>             
+        </filter>
+</phpunit>
+
