@@ -36,7 +36,7 @@ function getColor($t) {
 	);
 }
 
-function draw_clusters($tset, $clusters, $centroids=null, $lines=False,$w=300,$h=200) {
+function draw_clusters($tset, $clusters, $centroids=null, $lines=False,$emphasize=0,$w=300,$h=200) {
 	if (!function_exists('imagecreate'))
 		return null;
 	
@@ -55,7 +55,10 @@ function draw_clusters($tset, $clusters, $centroids=null, $lines=False,$w=300,$h
 		foreach ($cluster as $idx)
 		{
 			$data = $tset[$idx]->getDocumentData();
-			imagesetpixel($im,$data['x'],$data['y'],$colors[$cid]);
+			if ($emphasize>0)
+				imagefilledarc($im,$data['x'],$data['y'],$emphasize,$emphasize,0,360,$colors[$cid],0);
+			else
+				imagesetpixel($im,$data['x'],$data['y'],$colors[$cid]);
 		}
 		if (is_array($centroids))
 		{
@@ -77,3 +80,62 @@ function draw_clusters($tset, $clusters, $centroids=null, $lines=False,$w=300,$h
 	}
 	return $im;
 }
+
+function draw_dendrogram($tset, $dendrogram, $w=300, $h=200) {
+	$im = imagecreatetruecolor($w,$h);
+	$white = imagecolorallocate($im, 255,255,255);
+	$black = imagecolorallocate($im, 0,0,0);
+	$blue = imagecolorallocate($im, 0,0,255);
+	imagefill($im, 0,0, $white);
+	
+	// padding 5%
+	$padding = round(0.05*$w);
+	// equally distribute
+	$d = ($w-2*$padding)/count($tset);
+	$count_depth = function ($a) use (&$depth, &$count_depth) {
+		if (is_array($a))
+		{
+			return max(
+				array_map(
+					$count_depth,
+					$a
+				)
+			) + 1;
+		}
+		else
+		{
+			return 1;
+		}
+	};
+	$depth = $count_depth($dendrogram)-1;
+	$d_v = ($h-2*$padding)/$depth;
+
+	// offset from bottom
+	$y = $h-$padding;
+	$left = $padding;
+	
+	$draw_subcluster = function ($dendrogram, &$left) use(&$im, $d, $y, $d_v, $black, &$draw_subcluster,$blue) {
+		if (!is_array($dendrogram))
+		{
+			imagestring($im, 1, $left-(2 * strlen($dendrogram)), $y, $dendrogram, $black);
+			$left += $d;
+			return array($left - $d,$y-5);
+		}
+		list($l,$yl) = $draw_subcluster($dendrogram[0],$left);
+		list($r,$yr) = $draw_subcluster($dendrogram[1],$left);
+		$ym = min($yl,$yr)-$d_v;
+		imageline($im, $l, $yl, $l, $ym, $blue);
+		imageline($im, $r, $yr, $r, $ym, $blue);
+		imageline($im, $l, $ym, $r, $ym, $blue);
+		return array($l+($r-$l)/2,$ym);
+	};
+
+	if (count($dendrogram)==1)
+		$draw_subcluster($dendrogram[0],$left);
+	else
+		$draw_subcluster($dendrogram,$left);
+
+	return $im;
+}
+
+
