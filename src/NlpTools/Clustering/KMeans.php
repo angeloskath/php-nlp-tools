@@ -66,8 +66,17 @@ class KMeans extends Clusterer
 				function ($doc) use(&$centroids,$dist) {
 					return array_map(
 						function ($c) use($dist,$doc) {
-							return call_user_func($dist,&$c,&$doc);
-							//return $dist($c,$doc);
+                            // it is passed with an array because dist expects references
+                            // and it failed when run with phpunit.
+                            // see http://php.net/manual/en/function.call-user-func.php
+                            // for the solution used below
+                            return call_user_func_array(
+                                $dist,
+                                array(
+                                    &$c,
+                                    &$doc
+                                )
+                            );
 						},
 						$centroids
 					);
@@ -89,7 +98,13 @@ class KMeans extends Clusterer
 			// using the centroid factory function
 			$new_centroids = array_map(
 				function ($cluster) use(&$docs,$cf) {
-					return call_user_func($cf,&$docs,$cluster);
+                    return call_user_func_array(
+                        $cf,
+                        array(
+                            &$docs,
+                            $cluster
+                        )
+                    );
 				},
 				$clusters
 			);

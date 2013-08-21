@@ -4,7 +4,7 @@ namespace NlpTools\Similarity;
 
 /**
  * This class computes the very simple euclidean distance between
- * two vectors ( sum(sqrt((a_i-b_i)^2)) ).
+ * two vectors ( sqrt(sum((a_i-b_i)^2)) ).
  */
 class Euclidean implements Distance
 {
@@ -35,14 +35,16 @@ class Euclidean implements Distance
 				$r[$k] = $v;
 		}
 
-		return array_sum(
-			array_map(
-				function ($x) {
-					return $x*$x;
-				},
-				$r
-			)
-		);
+		return sqrt(
+            array_sum(
+                array_map(
+                    function ($x) {
+                        return $x*$x;
+                    },
+                    $r
+                )
+            )
+        );
 	}
 }
 

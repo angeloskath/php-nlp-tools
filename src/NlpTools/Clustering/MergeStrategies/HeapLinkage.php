@@ -23,7 +23,7 @@ use NlpTools\Utils\MatrixHeap;
 abstract class HeapLinkage implements MergeStrategy
 {
 	protected $L;
-	protected $heap;
+	protected $queue;
 	protected $dm;
 	protected $removed;
 
@@ -51,15 +51,17 @@ abstract class HeapLinkage implements MergeStrategy
 		$elements = (int)($this->L*($this->L-1))/2;
 		// the containers that will hold the distances
 		$this->dm = new \SplFixedArray($elements);
-		$this->heap = new MatrixHeap($this->dm);
+		$this->queue = new \SplPriorityQueue();
+        $this->queue->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
 		// for each unique pair of documents calculate the distance and
 		// save it in the heap and distance matrix
 		for ($x=0;$x<$this->L;$x++) {
 			for ($y=$x+1;$y<$this->L;$y++) {
 				$index = $this->packIndex($y,$x);
-				$this->dm[$index] = $d->dist($docs[$x],$docs[$y]);
-				$this->heap->insert($index);
+                $tmp_d = $d->dist($docs[$x],$docs[$y]);
+				$this->dm[$index] = $tmp_d;
+				$this->queue->insert($index, -$tmp_d);
 			}
 		}
 	}
@@ -75,12 +77,16 @@ abstract class HeapLinkage implements MergeStrategy
 	 */
 	public function getNextMerge() {
 		// extract the pair with the smallest distance
-		$index = $this->heap->extract();
+		$tmp = $this->queue->extract();
+        $index = $tmp["data"];
+        $d = -$tmp["priority"];
 		list($y,$x) = $this->unravelIndex($index);
 		// check if it is invalid 
-		while ($this->removed[$y] || $this->removed[$x]) {
-			$index = $this->heap->extract();
-			list($y,$x) = $this->unravelIndex($index);
+		while ($this->removed[$y] || $this->removed[$x] || $this->dm[$index]!=$d) {
+            $tmp = $this->queue->extract();
+            $index = $tmp["data"];
+            $d = -$tmp["priority"];
+            list($y,$x) = $this->unravelIndex($index);
 		}
 
 		// Now that we have a valid pair to be merged
@@ -93,14 +99,20 @@ abstract class HeapLinkage implements MergeStrategy
 		for ($i=0;$i<$x;$i++,$yi++,$xi++)
 		{
 			$d = $this->newDistance($xi,$yi,$x,$y);
-			$this->dm[$xi] = $d;
+            if ($d!=$this->dm[$xi]) {
+                $this->dm[$xi] = $d;
+                $this->queue->insert($xi, -$d);
+            }
 		}
 		// for every cluster with index x<i<y
 		for ($i=$x+1;$i<$y;$i++,$yi++)
 		{
 			$xi = $this->packIndex($i,$x);
 			$d = $this->newDistance($xi,$yi,$x,$y);
-			$this->dm[$xi] = $d;
+            if ($d!=$this->dm[$xi]) {
+                $this->dm[$xi] = $d;
+                $this->queue->insert($xi, -$d);
+            }
 		}
 		// for every cluster x<y<i
 		for ($i=$y+1;$i<$this->L;$i++)
@@ -108,13 +120,14 @@ abstract class HeapLinkage implements MergeStrategy
 			$xi = $this->packIndex($i,$x);
 			$yi = $this->packIndex($i,$y);
 			$d = $this->newDistance($xi,$yi,$x,$y);
-			$this->dm[$xi] = $d;
+            if ($d!=$this->dm[$xi]) {
+                $this->dm[$xi] = $d;
+                $this->queue->insert($xi, -$d);
+            }
 		}
 		
 		// mark y as removed
 		$this->removed[$y] = true;
-		// reheap
-		$this->heap->recoverFromCorruption();
 
 		return array($x,$y);
 	}

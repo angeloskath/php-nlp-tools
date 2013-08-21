@@ -1,8 +1,6 @@
 <?php
 
-namespace Tests\NlpTools\Tokenizers;
-
-use NlpTools\Tokenizers\PennTreeBankTokenizer;
+namespace NlpTools\Tokenizers;
 
 /**
  * 
