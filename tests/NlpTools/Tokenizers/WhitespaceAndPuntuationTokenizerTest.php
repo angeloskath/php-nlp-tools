@@ -24,10 +24,10 @@ class WhitespaceAndPunctuationTokenizerTest extends \PHPUnit_Framework_TestCase
     public function testTokenizerOnUtf8()
     {
         $tok = new WhitespaceAndPunctuationTokenizer();
-        
+
         $s = "Ελληνικό κείμενο για παράδειγμα utf-8 χαρακτήρων";
         $tokens = array('Ελληνικό','κείμενο','για','παράδειγμα','utf','-','8','χαρακτήρων');
-        // test tokenization of multibyte non-whitespace characters 
+        // test tokenization of multibyte non-whitespace characters
         $this->assertEquals(
             $tokens,
             $tok->tokenize($s)

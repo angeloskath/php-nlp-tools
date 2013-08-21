@@ -9,14 +9,12 @@ namespace NlpTools\Documents;
  */
 interface Document
 {
-	/**
-	 * Return the data of what is being represented. If it were a word
-	 * we could return a word. If it were a blog post we could return
-	 * an array(Title,Body,array(Comments)).
-	 * 
-	 * @return mixed
-	 */
-	public function getDocumentData();
+    /**
+     * Return the data of what is being represented. If it were a word
+     * we could return a word. If it were a blog post we could return
+     * an array(Title,Body,array(Comments)).
+     *
+     * @return mixed
+     */
+    public function getDocumentData();
 }
-
-?>

@@ -7,9 +7,8 @@ namespace NlpTools\Exceptions;
  */
 class InvalidExpression extends \Exception
 {
-    static public function invalidRegex($pattern, $replacement)
+    public static function invalidRegex($pattern, $replacement)
     {
         throw new InvalidExpression("The pattern '{$pattern}', and the replacement '{$replacement}' caused an error.");
     }
 }
-

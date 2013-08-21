@@ -7,14 +7,17 @@ namespace NlpTools\Random\Generators;
  */
 class MersenneTwister implements GeneratorI
 {
-	public function generate() {
-		return mt_rand()/mt_getrandmax();
-	}
-	
-	protected static $instance;
-	public static function get() {
-		if (self::$instance!=null) return self::$instance;
-		self::$instance = new MersenneTwister();
-		return self::$instance;
-	}
+    public function generate()
+    {
+        return mt_rand()/mt_getrandmax();
+    }
+
+    protected static $instance;
+    public static function get()
+    {
+        if (self::$instance!=null) return self::$instance;
+        self::$instance = new MersenneTwister();
+
+        return self::$instance;
+    }
 }

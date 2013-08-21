@@ -27,7 +27,7 @@ class WhitespaceTokenizerTest extends \PHPUnit_Framework_TestCase
 
         $s = "Ελληνικό κείμενο για παράδειγμα utf-8 χαρακτήρων";
         $tokens = array('Ελληνικό','κείμενο','για','παράδειγμα','utf-8','χαρακτήρων');
-        // test tokenization of multibyte non-whitespace characters 
+        // test tokenization of multibyte non-whitespace characters
         $this->assertEquals(
             $tokens,
             $tok->tokenize($s)

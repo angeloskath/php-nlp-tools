@@ -126,7 +126,6 @@ class HierarchicalTest extends ClusteringTestBase
             $pair
         );
 
-
         $pair = $cl->getNextMerge();
         $this->assertEquals(
             array(0,5),
@@ -141,13 +140,13 @@ class HierarchicalTest extends ClusteringTestBase
     }
 
     /**
-     * 
+     *
      * | * * * *   *
      * +------------
      *   0 1 2 3   4.51
-     * 
+     *
      * results in
-     * 
+     *
      *    +----+
      *    |    |
      *  +---+  |
@@ -156,26 +155,26 @@ class HierarchicalTest extends ClusteringTestBase
      * +-+ | | |
      * | | | | |
      * 0 1 2 3 4.51
-     * 
+     *
      * while
-     * 
+     *
      * | * * * *   *
      * +------------
      *   0 1 2 3   4.49
-     * 
+     *
      * in
-     * 
-     *  +----+  
-     *  |    |  
+     *
+     *  +----+
+     *  |    |
      *  |   +--+
      *  |   |  |
      *  |  +-+ |
      * +-+ | | |
      * | | | | |
      * 0 1 2 3 4.49
-     * 
+     *
      * because the distance between the groups {0,1}-{2,3} is 2 and {2,3},{4.5} is also 2.
-     * 
+     *
      */
     public function testGroupAverage()
     {
@@ -254,7 +253,6 @@ class HierarchicalTest extends ClusteringTestBase
                 array(array(0),array(1),array(2),array(3,4,5,6,7))
             )
         );
-
 
         foreach ($dendrograms as $i=>$d) {
             $this->assertEquals(

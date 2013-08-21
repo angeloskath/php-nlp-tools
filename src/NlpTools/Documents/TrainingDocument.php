@@ -9,23 +9,24 @@ namespace NlpTools\Documents;
  */
 class TrainingDocument implements Document
 {
-	protected $d;
-	protected $class;
-	
-	/**
-	 * @param string $class The actual class of the Document $d
-	 * @param Document $d The document to be decorated
-	 */
-	public function __construct($class, Document $d) {
-		$this->d = $d;
-		$this->class = $class;
-	}
-	public function getDocumentData() {
-		return $this->d->getDocumentData();
-	}
-	public function getClass() {
-		return $this->class;
-	}
-}
+    protected $d;
+    protected $class;
 
-?>
+    /**
+     * @param string   $class The actual class of the Document $d
+     * @param Document $d     The document to be decorated
+     */
+    public function __construct($class, Document $d)
+    {
+        $this->d = $d;
+        $this->class = $class;
+    }
+    public function getDocumentData()
+    {
+        return $this->d->getDocumentData();
+    }
+    public function getClass()
+    {
+        return $this->class;
+    }
+}

@@ -52,7 +52,7 @@ class WordDocumentTest extends \PHPUnit_Framework_TestCase
         for ($i=0;$i<5;$i++) {
             $doc = new WordDocument($this->tokens, 4, $i);
             list($_,$prev,$_) = $doc->getDocumentData();
-            
+
             $this->assertCount(
                 $i,
                 $prev,
@@ -77,8 +77,7 @@ class WordDocumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testNextContext()
     {
-        for ($i=0;$i<5;$i++)
-        {
+        for ($i=0;$i<5;$i++) {
             $doc = new WordDocument($this->tokens, 4, $i);
             list($_,$_,$next) = $doc->getDocumentData();
 

@@ -88,10 +88,10 @@ class LdaTest extends \PHPUnit_Framework_Testcase
                 $max = max($topic);
                 $this->createImage(
                     array_map(
-                        function ($x) use($topic,$max) {
+                        function ($x) use ($topic,$max) {
                             return array_map(
-                                function ($y) use($x,$topic,$max) {
-                                    return (int)(($topic[$y*5+$x]/$max)*255);
+                                function ($y) use ($x,$topic,$max) {
+                                    return (int) (($topic[$y*5+$x]/$max)*255);
                                 },
                                 range(0,4)
                             );
@@ -100,13 +100,12 @@ class LdaTest extends \PHPUnit_Framework_Testcase
                     ),
                     $name
                 );
-            }	
+            }
         }
 
         // TODO: assert the resemblance of the inferred topics
         //       with the actual topics
     }
-    
 
     // WARNING: Massive set up code follows
     // Lda is one of the hardest models to test.
@@ -197,9 +196,10 @@ class LdaTest extends \PHPUnit_Framework_Testcase
                     $topic
                 );
 
-                $s = array_sum($t); 
+                $s = array_sum($t);
+
                 return array_map(
-                    function ($ti) use($s) {
+                    function ($ti) use ($s) {
                         return $ti/$s;
                     },
                     $t
@@ -207,7 +207,7 @@ class LdaTest extends \PHPUnit_Framework_Testcase
             },
             $topics
         );
-        
+
         // multiply by 255 to make gray-scale images of
         // the above arrays
         $topics = array_map(
@@ -216,7 +216,7 @@ class LdaTest extends \PHPUnit_Framework_Testcase
                     function ($row) {
                         return array_map(
                             function ($pixel) {
-                                return (int)(255*$pixel);
+                                return (int) (255*$pixel);
                             },
                             $row
                         );
@@ -284,8 +284,7 @@ class LdaTest extends \PHPUnit_Framework_Testcase
         $mt = MersenneTwister::get(); // simply mt_rand but in the interval [0,1)
         $x = $mt->generate();
         $p = 0.0;
-        foreach ($d as $i=>$v)
-        {
+        foreach ($d as $i=>$v) {
             $p+=$v;
             if ($p > $x)
                 return $i;
@@ -296,17 +295,17 @@ class LdaTest extends \PHPUnit_Framework_Testcase
      * Create a document sticking to the model's assumptions
      * and hypotheses
      */
-    function createDocument($topic_dists,$theta,$length)
+    public function createDocument($topic_dists,$theta,$length)
     {
         $doc = array_fill_keys(range(0,24),0);
-        while ($length-- > 0)
-        {
+        while ($length-- > 0) {
             $topic = $this->draw($theta);
             $word = $this->draw($topic_dists[$topic]);
             $doc[$word] += 1;
         }
+
         return array_map(
-            function ($start) use($doc) {
+            function ($start) use ($doc) {
                 return array_slice($doc,$start,5);
             },
             range(0,24,5)
@@ -316,19 +315,17 @@ class LdaTest extends \PHPUnit_Framework_Testcase
     /**
      * Load a document from an image saved to disk
      */
-    function fromImg($file)
+    public function fromImg($file)
     {
         $im = imagecreatefrompng($file);
         $d = array();
-        for ($w=0;$w<25;$w++)
-        {
-            $x = (int)($w%5);
-            $y = (int)($w/5);
-            
+        for ($w=0;$w<25;$w++) {
+            $x = (int) ($w%5);
+            $y = (int) ($w/5);
+
             $c = imagecolorsforindex($im,imagecolorat($im,$x,$y));
             $c = $c['red'];
-            if ($c>0)
-            {
+            if ($c>0) {
                 $d = array_merge(
                     $d,
                     array_fill_keys(
@@ -338,6 +335,7 @@ class LdaTest extends \PHPUnit_Framework_Testcase
                 );
             }
         }
+
         return $d;
     }
 
