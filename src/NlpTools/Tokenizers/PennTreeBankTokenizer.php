@@ -5,7 +5,7 @@ use NlpTools\Exceptions\InvalidExpression;
 
 /**
  * Based on http://www.cis.upenn.edu/~treebank/tokenizer.sed
- * 
+ *
  *
  * @author Dan Cardin
  */
@@ -13,7 +13,7 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
 {
     /**
      *
-     * @var array An array that holds the patterns and replacements 
+     * @var array An array that holds the patterns and replacements
      */
     protected $patternsAndReplacements = array();
 
@@ -22,10 +22,9 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
         $this->initPatternReplacement();
     }
 
-
     /**
      * Calls internal functions to handle data processing
-     * @param type $string 
+     * @param type $string
      */
     public function tokenize($str)
     {
@@ -37,20 +36,20 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
      */
     protected function execute($string)
     {
-        foreach($this->patternsAndReplacements as $patternAndReplacement)
-        {
+        foreach ($this->patternsAndReplacements as $patternAndReplacement) {
             $tmp = preg_replace("/".$patternAndReplacement->pattern."/s", $patternAndReplacement->replacement, $string);
-            if(!$tmp) {
+            if (!$tmp) {
                 InvalidExpression::invalidRegex($patternAndReplacement->pattern, $patternAndReplacement->replacement);
             } else {
                 $string = $tmp;
             }
         }
+
         return $string;
     }
-    
+
     /**
-     * Initializes the patterns and replacements/ 
+     * Initializes the patterns and replacements/
      */
     protected function initPatternReplacement()
     {
@@ -87,14 +86,13 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
 
         $this->addPatternAndReplacement("  *"," ");
         $this->addPatternAndReplacement("^ *","");
-        
-        
+
     }
-    
+
     /**
      * Appends \stdClass objects to the internal data structure $patternsAndReplacements
-     * @param string $pattern 
-     * @param string $replacement 
+     * @param string $pattern
+     * @param string $replacement
      */
     protected function addPatternAndReplacement($pattern, $replacement)
     {
@@ -103,5 +101,5 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
         $instance->replacement = $replacement;
         $this->patternsAndReplacements[] = $instance;
     }
-    
+
 }
