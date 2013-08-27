@@ -1,7 +1,6 @@
 <?php
-namespace Tests\NlpTools\Stemmers;
+namespace NlpTools\Stemmers;
 
-use NlpTools\Stemmers\LancasterStemmer;
 /**
  * Description of LancasterStemmerTest
  *
