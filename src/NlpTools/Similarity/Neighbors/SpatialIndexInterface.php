@@ -2,8 +2,6 @@
 
 namespace NlpTools\Similarity\Neighbors;
 
-use NlpTools\Documents\TrainingSet;
-use NlpTools\FeatureFactories\FeatureFactory;
 use NlpTools\Similarity\Distance;
 
 /**
@@ -39,8 +37,8 @@ interface SpatialIndexInterface
      * Return the indices of the datapoints that are within the e-neighborhood
      * of the data point $d.
      * 
-     * @param mixed    $doc The data point whose neighbors we are looking for
-     * @param float    $e   The neighborhood
+     * @param mixed $doc The data point whose neighbors we are looking for
+     * @param float $e   The neighborhood
      * @return array An array of indices that are the neighbors of point $d 
      */
     public function regionQuery($doc, $e);
@@ -48,8 +46,8 @@ interface SpatialIndexInterface
     /**
      * Return the indices of the $k datapoints that are closest to $doc.
      * 
-     * @param mixed    $doc The data point whose neighbors we are looking for
-     * @param int      $k   How many neighbors do we want
+     * @param mixed $doc The data point whose neighbors we are looking for
+     * @param int   $k   How many neighbors do we want
      * @return array An array of indices that are the neighbors of point $d 
      */
     public function kNearestNeighbors($doc, $k);

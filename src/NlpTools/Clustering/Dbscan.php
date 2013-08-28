@@ -2,7 +2,9 @@
 
 namespace NlpTools\Clustering;
 
-use NlpTools\Similarity\Neighbors\SpatialIndex;
+use NlpTools\Similarity\Neighbors\SpatialIndexInterface;
+use NlpTools\Similarity\Neighbors\NaiveLinearSearch;
+use NlpTools\Similarity\Distance;
 use NlpTools\FeatureFactories\FeatureFactory;
 use NlpTools\Documents\TrainingSet;
 
@@ -15,18 +17,23 @@ class Dbscan extends Clusterer
 
     protected $neighbors;
     protected $minPts;
-    protected $e;
+    protected $eps;
 
     /**
-     * @param SpatialIndex $neighbors An index for efficiently performing distance related queries
-     * @param int          $minPts    The minimum number of points required in the e-neighborhood
-     * @param float        $e         The distance that defines a neighborhood
+     * @param int                   $minPts    The minimum number of points required in the e-neighborhood
+     * @param float                 $e         The distance that defines a neighborhood
+     * @param Distance              $d         The distance to be used with the SpatialIndex
+     * @param SpatialIndexInterface $neighbors An index for efficiently performing distance related queries
      */
-    public function __construct(SpatialIndex $neighbors, $minPts, $e)
+    public function __construct($minPts, $e, Distance $d, SpatialIndexInterface $neighbors=null)
     {
-        $this->neighbors = $neighbors;
         $this->minPts = $minPts;
-        $this->e = $e;
+        $this->eps = $e;
+        if ($neighbors === null) {
+            $neighbors = new NaiveLinearSearch();
+        }
+        $this->neighbors = $neighbors;
+        $this->neighbors->setDistanceMetric($d);
     }
 
     /**
@@ -36,46 +43,56 @@ class Dbscan extends Clusterer
      */
     public function cluster(TrainingSet $tset, FeatureFactory $ff)
     {
-        $docs = $this->getDocumentArray();
+        $docs = $this->getDocumentArray($tset, $ff);
+        $this->neighbors->index($docs);
 
-        $noise = array();
-        $visited = array();
-        $clusters = array_fill_keys(range(0,count($docs)),-1);
+        $visited = array_fill_keys(range(0,count($docs)-1), false);
+        $clusters = array_fill_keys(range(0,count($docs)-1), -1);
         $c = -1; // current cluster
 
         // for every data point
         foreach ($docs as $idx=>$d) {
-            $visited[$i] = true;
-            $idxs = $this->neighbors->regionQuery($idx, $this->eps);
+            if ($visited[$idx])
+                continue;
 
-            // if it has a few neighbors then it is noise
-            if (count($idxs)<$this->minPts) {
-                $noise[] = $i;
-            } else {
-                // we have found a new cluster increment $c
-                $c++;
-                $clusters[$i] = $c;
-                $l = count($idxs);
-                // foreach neighbors of $i
-                for ($j=0;$j<$l;$j++) {
-                    // new $i the previous $i's neighbor
-                    $i = $idxs[$j];
-                    if (!isset($visited[$i])) {
-                        // we haven't visited before so we need to
-                        // find its neighbors
+            $visited[$idx] = true;
+            $neighbors = $this->neighbors->regionQuery($d, $this->eps);
+
+            // we have ourselves a core point
+            if (count($neighbors)>=$this->minPts) {
+                $c++; // next cluster
+                $clusters[$idx] = $c;
+                
+                // expand cluster $c
+                $set = array();
+                $iter = new \AppendIterator();
+                $iter->append(new \ArrayIterator($neighbors));
+                // while we still have neighbors
+                foreach ($iter as $i) {
+                    $set[$i] = true;
+                    // if we haven't visited this point before we
+                    // should check it for neighbors
+                    if (!$visited[$i]) {
                         $visited[$i] = true;
-                        $new_idxs = $this->neighbors->regionQuery($docs[$i], $this->eps);
-                        // if it has the required density
-                        // (sufficient amounf of neighbors in sufficiently small distance)
-                        // also add its neighbors to the cluster
-                        if (count($new_idxs)>=$this->minPts) {
-                            $idxs = array_merge($idxs,$new_idxs);
-                            $l = count($idxs);
+                        $neighbors = $this->neighbors->regionQuery($docs[$i], $this->eps);
+                        if (count($neighbors)>=$this->minPts) {
+                            // add only the points that have not been added
+                            $iter->append(
+                                new \ArrayIterator(
+                                    array_filter(
+                                        $neighbors,
+                                        function ($n) use(&$set) {
+                                            return !isset($set[$n]);
+                                        }
+                                    )
+                                )
+                            );
                         }
                     }
-                    if (!isset($clusters[$i])) {
-                        // add the neighbor to the cluster if it
-                        // doesn't belong to any other cluster already
+
+                    // if it is not member of any other cluster then
+                    // it should be of cluster $c
+                    if ($clusters[$i]<0) {
                         $clusters[$i] = $c;
                     }
                 }
@@ -83,7 +100,12 @@ class Dbscan extends Clusterer
         }
 
         $actual_clusters = array();
+        $noise = array();
         foreach ($clusters as $i=>$c) {
+            if ($c<0) {
+                $noise[] = $i;
+                continue;
+            }
             if (!isset($actual_clusters[$c])) {
                 $actual_clusters[$c]=array();
             }
