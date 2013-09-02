@@ -39,7 +39,7 @@ class Dbscan extends Clusterer
     /**
      * @param  TrainingSet    $document The documents to be clustered
      * @param  FeatureFactory $ff       A feature factory to transform the documents given
-     * @return array          The clusters, an array containing arrays of offsets for the documents
+     * @return array          The clusters and the noise
      */
     public function cluster(TrainingSet $tset, FeatureFactory $ff)
     {
@@ -62,7 +62,7 @@ class Dbscan extends Clusterer
             if (count($neighbors)>=$this->minPts) {
                 $c++; // next cluster
                 $clusters[$idx] = $c;
-                
+
                 // expand cluster $c
                 $set = array();
                 $iter = new \AppendIterator();
@@ -81,7 +81,7 @@ class Dbscan extends Clusterer
                                 new \ArrayIterator(
                                     array_filter(
                                         $neighbors,
-                                        function ($n) use(&$set) {
+                                        function ($n) use (&$set) {
                                             return !isset($set[$n]);
                                         }
                                     )
