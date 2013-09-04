@@ -9,13 +9,7 @@ use NlpTools\Documents\TokensDocument;
  */
 class FreqDist 
 {
-    /**
-     * The TokensDocument passed in
-     * @var TokensDocument
-     */
-    protected $tokensDocument = null;
-    
-    
+      
     /**
      * An associative array that holds all the frequencies per token
      * @var array 
@@ -23,14 +17,21 @@ class FreqDist
     protected $keyValues = array();
     
     /**
+     * The total number of tokens original passed into FreqDist
+     * @var int  
+     */
+    protected $totalTokens = null;
+    
+    
+    /**
      * This sorts the token meta data collection right away so use 
      * frequency distribution data can be extracted.
-     * @param TokensDocument
+     * @param array $tokens
      */
-    public function __construct(TokensDocument &$document)
-    {
-        $this->tokensDocument  = $document;   
-        $this->preCompute();
+    public function __construct(array $tokens)
+    {  
+        $this->preCompute($tokens);
+        $this->totalTokens = count($tokens);
     }
      
     /**
@@ -39,16 +40,17 @@ class FreqDist
      */
     public function getTotalTokens()
     {
-        return count($this->tokensDocument->getDocumentData());
+        return $this->totalTokens;
     }
     
     /**
      * Internal function for summarizing all the data into a key value store
+     * @param array $tokens The set of tokens passed in
      */
-    public function preCompute()
+    protected function preCompute(array &$tokens)
     {
         //count all the tokens up and put them in a key value store
-        $this->keyValues = array_count_values($this->tokensDocument->getDocumentData());
+        $this->keyValues = array_count_values($tokens);
         arsort($this->keyValues);        
     } 
     
@@ -107,19 +109,25 @@ class FreqDist
     public function getHapaxes()
     {
             $hapaxes = array();
-            //resort the array
-            $reversed = array_reverse($this->keyValues);
             
-            foreach($reversed as $key => $freq){
-                if($freq === 1){
-                    $hapaxes[] = $key;
-                }
-                elseif($freq > 1){ 
-                    break;
-                }
+            //get the head key
+            $head = key($this->keyValues);
+            
+            //get the tail value,. set the internal pointer to the tail
+            $tail = end($this->keyValues);
+            // no hapaxes available
+            if($tail > 1) { 
+                return array();
             }
             
-            unset($reversed);
+            do {
+                $hapaxes[] = key($this->keyValues);
+                prev($this->keyValues);
+                
+            } while(current($this->keyValues) == 1 && key($this->keyValues) !== $head);
+            
+            //reset the internal pointer in the array
+            reset($this->keyValues);
             return $hapaxes; 
     }
     
