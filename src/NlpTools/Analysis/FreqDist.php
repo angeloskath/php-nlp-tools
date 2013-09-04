@@ -17,7 +17,7 @@ class FreqDist
     protected $keyValues = array();
     
     /**
-     * The total number of tokens original passed into FreqDist
+     * The total number of tokens originally passed into FreqDist
      * @var int  
      */
     protected $totalTokens = null;
@@ -45,7 +45,7 @@ class FreqDist
     
     /**
      * Internal function for summarizing all the data into a key value store
-     * @param array $tokens The set of tokens passed in
+     * @param array $tokens The set of tokens passed into the constructor
      */
     protected function preCompute(array &$tokens)
     {
