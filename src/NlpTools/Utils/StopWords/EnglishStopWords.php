@@ -3,7 +3,7 @@ namespace NlpTools\Utils\StopWords;
 /**
  * Description of EnglishStopWords
  *
- * @author dcardin
+ * @author Dan Cardin
  */
 class EnglishStopWords extends StopWordsAbstractFactory
 {
