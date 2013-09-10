@@ -25,7 +25,7 @@ namespace NlpTools\Similarity;
  * 	....
  * )
  */
-class CosineSimilarity implements Similarity, Distance
+class CosineSimilarity implements SimilarityInterface, DistanceInterface
 {
 
     /**

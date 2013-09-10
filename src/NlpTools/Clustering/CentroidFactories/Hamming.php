@@ -7,7 +7,7 @@ This class computes the centroid of the hamming distance between two strings
 that are the binary representations of two integers (the strings are supposed
 to only contain the characters 1 and 0).
  */
-class Hamming implements CentroidFactory
+class Hamming implements CentroidFactoryInterface
 {
 
     /**

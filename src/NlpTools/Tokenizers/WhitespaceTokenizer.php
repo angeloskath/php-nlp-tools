@@ -6,7 +6,7 @@ namespace NlpTools\Tokenizers;
  * Simple white space tokenizer.
  * Break on every white space
  */
-class WhitespaceTokenizer implements Tokenizer
+class WhitespaceTokenizer implements TokenizerInterface
 {
     const PATTERN = '/[\pZ\pC]+/u';
 

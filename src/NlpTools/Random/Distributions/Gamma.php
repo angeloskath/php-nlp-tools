@@ -2,7 +2,7 @@
 
 namespace NlpTools\Random\Distributions;
 
-use NlpTools\Random\Generators\GeneratorI;
+use NlpTools\Random\Generators\GeneratorInterface;
 
 /**
  * Implement the gamma distribution.
@@ -16,7 +16,7 @@ class Gamma extends AbstractDistribution
     protected $shape;
     protected $scale;
 
-    public function __construct($shape,$scale,GeneratorI $rnd=null)
+    public function __construct($shape,$scale,  GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 

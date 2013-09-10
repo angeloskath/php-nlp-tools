@@ -7,7 +7,7 @@ namespace NlpTools\Random\Generators;
  * with random numbers from different platforms or different generation
  * algorithms.
  */
-class FromFile implements GeneratorI
+class FromFile implements GeneratorInterface
 {
     protected $h;
 

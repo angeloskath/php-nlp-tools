@@ -5,7 +5,7 @@ namespace NlpTools\Documents;
 /**
  * Represents a bag of words (tokens) document.
  */
-class TokensDocument implements Document
+class TokensDocument implements DocumentInterface
 {
     protected $tokens;
     public function __construct(array $tokens)

@@ -7,16 +7,16 @@ namespace NlpTools\Documents;
  * to add the real class of the document. It is used while training
  * together with the training set.
  */
-class TrainingDocument implements Document
+class TrainingDocument implements DocumentInterface
 {
     protected $d;
     protected $class;
 
     /**
      * @param string   $class The actual class of the Document $d
-     * @param Document $d     The document to be decorated
+     * @param DocumentInterface $d     The document to be decorated
      */
-    public function __construct($class, Document $d)
+    public function __construct($class, DocumentInterface $d)
     {
         $this->d = $d;
         $this->class = $class;

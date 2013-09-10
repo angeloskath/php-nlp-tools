@@ -40,7 +40,7 @@ namespace NlpTools\Optimizers;
  * floats in json that will contain the weight for each feature.
  *
  */
-class ExternalMaxentOptimizer implements MaxentOptimizer
+class ExternalMaxentOptimizer implements MaxentOptimizerInterface
 {
     // holds the program name to be run
     protected $optimizer;

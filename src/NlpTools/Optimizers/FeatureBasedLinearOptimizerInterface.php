@@ -2,7 +2,7 @@
 
 namespace NlpTools\Optimizers;
 
-interface FeatureBasedLinearOptimizer
+interface FeatureBasedLinearOptimizerInterface
 {
     /**
      * This function receives an array that contains an array for

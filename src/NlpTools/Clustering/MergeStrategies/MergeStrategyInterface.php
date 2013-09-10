@@ -2,7 +2,7 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * In hierarchical agglomerative clustering each document starts in its own
@@ -10,13 +10,13 @@ use NlpTools\Similarity\Distance;
  * The MergeStrategy defines how a new distance for the merged cluster is
  * going to be calculated based on the distances of the individual clusters.
  */
-interface MergeStrategy
+interface MergeStrategyInterface
 {
     /**
      * Study the docs and preprocess anything required for
      * computing the merges
      */
-    public function initializeStrategy(Distance $d, array &$docs);
+    public function initializeStrategy(DistanceInterface $d, array &$docs);
 
     /**
      * Return the next two clusters for merging and assume

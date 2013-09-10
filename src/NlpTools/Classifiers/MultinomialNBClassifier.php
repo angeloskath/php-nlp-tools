@@ -2,21 +2,21 @@
 
 namespace NlpTools\Classifiers;
 
-use \NlpTools\Documents\Document;
-use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\Documents\DocumentInterface;
+use \NlpTools\FeatureFactories\FeatureFactoryInterface;
 use \NlpTools\Models\MultinomialNBModel;
 
 /**
  * Use a multinomia NB model to classify a document
  */
-class MultinomialNBClassifier implements Classifier
+class MultinomialNBClassifier implements ClassifierInterface
 {
     // The feature factory
     protected $feature_factory;
     // The NBModel
     protected $model;
 
-    public function __construct(FeatureFactory $ff, MultinomialNBModel $m)
+    public function __construct(FeatureFactoryInterface $ff, MultinomialNBModel $m)
     {
         $this->feature_factory = $ff;
         $this->model = $m;
@@ -28,10 +28,10 @@ class MultinomialNBClassifier implements Classifier
      * probability.
      *
      * @param  array    $classes The classes from which to choose
-     * @param  Document $d       The document to classify
+     * @param  DocumentInterface $d       The document to classify
      * @return string   $class The class that has the maximum probability
      */
-    public function classify(array $classes, Document $d)
+    public function classify(array $classes, DocumentInterface $d)
     {
         $maxclass = current($classes);
         $maxscore = $this->getScore($maxclass,$d);
@@ -55,10 +55,10 @@ class MultinomialNBClassifier implements Classifier
      *       ex.: getLogPrior() and getLogCondProb()
      *
      * @param string $class The class for which we are getting a score
-     * @param Document The document whose score we are getting
+     * @param DocumentInterface The document whose score we are getting
      * @return float The log of the probability of $d belonging to $class
      */
-    public function getScore($class, Document $d)
+    public function getScore($class, DocumentInterface $d)
     {
         $score = log($this->model->getPrior($class));
         $features = $this->feature_factory->getFeatureArray($class,$d);

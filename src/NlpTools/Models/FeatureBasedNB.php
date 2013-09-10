@@ -2,14 +2,14 @@
 
 namespace NlpTools\Models;
 
-use \NlpTools\FeatureFactories\FeatureFactory;
+use \NlpTools\FeatureFactories\FeatureFactoryInterface;
 use \NlpTools\Documents\TrainingSet;
 
 /**
  * Implement a MultinomialNBModel by training on a TrainingSet with a
  * FeatureFactory and additive smoothing.
  */
-class FeatureBasedNB implements MultinomialNBModel
+class FeatureBasedNB implements MultinomialNBModelInterface
 {
     // computed prior probabilities
     protected $priors;
@@ -61,13 +61,13 @@ class FeatureBasedNB implements MultinomialNBModel
      * with the same training set twice.
      *
      * @param array          $train_ctx The previous training context
-     * @param FeatureFactory $ff        A feature factory to compute features from a training document
+     * @param FeatureFactoryInterface $ff        A feature factory to compute features from a training document
      * @param TrainingSet The training set
      * @param  integer $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
      * @return array   Return a training context to be used for further incremental training,
      *               although this is not necessary since the changes also happen in place
      */
-    public function train_with_context(array &$train_ctx, FeatureFactory $ff, TrainingSet $tset, $a_smoothing=1)
+    public function train_with_context(array &$train_ctx, FeatureFactoryInterface $ff, TrainingSet $tset, $a_smoothing=1)
     {
         $this->countTrainingSet(
                                 $ff,
@@ -109,7 +109,7 @@ class FeatureBasedNB implements MultinomialNBModel
      * @param  integer $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
      * @return array   Return a training context to be used for incremental training
      */
-    public function train(FeatureFactory $ff, TrainingSet $tset, $a_smoothing=1)
+    public function train(FeatureFactoryInterface $ff, TrainingSet $tset, $a_smoothing=1)
     {
         $class_set = $tset->getClassSet();
 
@@ -138,7 +138,7 @@ class FeatureBasedNB implements MultinomialNBModel
      * @param  integer        $ndocs               The number of documents
      * @return void
      */
-    protected function countTrainingSet(FeatureFactory $ff, TrainingSet $tset, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, array &$voc, &$ndocs)
+    protected function countTrainingSet(FeatureFactoryInterface $ff, TrainingSet $tset, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, array &$voc, &$ndocs)
     {
         foreach ($tset as $tdoc) {
             $ndocs++;

@@ -9,7 +9,7 @@ namespace NlpTools\Optimizers;
  * See page 24 - 28 of http://nlp.stanford.edu/pubs/maxent-tutorial-slides.pdf
  * @see NlpTools\Models\Maxent
  */
-class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOptimizer
+class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOptimizerInterface
 {
     // will hold the constant numerators
     protected $numerators;

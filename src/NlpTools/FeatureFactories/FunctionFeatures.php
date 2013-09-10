@@ -2,7 +2,7 @@
 
 namespace NlpTools\FeatureFactories;
 
-use \NlpTools\Documents\Document;
+use \NlpTools\Documents\DocumentInterface;
 
 /**
  * An implementation of FeatureFactory that takes any number of callables
@@ -12,7 +12,7 @@ use \NlpTools\Documents\Document;
  *
  * The class can model both feature frequency and presence
  */
-class FunctionFeatures implements FeatureFactory
+class FunctionFeatures implements FeatureFactoryInterface
 {
 
     protected $functions;
@@ -59,10 +59,10 @@ class FunctionFeatures implements FeatureFactory
      * and add each value to the feature set.
      *
      * @param  string   $class The class for which we are calculating features
-     * @param  Document $d     The document for which we are calculating features
+     * @param  DocumentInterface $d     The document for which we are calculating features
      * @return array
      */
-    public function getFeatureArray($class, Document $d)
+    public function getFeatureArray($class, DocumentInterface $d)
     {
         $features = array_filter(
             array_map( function ($feature) use ($class,$d) {
