@@ -7,7 +7,7 @@ use \NlpTools\Documents\TrainingSet;
 
 /**
  * Implement a MultinomialNBModel by training on a TrainingSet with a
- * FeatureFactory and additive smoothing.
+ * FeatureFactoryInterface and additive smoothing.
  */
 class FeatureBasedNB implements MultinomialNBModelInterface
 {
@@ -104,7 +104,7 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * More information on the algorithm can be found at
      * http://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html
      *
-     * @param FeatureFactory A feature factory to compute features from a training document
+     * @param FeatureFactoryInterface A feature factory to compute features from a training document
      * @param TrainingSet The training set
      * @param  integer $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
      * @return array   Return a training context to be used for incremental training
@@ -129,7 +129,7 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * by reference and they are filled in this function. Useful for not
      * making copies of big arrays.
      *
-     * @param  FeatureFactory $ff                  A feature factory to create the features for each document in the set
+     * @param  FeatureFactoryInterface $ff                  A feature factory to create the features for each document in the set
      * @param  TrainingSet    $tset                The training set (collection of labeled documents)
      * @param  array          $termcount_per_class The count of occurences of each feature in each class
      * @param  array          $termcount           The total count of occurences of each term

@@ -37,7 +37,7 @@ use NlpTools\Classifiers\FeatureBasedLinearClassifier;
 // create needed reusable objects, a tokenizer and a feature factory
 $tok = new WhitespaceTokenizer();
 $ff = new FunctionFeatures();
-$ff->add(function ($class, Document $d) {
+$ff->add(function ($class, DocumentInterface $d) {
     $r = array();
     foreach ($d->getDocumentData() as $tok)
         $r[] = $class.$tok;

@@ -2,9 +2,9 @@
 
 namespace NlpTools\Classifiers;
 
-use \NlpTools\Documents\DocumentInterface;
-use \NlpTools\FeatureFactories\FeatureFactoryInterface;
-use \NlpTools\Models\MultinomialNBModel;
+use NlpTools\Documents\DocumentInterface;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
+use NlpTools\Models\MultinomialNBModelInterface;
 
 /**
  * Use a multinomia NB model to classify a document
@@ -16,7 +16,7 @@ class MultinomialNBClassifier implements ClassifierInterface
     // The NBModel
     protected $model;
 
-    public function __construct(FeatureFactoryInterface $ff, MultinomialNBModel $m)
+    public function __construct(FeatureFactoryInterface $ff, MultinomialNBModelInterface $m)
     {
         $this->feature_factory = $ff;
         $this->model = $m;

@@ -11,7 +11,7 @@ abstract class Clusterer
      * Group the documents together
      *
      * @param  TrainingSet    $documents The documents to be clustered
-     * @param  FeatureFactory $ff        A feature factory to transform the documents given
+     * @param  FeatureFactoryInterface $ff        A feature factory to transform the documents given
      * @return array          The clusters, an array containing arrays of offsets for the documents
      */
     abstract public function cluster(TrainingSet $documents, FeatureFactoryInterface $ff);

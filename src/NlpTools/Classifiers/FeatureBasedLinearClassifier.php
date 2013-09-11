@@ -17,7 +17,7 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
     // The LinearModel
     protected $model;
 
-    public function __construct(FeatureFactory $ff, LinearModel $m)
+    public function __construct(FeatureFactoryInterface $ff, LinearModel $m)
     {
         $this->feature_factory = $ff;
         $this->model = $m;

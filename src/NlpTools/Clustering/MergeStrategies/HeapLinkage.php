@@ -38,7 +38,7 @@ abstract class HeapLinkage implements MergeStrategyInterface
      * Initialize the distance matrix and any other data structure needed
      * to calculate the merges later.
      *
-     * @param Distance $d    The distance metric used to calculate the distance matrix
+     * @param DistanceInterface $d    The distance metric used to calculate the distance matrix
      * @param array    $docs The docs to be clustered
      */
     public function initializeStrategy(DistanceInterface $d, array &$docs)

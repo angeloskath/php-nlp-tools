@@ -5,7 +5,7 @@ namespace NlpTools\FeatureFactories;
 use \NlpTools\Documents\DocumentInterface;
 
 /**
- * An implementation of FeatureFactory that takes any number of callables
+ * An implementation of FeatureFactoryInterface that takes any number of callables
  * (function names, closures, array($object,'func_name'), etc.) and
  * calls them consecutively using the return value as a feature's unique
  * string.
