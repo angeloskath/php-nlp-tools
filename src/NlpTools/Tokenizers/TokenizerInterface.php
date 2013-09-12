@@ -2,7 +2,7 @@
 
 namespace NlpTools\Tokenizers;
 
-interface Tokenizer
+interface TokenizerInterface
 {
     /**
      * Break a character sequence to a token sequence

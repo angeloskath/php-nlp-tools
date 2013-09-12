@@ -2,7 +2,7 @@
 
 namespace NlpTools\Models;
 
-use NlpTools\FeatureFactories\FeatureFactory;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Random\Generators\MersenneTwister;
 
@@ -37,12 +37,12 @@ class Lda
     protected $voc;
 
     /**
-     * @param FeatureFactory $ff      The feature factory will be applied to each document and the resulting feature array will be considered as a document for LDA
+     * @param FeatureFactoryInterface $ff      The feature factory will be applied to each document and the resulting feature array will be considered as a document for LDA
      * @param integer        $ntopics The number of topics assumed by the model
      * @param float          $a       The dirichlet prior assumed for the per document topic distribution
      * @param float          $b       The dirichlet prior assumed for the per word topic distribution
      */
-    public function __construct(FeatureFactory $ff,$ntopics,$a=1,$b=1)
+    public function __construct(FeatureFactoryInterface $ff,$ntopics,$a=1,$b=1)
     {
         $this->ff = $ff;
 

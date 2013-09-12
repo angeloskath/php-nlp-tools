@@ -2,7 +2,7 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * In single linkage clustering the new distance of the merged cluster with

@@ -5,7 +5,7 @@ namespace NlpTools\Tokenizers;
 /**
  * Regex tokenizer tokenizes text based on a set of regexes
  */
-class RegexTokenizer implements Tokenizer
+class RegexTokenizer implements TokenizerInterface
 {
     // the patterns to be used
     protected $patterns;

@@ -5,7 +5,7 @@ namespace NlpTools\Clustering\CentroidFactories;
 /**
  * Computes the euclidean centroid of the provided sparse vectors
  */
-class Euclidean implements CentroidFactory
+class Euclidean implements CentroidFactoryInterface
 {
     /**
      * If the document is a collection of tokens or features transorm it to
