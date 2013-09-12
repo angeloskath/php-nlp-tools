@@ -7,7 +7,7 @@ namespace NlpTools\Documents;
  * It can be a representation of a word, of a bunch of text, of a text
  * that has structure (ex.: Title,Body,Link)
  */
-interface Document
+interface DocumentInterface
 {
     /**
      * Return the data of what is being represented. If it were a word

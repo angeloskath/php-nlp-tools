@@ -2,7 +2,7 @@
 
 namespace NlpTools\Clustering\CentroidFactories;
 
-interface CentroidFactory
+interface CentroidFactoryInterface
 {
     /**
      * Parse the provided docs and create a doc that given a metric

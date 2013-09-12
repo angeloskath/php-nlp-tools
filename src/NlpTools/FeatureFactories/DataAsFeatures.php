@@ -1,10 +1,9 @@
 <?php
-
 namespace NlpTools\FeatureFactories;
 
-use \NlpTools\Documents\Document;
+use NlpTools\Documents\DocumentInterface;
 
-class DataAsFeatures implements FeatureFactory
+class DataAsFeatures implements FeatureFactoryInterface
 {
     /**
      * For use with TokensDocument mostly. Simply return the data as
@@ -12,10 +11,10 @@ class DataAsFeatures implements FeatureFactory
      * for a signle document).
      *
      * @param  string   $class The class for which we are calculating features
-     * @param  Document $d     The document to calculate features for.
+     * @param  DocumentInterface $d     The document to calculate features for.
      * @return array
      */
-    public function getFeatureArray($class, Document $d)
+    public function getFeatureArray($class, DocumentInterface $d)
     {
         return $d->getDocumentData();
     }

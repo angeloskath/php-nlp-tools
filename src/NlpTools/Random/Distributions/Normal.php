@@ -2,14 +2,14 @@
 
 namespace NlpTools\Random\Distributions;
 
-use NlpTools\Random\Generators\GeneratorI;
+use NlpTools\Random\Generators\GeneratorInterface;
 
 class Normal extends AbstractDistribution
 {
     protected $m;
     protected $sigma;
 
-    public function __construct($m=0.0,$sigma=1.0, GeneratorI $rnd=null)
+    public function __construct($m=0.0,$sigma=1.0, GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 

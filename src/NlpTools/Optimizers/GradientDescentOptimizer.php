@@ -6,7 +6,7 @@ namespace NlpTools\Optimizers;
  * Implements gradient descent with fixed step.
  * Leaves the computation of the fprime to the children classes.
  */
-abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizer
+abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerInterface
 {
     // gradient descent parameters
     protected $precision; // how close to zero should fprime go

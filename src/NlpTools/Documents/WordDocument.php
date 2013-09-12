@@ -6,7 +6,7 @@ namespace NlpTools\Documents;
  * A Document that represents a single word but with a context of a
  * larger document. Useful for Named Entity Recognition
  */
-class WordDocument implements Document
+class WordDocument implements DocumentInterface
 {
     protected $word;
     protected $before;

@@ -7,7 +7,7 @@ namespace NlpTools\Random\Generators;
  *
  * @author Katharopoulos Angelos <angelos@yourse.gr>
  */
-interface GeneratorI
+interface GeneratorInterface
 {
     /**
      * Generates a pseudo-random number with uniform distribution in the

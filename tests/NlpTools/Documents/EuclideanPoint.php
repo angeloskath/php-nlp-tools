@@ -2,7 +2,7 @@
 
 namespace NlpTools\Documents;
 
-class EuclideanPoint implements Document
+class EuclideanPoint implements DocumentInterface
 {
     public $x;
     public $y;

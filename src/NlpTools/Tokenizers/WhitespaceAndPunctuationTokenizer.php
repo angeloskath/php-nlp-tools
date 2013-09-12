@@ -8,7 +8,7 @@ namespace NlpTools\Tokenizers;
  * Does not include white space in tokens.
  * Every punctuation character is a signle token
  */
-class WhitespaceAndPunctuationTokenizer implements Tokenizer
+class WhitespaceAndPunctuationTokenizer implements TokenizerInterface
 {
     public function tokenize($str)
     {

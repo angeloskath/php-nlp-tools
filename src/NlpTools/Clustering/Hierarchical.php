@@ -2,10 +2,10 @@
 
 namespace NlpTools\Clustering;
 
-use NlpTools\Clustering\MergeStrategies\MergeStrategy;
-use NlpTools\Similarity\Distance;
+use NlpTools\Clustering\MergeStrategies\MergeStrategyInterface;
+use NlpTools\Similarity\DistanceInterface;
 use NlpTools\Documents\TrainingSet;
-use NlpTools\FeatureFactories\FeatureFactory;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
 
 /**
  * This class implements hierarchical agglomerative clustering.
@@ -16,7 +16,7 @@ class Hierarchical extends Clusterer
     protected $strategy;
     protected $dist;
 
-    public function __construct(MergeStrategy $ms, Distance $d)
+    public function __construct(MergeStrategyInterface $ms, DistanceInterface $d)
     {
         $this->strategy = $ms;
         $this->dist = $d;
@@ -29,7 +29,7 @@ class Hierarchical extends Clusterer
      *
      * @return array An array containing one element which is the resulting dendrogram
      */
-    public function cluster(TrainingSet $documents, FeatureFactory $ff)
+    public function cluster(TrainingSet $documents, FeatureFactoryInterface $ff)
     {
         // what a complete waste of memory here ...
         // the same data exists in $documents, $docs and

@@ -14,7 +14,7 @@ namespace NlpTools\Similarity;
  * features. Weighted features are not supported (unless duplicating a
  * feature is considered adding weight to it).
  */
-class Simhash implements Similarity, Distance
+class Simhash implements SimilarityInterface, DistanceInterface
 {
     // The length in bits of the simhash
     protected $length;
