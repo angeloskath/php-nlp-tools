@@ -5,7 +5,7 @@ use NlpTools\FeatureFactories\WeightedFeatures;
 
 
 /**
- * TF*IDF implementation used for determine the importance of a token in a document
+ * IDF implementation used for determine the importance of a token in a document
  * @author Dan Cardin
  */
 class TfIdf 
@@ -22,6 +22,18 @@ class TfIdf
     protected $totalDocuments = 0;
     
     /**
+     * Cache for saving IDF results
+     * @var array 
+     */
+    protected $cachedIdf = array();
+    
+    /**
+     * Cache for saving the document weghts into 
+     * @var array 
+     */
+    protected $cachedWeights = array();
+    
+    /**
      * A constructor for setting up the Tf IDF implementation
      * @param array $documents An array of documents
      * @param int $mode The mode to use in the weighted features
@@ -31,58 +43,64 @@ class TfIdf
                 
         $weightedFeatures = new WeightedFeatures($mode);
         $this->totalDocuments = count($documents);
-        
         //assume each document has a unique name
-        foreach($documents as $document){             
-            $this->features = array_merge($weightedFeatures->getFeatureArray($document->getName(), $document), $this->features);
+        foreach($documents as $documentName => $document){             
+            $this->features = array_merge($weightedFeatures->getFeatureArray($documentName, $document), $this->features);
         }       
     }
     
     /**
-     * For a given token compute the idf
+     * For a given token compute the idf, the value is cached
      * @param string $token 
      * @return double
      */
-    protected function computedIdf($token)
+    public function getIdf($token)
     {        
-        $timesFound = 0;
+        if(!isset($this->cachedIdf[$token])){         
+            $timesFound = 0;
+
+            foreach($this->features as $featureSet){             
+                if(isset($featureSet[$token])){ 
+                    $timesFound++;
+                }            
+            }
+
+            $timesFound = max($timesFound, 1);        
+            $this->cachedIdf[$token] = log($this->totalDocuments / $timesFound);
+        }    
         
-        foreach($this->features as $tokens){             
-            if(array_key_exists($token, $tokens)){ 
-                $timesFound++;
-            }            
-        }
-        
-        $timesFound = max($timesFound, 1);
-        return log($this->totalDocuments / $timesFound);
-        
+        return $this->cachedIdf[$token];   
     }
     
     /**
-     * Get an array containing the tf idf weights per document based on the provided token
+     * Get an array containing the tf idf weights per document based on the provided token, a cache is used to store the values
      * @param string $token Token is a word to lookup
      * @return array Returns an array with the index as the document id and the value as the weight for that document
      */
     public function query($token)
     { 
-        //inverse document frequency
-        $idf = $this->computedIdf($token);
+
+        if(isset($this->cachedWeights[$token])){ 
+            return $this->cachedWeights[$token];
+        } else { 
+            $this->cachedWeights[$token] = array();
+        }
+        //get the inverse document frequency
+        $idf = $this->getIdf($token);
+                
         $weights = array();
         
         foreach($this->features as $documentName => $tokens){             
-            if(array_key_exists($token, $tokens)){ 
+            if(isset($tokens[$token])){ 
                 $weights[$documentName] = $this->features[$documentName][$token] * $idf;
             } else {
                 $weights[$documentName] = 0;
             } 
         }        
             
-        return $weights;
+        $this->cachedWeights[$token] = array_merge($weights, $this->cachedWeights[$token]);
+        return $this->cachedWeights[$token];
     }
-    
-    
-    
-    
 }
 
 

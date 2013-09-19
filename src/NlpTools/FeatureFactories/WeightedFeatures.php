@@ -72,7 +72,7 @@ class WeightedFeatures implements FeatureFactoryInterface, \Countable
             
             case self::AUGMENTED_MODE:
                 
-                $maxFrequency = current($keyValuesByWeight);
+                $maxFrequency = max($keyValuesByWeight);
                 
                 array_walk($keyValuesByWeight, function(&$value, $key, $max) {
                     $value = 0.5 + (0.5 * $value) / $max;
