@@ -2,13 +2,14 @@
 namespace NlpTools\Analysis;
 
 use NlpTools\FeatureFactories\WeightedFeatures;
-
+use NlpTools\Documents\TrainingSet;
+use NlpTools\Documents\TrainingDocument;
 
 /**
- * IDF implementation used for determine the importance of a token in a document
- * @author Dan Cardin
+ * Inverse Document Frequency implementation
+ * @author Dan Cardin (yooper)
  */
-class TfIdf 
+class Idf 
 {
     /**
      * @var array The features for this set of documents 
@@ -33,20 +34,26 @@ class TfIdf
      */
     protected $cachedWeights = array();
     
+    
     /**
      * A constructor for setting up the Tf IDF implementation
-     * @param array $documents An array of documents
+     * @param TrainingSet The set of documents used
      * @param int $mode The mode to use in the weighted features
      */
-    public function __construct(array $documents, $mode = WeightedFeatures::FREQUENCY_MODE)
+    public function __construct(TrainingSet $trainingSet, $mode = WeightedFeatures::FREQUENCY_MODE)
     {        
                 
         $weightedFeatures = new WeightedFeatures($mode);
-        $this->totalDocuments = count($documents);
-        //assume each document has a unique name
-        foreach($documents as $documentName => $document){             
-            $this->features = array_merge($weightedFeatures->getFeatureArray($documentName, $document), $this->features);
-        }       
+        $this->totalDocuments = $trainingSet->count();
+        
+        /** @var TrainingDocument $trainingDocument */
+        foreach($trainingSet as $trainingDocument) {
+            $this->features = array_merge(
+                        $weightedFeatures->getFeatureArray($trainingDocument->getClass(), 
+                        $trainingDocument), $this->features 
+                    );
+        }
+       
     }
     
     /**

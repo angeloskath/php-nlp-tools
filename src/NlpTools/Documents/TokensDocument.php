@@ -16,20 +16,12 @@ class TokensDocument implements DocumentInterface
     protected $tokens = null;
     
     /**
-     * stores meta data, what the source name was
-     * @var type 
-     */
-    protected $name = null;
-    
-    /**
      *
      * @param array $tokens
-     * @param string $name A name assigned to this document
      */
-    public function __construct(array $tokens, $name = null)
+    public function __construct(array $tokens)
     {
         $this->tokens = $tokens;
-        $this->name = $name;
     }
     /**
      * Simply return the tokens received in the constructor
@@ -40,11 +32,4 @@ class TokensDocument implements DocumentInterface
         return $this->tokens;
     }
     
-    /**
-     * @return string|null Returns the name if it exists or null 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }
