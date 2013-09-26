@@ -38,14 +38,14 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
     protected function execute($string)
     {
         foreach ($this->patternsAndReplacements as $patternAndReplacement) {
-            $tmp = preg_replace("/".$patternAndReplacement->pattern."/", $patternAndReplacement->replacement, $string);
-            if (!$tmp) {
+            $tmp = preg_replace("/".$patternAndReplacement->pattern."/s", $patternAndReplacement->replacement, $string);
+            if ($tmp === null) {
                 InvalidExpression::invalidRegex($patternAndReplacement->pattern, $patternAndReplacement->replacement);
             } else {
                 $string = $tmp;
             }
         }
-
+        
         return $string;
     }
 
@@ -59,8 +59,8 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
         $this->addPatternAndReplacement("\.\.\."," ... ");
         $this->addPatternAndReplacement("([,;:@#$%&])", " $1 ");
         $this->addPatternAndReplacement("([^.])([.])([])}>\"\']*)[ 	]*$","\${1} \${2}\${3}");
-        $this->addPatternAndReplacement("[?!]"," & ");
-        $this->addPatternAndReplacement("[][(){}<>]"," & ");
+        $this->addPatternAndReplacement("[?!]"," $0 ");
+        $this->addPatternAndReplacement("[][(){}<>]"," $0 ");
         $this->addPatternAndReplacement("--"," -- ");
         $this->addPatternAndReplacement("\""," '' ");
 
