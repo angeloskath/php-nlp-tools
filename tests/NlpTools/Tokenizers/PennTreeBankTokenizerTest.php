@@ -6,7 +6,7 @@ namespace NlpTools\Tokenizers;
  *
  * @author Dan Cardin
  */
-class PennBankTokenizerTest extends \PHPUnit_Framework_TestCase
+class PennTreeBankTokenizerTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testTokenizer()
@@ -28,22 +28,25 @@ class PennBankTokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(4, $tokenizer->tokenize("I'm some text"));
     }
     
-    public function testComparison()
+    public function testAgainstOriginalSedImplementation()
     {
-        $this->markTestIncomplete(
-          'This test is not complete, because it does not work to compare the outputs, because the underlying tokenizers differ in behavior.'
-        );
-        //test data is based on the same test file, the tokens are unique and lower case
-        $testWordSet = explode(PHP_EOL, file_get_contents(TEST_DATA_DIR.'/Tokenizers/PennTreeBankTokenizerTest/nltk_output.txt'));
-            
         $tokenizer = new PennTreeBankTokenizer();
-        //text is normalized to lower case
-        $tokens = $tokenizer->tokenize(strtolower(file_get_contents(TEST_DATA_DIR.'/Tokenizers/PennTreeBankTokenizerTest/test.txt')));
-        $tokens = array_unique($tokens);
-        sort($tokens);
-        
-        foreach($testWordSet as $testWord){ 
-            $this->assertTrue(in_array($testWord, $tokens), "The tokenized word '$testWord' was not found.");
+        $tokenized = new \SplFileObject(TEST_DATA_DIR."/Tokenizers/PennTreeBankTokenizerTest/tokenized");
+        $tokenized->setFlags(\SplFileObject::DROP_NEW_LINE);
+        $sentences = new \SplFileObject(TEST_DATA_DIR."/Tokenizers/PennTreeBankTokenizerTest/test.txt");
+        $sentences->setFlags(\SplFileObject::DROP_NEW_LINE);
+ 
+        $tokenized->rewind();
+        foreach ($sentences as $sentence) {
+            if ($sentence) // skip empty lines
+            {
+                $this->assertEquals(
+                    $tokenized->current(),
+                    implode(" ",$tokenizer->tokenize($sentence)),
+                    "Sentence: '$sentence' was not tokenized correctly"
+                );
+            }
+            $tokenized->next();
         }
                 
     }
