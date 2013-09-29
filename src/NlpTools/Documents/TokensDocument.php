@@ -4,10 +4,21 @@ namespace NlpTools\Documents;
 
 /**
  * Represents a bag of words (tokens) document.
+ * @author angeloskath
+ * @author Dan Cardin (yooper)
  */
 class TokensDocument implements DocumentInterface
 {
-    protected $tokens;
+    /**
+     * An array of tokens
+     * @var array
+     */
+    protected $tokens = null;
+    
+    /**
+     *
+     * @param array $tokens
+     */
     public function __construct(array $tokens)
     {
         $this->tokens = $tokens;
@@ -20,4 +31,5 @@ class TokensDocument implements DocumentInterface
     {
         return $this->tokens;
     }
+    
 }

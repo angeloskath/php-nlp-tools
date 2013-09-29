@@ -22,7 +22,6 @@ class FreqDist
      */
     protected $totalTokens = null;
     
-    
     /**
      * This sorts the token meta data collection right away so use 
      * frequency distribution data can be extracted.
@@ -92,12 +91,29 @@ class FreqDist
     }
     
     /**
-     * Return the full key value store
+     * Return an array with key frequency pairs
      * @return array 
      */
-    public function getKeyValues()
+    public function getKeyValuesByFrequency()
     {
         return $this->keyValues;
+    }
+    
+    /**
+     * Return an array with key weight pairs
+     * @return array 
+     */
+    public function getKeyValuesByWeight()
+    {
+        $weightPerToken = $this->getWeightPerToken();
+        //make a copy of the array
+        $keyValuesByWeight = $this->keyValues;
+        
+        array_walk($keyValuesByWeight, function(&$value, $key, $weightPerToken) {
+            $value = $value * $weightPerToken;
+        }, $this->totalTokens);
+        
+        return $keyValuesByWeight;
     }
     
     /**
