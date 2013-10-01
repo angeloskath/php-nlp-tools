@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 class EuclideanPoint implements DocumentInterface
 {
@@ -26,5 +27,14 @@ class EuclideanPoint implements DocumentInterface
             $x+mt_rand(-$R,$R),
             $y+mt_rand(-$R,$R)
         );
+    }
+
+    /**
+     * do nothing
+     * @param TokenTransformationInterface $transformer 
+     */
+    public function applyTransformation(TokenTransformationInterface $transformer)
+    {
+        return null;
     }
 }

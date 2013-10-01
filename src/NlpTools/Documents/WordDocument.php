@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * A Document that represents a single word but with a context of a
@@ -37,5 +38,23 @@ class WordDocument implements DocumentInterface
     public function getDocumentData()
     {
         return array($this->word,$this->before,$this->after);
+    }
+
+    /**
+     * Apply the transformations to the context too
+     * @param TokenTransformationInterface $transformer 
+     */
+    public function applyTransformation(TokenTransformationInterface $transformer)
+    {        
+        $this->word = $transformer->transform($this->word);
+        
+        array_walk($this->before, function(&$beforeWord, $index, $transformerPassedIn) { 
+            $beforeWord = $transformerPassedIn->transform($beforeWord); 
+        }, $transformer);
+        
+        array_walk($this->after, function(&$afterWord, $index, $transformerPassedIn) { 
+            $afterWord = $transformerPassedIn->transform($afterWord); 
+        }, $transformer);        
+                        
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * Represents a bag of words (tokens) document.
@@ -20,4 +21,14 @@ class TokensDocument implements DocumentInterface
     {
         return $this->tokens;
     }
+
+    public function applyTransformation(TokenTransformationInterface $transformer)
+    {
+        foreach($this->tokens as &$token){ 
+            $token = $transformer->transform($token);
+        }
+    }
+    
+    
+    
 }

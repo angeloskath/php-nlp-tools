@@ -2,6 +2,8 @@
 
 namespace NlpTools\Documents;
 
+use NlpTools\Filters\StopWords;
+
 /**
  * TODO: Add checks for the edges of the token list
  */
@@ -93,5 +95,18 @@ class WordDocumentTest extends \PHPUnit_Framework_TestCase
                 );
             }
         }
+    }
+    
+    public function testStopWordTransformation()
+    {
+        $doc = new WordDocument($this->tokens, 3, 3);
+        $doc->applyTransformation(new StopWords());
+        list($current, $before, $after) = $doc->getDocumentData();
+        $this->assertEquals('fox', $current);
+        $this->assertEquals(array('The', 'quick', 'brown'), $before);
+        $this->assertEquals(array('jumped', null, null), $after);        
+        
+        
+        
     }
 }
