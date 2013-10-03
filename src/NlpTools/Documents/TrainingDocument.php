@@ -31,6 +31,10 @@ class TrainingDocument implements DocumentInterface
         return $this->class;
     }
 
+    /**
+     * Apply a transformation to the tokens in this document
+     * @param TokenTransformationInterface $transformer 
+     */
     public function applyTransformation(TokenTransformationInterface $transformer)
     {
         $this->d->applyTransformation($transformer);

@@ -2,6 +2,7 @@
 
 namespace NlpTools\Documents;
 use NlpTools\Utils\Interfaces\TokenTransformationInterface;
+use \BadMethodCallException;
 
 class EuclideanPoint implements DocumentInterface
 {
@@ -30,11 +31,11 @@ class EuclideanPoint implements DocumentInterface
     }
 
     /**
-     * do nothing
+     * @throws 
      * @param TokenTransformationInterface $transformer 
      */
     public function applyTransformation(TokenTransformationInterface $transformer)
     {
-        return null;
+        throw new BadMethodCallException("Not applicable");
     }
 }

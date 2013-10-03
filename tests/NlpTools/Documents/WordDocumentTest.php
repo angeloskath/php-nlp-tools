@@ -17,6 +17,22 @@ class WordDocumentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Return an associatve array of the stop words
+     * @staticvar array $cachedStopWords
+     * @return array 
+     */
+    protected function getStopWords()
+    {
+        static $cachedStopWords = null;
+        if(!$cachedStopWords) {
+            $stopWords = explode(PHP_EOL,file_get_contents(TEST_DATA_DIR.'/Filters/StopWordTest/stop_words.txt'));
+            $cachedStopWords = array_combine($stopWords, $stopWords);
+        }
+        
+        return $cachedStopWords;
+    }    
+    
+    /**
      * Test that the WordDocument correctly represents the ith token
      */
     public function testTokenSelection()
@@ -100,11 +116,11 @@ class WordDocumentTest extends \PHPUnit_Framework_TestCase
     public function testStopWordTransformation()
     {
         $doc = new WordDocument($this->tokens, 3, 3);
-        $doc->applyTransformation(new StopWords());
+        $doc->applyTransformation(new StopWords($this->getStopWords()));
         list($current, $before, $after) = $doc->getDocumentData();
         $this->assertEquals('fox', $current);
         $this->assertEquals(array('The', 'quick', 'brown'), $before);
-        $this->assertEquals(array('jumped', null, null), $after);        
+        $this->assertEquals(array('jumped'), $after);        
         
         
         

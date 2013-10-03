@@ -41,7 +41,7 @@ class WordDocument implements DocumentInterface
     }
 
     /**
-     * Apply the transformations to the context too
+     * Apply the transformations to the token and the context tokens too
      * @param TokenTransformationInterface $transformer 
      */
     public function applyTransformation(TokenTransformationInterface $transformer)
@@ -52,9 +52,15 @@ class WordDocument implements DocumentInterface
             $beforeWord = $transformerPassedIn->transform($beforeWord); 
         }, $transformer);
         
+        // filter and re-index the array
+        $this->before = array_values(array_filter($this->before));
+        
         array_walk($this->after, function(&$afterWord, $index, $transformerPassedIn) { 
             $afterWord = $transformerPassedIn->transform($afterWord); 
         }, $transformer);        
+        
+        //filter and re-index the array
+        $this->after = array_values(array_filter($this->after));
                         
     }
 }

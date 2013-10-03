@@ -13,13 +13,6 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
     const OFFSET_AS_KEY = 2;
 
     
-    /**
-     * The transformers allows an easy way to add functionality that will filter or alter
-     * tokens or documents 
-     * @var array
-     */
-    protected $transformations = array();
-    
     // An array that contains all the classes present in the TrainingSet
     protected $classSet;
     protected $documents; // The documents container
@@ -38,23 +31,15 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
 
     
     /**
-     * Add a transformer
-     * @param TokenTransformationInterface $transformer 
-     */
-    public function addTransformation(TokenTransformationInterface $transformation)
-    {
-        $this->transformations[] = $transformation;
-    }
-    
-    /**
+     * @param array $transformations An array of 
      * Apply the collection of token transformers to the documents
      */
-    public function applyTransformations()
+    public function applyTransformations(array $transformations)
     {
         /** @var DocumentInterface $document **/
         foreach($this->documents as $document) { 
             /** @var TokenTransformationInterface $transformation **/
-            foreach($this->transformations as $transformation){
+            foreach($transformations as $transformation){
                 $document->applyTransformation($transformation);
             }
         }        

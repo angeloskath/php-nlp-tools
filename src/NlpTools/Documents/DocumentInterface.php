@@ -21,6 +21,7 @@ interface DocumentInterface
     
     /**
      * Applies the given transformation; 
+     * @return null|string
      */
     public function applyTransformation(TokenTransformationInterface $transformer);
 }
