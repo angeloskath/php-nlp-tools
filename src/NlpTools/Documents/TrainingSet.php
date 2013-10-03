@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * A collection of TrainingDocument objects. It implements many built
@@ -11,6 +12,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
     const CLASS_AS_KEY = 1;
     const OFFSET_AS_KEY = 2;
 
+    
     // An array that contains all the classes present in the TrainingSet
     protected $classSet;
     protected $documents; // The documents container
@@ -27,6 +29,22 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
         $this->keytype = self::CLASS_AS_KEY;
     }
 
+    
+    /**
+     * @param array $transformations An array of 
+     * Apply the collection of token transformers to the documents
+     */
+    public function applyTransformations(array $transformations)
+    {
+        /** @var DocumentInterface $document **/
+        foreach($this->documents as $document) { 
+            /** @var TokenTransformationInterface $transformation **/
+            foreach($transformations as $transformation){
+                $document->applyTransformation($transformation);
+            }
+        }        
+    }
+    
     /**
      * Add a document to the set.
      *
