@@ -25,4 +25,18 @@ class SimhashTest extends \PHPUnit_Framework_TestCase
             "The more elements in common the more similar the two sets should be"
         );
     }
+
+    public function testWeightedSets()
+    {
+        $sim = new Simhash(64);
+
+        $A = array("a","a","a","b","b",);
+        $B = array("a"=>3,"b"=>2);
+
+        $this->assertEquals(
+            1,
+            $sim->similarity($A,$B),
+            "The two sets are identical given that one is the weighted version of the other"
+        );
+    }
 }
