@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * A TrainingDocument is a document that "decorates" any other document
@@ -13,7 +14,7 @@ class TrainingDocument implements DocumentInterface
     protected $class;
 
     /**
-     * @param string   $class The actual class of the Document $d
+     * @param string            $class The actual class of the Document $d
      * @param DocumentInterface $d     The document to be decorated
      */
     public function __construct($class, DocumentInterface $d)
@@ -29,4 +30,14 @@ class TrainingDocument implements DocumentInterface
     {
         return $this->class;
     }
+
+    /**
+     * Apply a transformation to the tokens in this document
+     * @param TokenTransformationInterface $transformer
+     */
+    public function applyTransformation(TokenTransformationInterface $transformer)
+    {
+        $this->d->applyTransformation($transformer);
+    }
+
 }

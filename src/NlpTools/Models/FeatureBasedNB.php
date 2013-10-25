@@ -60,7 +60,7 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * It can be used for incremental training. It is not meant to be used
      * with the same training set twice.
      *
-     * @param array          $train_ctx The previous training context
+     * @param array                   $train_ctx The previous training context
      * @param FeatureFactoryInterface $ff        A feature factory to compute features from a training document
      * @param TrainingSet The training set
      * @param  integer $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
@@ -130,12 +130,12 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * making copies of big arrays.
      *
      * @param  FeatureFactoryInterface $ff                  A feature factory to create the features for each document in the set
-     * @param  TrainingSet    $tset                The training set (collection of labeled documents)
-     * @param  array          $termcount_per_class The count of occurences of each feature in each class
-     * @param  array          $termcount           The total count of occurences of each term
-     * @param  array          $ndocs_per_class     The total number of documents per class
-     * @param  array          $voc                 A set of the found features
-     * @param  integer        $ndocs               The number of documents
+     * @param  TrainingSet             $tset                The training set (collection of labeled documents)
+     * @param  array                   $termcount_per_class The count of occurences of each feature in each class
+     * @param  array                   $termcount           The total count of occurences of each term
+     * @param  array                   $ndocs_per_class     The total number of documents per class
+     * @param  array                   $voc                 A set of the found features
+     * @param  integer                 $ndocs               The number of documents
      * @return void
      */
     protected function countTrainingSet(FeatureFactoryInterface $ff, TrainingSet $tset, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, array &$voc, &$ndocs)

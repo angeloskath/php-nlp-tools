@@ -1,6 +1,8 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
+use \BadMethodCallException;
 
 class EuclideanPoint implements DocumentInterface
 {
@@ -26,5 +28,14 @@ class EuclideanPoint implements DocumentInterface
             $x+mt_rand(-$R,$R),
             $y+mt_rand(-$R,$R)
         );
+    }
+
+    /**
+     * @throws 
+     * @param TokenTransformationInterface $transformer 
+     */
+    public function applyTransformation(TokenTransformationInterface $transformer)
+    {
+        throw new BadMethodCallException("Not applicable");
     }
 }

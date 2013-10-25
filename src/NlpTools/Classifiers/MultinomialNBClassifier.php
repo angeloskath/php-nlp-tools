@@ -27,9 +27,9 @@ class MultinomialNBClassifier implements ClassifierInterface
      * successively and return that class that has the maximum
      * probability.
      *
-     * @param  array    $classes The classes from which to choose
+     * @param  array             $classes The classes from which to choose
      * @param  DocumentInterface $d       The document to classify
-     * @return string   $class The class that has the maximum probability
+     * @return string            $class The class that has the maximum probability
      */
     public function classify(array $classes, DocumentInterface $d)
     {

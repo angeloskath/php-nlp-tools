@@ -27,9 +27,9 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
      * Compute the vote for every class. Return the class that
      * receive the maximum vote.
      *
-     * @param  array    $classes A set of classes
+     * @param  array             $classes A set of classes
      * @param  DocumentInterface $d       A Document
-     * @return string   A class
+     * @return string            A class
      */
     public function classify(array $classes, DocumentInterface $d)
     {
@@ -50,9 +50,9 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
      * Compute the features that fire for the Document $d. The sum of
      * the weights of the features is the vote.
      *
-     * @param  string   $class The vote for class $class
+     * @param  string            $class The vote for class $class
      * @param  DocumentInterface $d     The vote for Document $d
-     * @return float    The vote of the model for class $class and Document $d
+     * @return float             The vote of the model for class $class and Document $d
      */
     public function getVote($class, DocumentInterface $d)
     {
