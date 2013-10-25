@@ -45,7 +45,7 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
                 $string = $tmp;
             }
         }
-        
+
         return $string;
     }
 

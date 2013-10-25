@@ -58,7 +58,7 @@ class FunctionFeatures implements FeatureFactoryInterface
      * the feature set. If the return value is an array iterate over it
      * and add each value to the feature set.
      *
-     * @param  string   $class The class for which we are calculating features
+     * @param  string            $class The class for which we are calculating features
      * @param  DocumentInterface $d     The document for which we are calculating features
      * @return array
      */

@@ -1,11 +1,12 @@
 <?php
 
 namespace NlpTools\Stemmers;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * http://en.wikipedia.org/wiki/Stemming
  */
-abstract class Stemmer
+abstract class Stemmer implements TokenTransformationInterface
 {
 
     /**
@@ -23,6 +24,16 @@ abstract class Stemmer
     public function stemAll(array $tokens)
     {
         return array_map(array($this,'stem'),$tokens);
+    }
+
+    /**
+     * Wrap the stem method so the transform interface works
+     * @param  string $token
+     * @return string
+     */
+    public function transform($token)
+    {
+        return $this->stem($token);
     }
 
 }

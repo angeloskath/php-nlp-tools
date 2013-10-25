@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Documents;
+use NlpTools\Utils\Interfaces\TokenTransformationInterface;
 
 /**
  * A Document is a representation of a Document to be classified.
@@ -17,4 +18,9 @@ interface DocumentInterface
      * @return mixed
      */
     public function getDocumentData();
+
+    /**
+     * Applies the given transformation;
+     */
+    public function applyTransformation(TokenTransformationInterface $transformer);
 }

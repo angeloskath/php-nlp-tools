@@ -26,10 +26,10 @@ class KMeans extends Clusterer
     /**
      * Initialize the K Means clusterer
      *
-     * @param int               $n      The number of clusters to compute
-     * @param DistanceInterface $d      The distance metric to be used (Euclidean, Hamming, ...)
-     * @param CentroidFactoryInterface   $cf     This parameter will be used to create the new centroids from a set of documents
-     * @param float             $cutoff When the maximum change of the centroids is smaller than that stop iterating
+     * @param int                      $n      The number of clusters to compute
+     * @param DistanceInterface        $d      The distance metric to be used (Euclidean, Hamming, ...)
+     * @param CentroidFactoryInterface $cf     This parameter will be used to create the new centroids from a set of documents
+     * @param float                    $cutoff When the maximum change of the centroids is smaller than that stop iterating
      */
     public function __construct($n, DistanceInterface $d, CentroidFactoryInterface $cf, $cutoff=1e-5)
     {
