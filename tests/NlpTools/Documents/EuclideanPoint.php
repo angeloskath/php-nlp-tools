@@ -2,6 +2,8 @@
 
 namespace NlpTools\Documents;
 
+use NlpTools\Utils\TransformationInterface;
+
 class EuclideanPoint implements DocumentInterface
 {
     public $x;
@@ -26,5 +28,11 @@ class EuclideanPoint implements DocumentInterface
             $x+mt_rand(-$R,$R),
             $y+mt_rand(-$R,$R)
         );
+    }
+
+    public function applyTransformation(TransformationInterface $transform)
+    {
+        $this->x = $transform->transform($this->x);
+        $this->y = $transform->transform($this->y);
     }
 }

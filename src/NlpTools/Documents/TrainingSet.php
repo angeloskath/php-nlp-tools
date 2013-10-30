@@ -61,6 +61,20 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
         }
     }
 
+    /**
+     * Apply an array of transformations to all documents in this container.
+     *
+     * @param array An array of TransformationInterface instances
+     */
+    public function applyTransformations(array $transforms)
+    {
+        foreach ($this->documents as $doc) {
+            foreach ($transforms as $transform) {
+                $doc->applyTransformation($transform);
+            }
+        }
+    }
+
     // ====== Implementation of \Iterator interface =========
     public function rewind()
     {

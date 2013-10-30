@@ -2,6 +2,8 @@
 
 namespace NlpTools\Documents;
 
+use NlpTools\Utils\TransformationInterface;
+
 /**
  * A TrainingDocument is a document that "decorates" any other document
  * to add the real class of the document. It is used while training
@@ -28,5 +30,15 @@ class TrainingDocument implements DocumentInterface
     public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * Pass the transformation to the decorated document
+     *
+     * @param TransformationInterface $transform The transformation to be applied
+     */
+    public function applyTransformation(TransformationInterface $transform)
+    {
+        $this->d->applyTransformation($transform);
     }
 }
