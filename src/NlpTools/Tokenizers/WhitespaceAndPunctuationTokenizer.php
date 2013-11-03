@@ -6,7 +6,7 @@ namespace NlpTools\Tokenizers;
  * Simple white space tokenizer. Breaks either on whitespace or on word
  * boundaries (ex.: dots, commas, etc)
  * Does not include white space in tokens.
- * Every punctuation character is a signle token
+ * Every punctuation character is a single token
  */
 class WhitespaceAndPunctuationTokenizer implements Tokenizer
 {
