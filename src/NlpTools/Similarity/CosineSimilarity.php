@@ -70,8 +70,14 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
             $v2_norm += $xi*$xi;
         }
         $v2_norm = sqrt($v2_norm);
+        
+        $innerProduct = $v1_norm*$v2_norm;
+        
+        if($innerProduct === 0) { 
+            throw new \InvalidArgumentException("Inner product of A and B is zero.");
+        }
 
-        return $prod/($v1_norm*$v2_norm);
+        return $prod/($innerProduct);
     }
 
     /**
