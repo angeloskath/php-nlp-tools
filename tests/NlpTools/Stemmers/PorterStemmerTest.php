@@ -8,7 +8,7 @@ namespace NlpTools\Stemmers;
  * words.txt and stems.txt are taken from
  * http://tartarus.org/~martin/PorterStemmer/
  */
-class PorterStemmerTest extends \PHPUnit_Framework_TestCase
+class PorterStemmerTest extends StemmerTestBase
 {
     /**
      * Load a set of words and their stems and check if the stemmer
@@ -25,14 +25,6 @@ class PorterStemmerTest extends \PHPUnit_Framework_TestCase
         $stems->rewind();
 
         $stemmer = new PorterStemmer();
-        foreach ($words as $word) {
-            $stem = $stems->current();
-            $this->assertEquals(
-                $stemmer->stem($word),
-                $stem,
-                "The stem for '$word' should be '$stem' not '{$stemmer->stem($word)}'"
-            );
-            $stems->next();
-        }
+        $this->checkStemmer($stemmer, $words, $stems);
     }
 }
