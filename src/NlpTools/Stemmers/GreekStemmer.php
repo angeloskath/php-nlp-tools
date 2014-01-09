@@ -8,6 +8,7 @@ namespace NlpTools\Stemmers;
  * http://people.dsv.su.se/~hercules/papers/Ntais_greek_stemmer_thesis_final.pdf
  *
  * It was first ported to php by P. Kyriakakis.
+ * This stemmer expects lower case characters and not upper case.
  */
 class GreekStemmer extends Stemmer
 {
