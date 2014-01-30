@@ -16,7 +16,7 @@ class TransformationsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideTokens
      */
-    public function testTokensDocument($tokens, $transformer)
+    public function testTokensDocument($tokens)
     {
         $doc = new TokensDocument($tokens);
         $transformer = new IdentityTransformer();
