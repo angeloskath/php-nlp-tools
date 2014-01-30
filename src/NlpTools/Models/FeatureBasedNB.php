@@ -172,7 +172,7 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * @param  integer $voccount            The total number of features found
      * @return void
      */
-    protected function computeProbabilitiesFromCounts(array &$class_set, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, $ndocs, $voccount, $a_smoothing=1)
+    protected function computeProbabilitiesFromCounts(array $class_set, array &$termcount_per_class, array &$termcount, array &$ndocs_per_class, $ndocs, $voccount, $a_smoothing=1)
     {
         $denom_smoothing = $a_smoothing*$voccount;
         foreach ($class_set as $class) {
