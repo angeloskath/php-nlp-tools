@@ -25,15 +25,19 @@ Lda is still experimental and quite slow but it works. [See an example](http://p
 
 ### Clustering ###
 
-Hierarchical and Expectations Maximization are coming soon.
-
 1. [K-Means](http://php-nlp-tools.com/documentation/clustering.html)
+2. [Hierarchical Agglomerative Clustering](http://php-nlp-tools.com/documentation/clustering.html)
+   * SingleLink
+   * CompleteLink
+   * GroupAverage
 
 ### Tokenizers ###
 
 1. [WhitespaceTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/WhitespaceTokenizer)
 2. [WhitespaceAndPunctuationTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/WhitespaceAndPunctuationTokenizer)
-3. [ClassifierBasedTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/ClassifierBasedTokenizer)
+3. [PennTreebankTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/PennTreebankTokenizer)
+4. [RegexTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools\Tokenizers\RegexTokenizer)
+5. [ClassifierBasedTokenizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Tokenizers/ClassifierBasedTokenizer)
    This tokenizer allows us to build a lot more complex tokenizers
    than the previous ones
 
@@ -67,6 +71,8 @@ Hierarchical and Expectations Maximization are coming soon.
 
 1. [PorterStemmer](http://php-nlp-tools.com/documentation/api/#NlpTools/Stemmers/PorterStemmer)
 2. [RegexStemmer](http://php-nlp-tools.com/documentation/api/#NlpTools/Stemmers/RegexStemmer)
+3. [LancasterStemmer](http://php-nlp-tools.com/documentation/api/#NlpTools/Stemmers/LancasterStemmer)
+4. [GreekStemmer](http://php-nlp-tools.com/documentation/api/#NlpTools/Stemmers/GreekStemmer)
 
 ### Optimizers (MaxEnt only) ###
 
@@ -79,3 +85,10 @@ Hierarchical and Expectations Maximization are coming soon.
    resides in another [repo](https://github.com/angeloskath/nlp-maxent-optimizer),
    it is used via the [external optimizer](http://php-nlp-tools.com/documentation/api/#NlpTools/Optimizers/ExternalMaxentOptimizer).
    TODO: At least write a readme for the optimizer written in Go.
+
+### Other ###
+
+1. Idf Inverse document frequency
+2. Stop words
+3. Language based normalizers
+4. Classifier based transformation for creating flexible preprocessing pipelines
