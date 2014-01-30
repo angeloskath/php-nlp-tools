@@ -7,7 +7,7 @@ namespace NlpTools\Similarity;
  * To be used with numbers one should pass the numbers to decbin() first
  * and make sure the smaller number is properly padded with zeros.
  */
-class HammingDistance implements Distance
+class HammingDistance implements DistanceInterface
 {
     /**
      * Count the number of positions that A and B differ.

@@ -2,11 +2,11 @@
 
 namespace NlpTools\Classifiers;
 
-use NlpTools\Documents\Document;
+use NlpTools\Documents\DocumentInterface;
 
-class EndOfSentenceRules implements Classifier
+class EndOfSentenceRules implements ClassifierInterface
 {
-    public function classify(array $classes, Document $d)
+    public function classify(array $classes, DocumentInterface $d)
     {
         list($token,$before,$after) = $d->getDocumentData();
 

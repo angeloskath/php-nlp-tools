@@ -25,7 +25,7 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
 
     /**
      * Calls internal functions to handle data processing
-     * @param type $string
+     * @param string $str
      */
     public function tokenize($str)
     {

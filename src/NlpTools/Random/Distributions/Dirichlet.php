@@ -2,7 +2,7 @@
 
 namespace NlpTools\Random\Distributions;
 
-use NlpTools\Random\Generators\GeneratorI;
+use NlpTools\Random\Generators\GeneratorInterface;
 
 /**
  * Implement a k-dimensional Dirichlet distribution using draws from
@@ -12,7 +12,7 @@ class Dirichlet extends AbstractDistribution
 {
     protected $gamma;
 
-    public function __construct($a,$k,GeneratorI $rnd=null)
+    public function __construct($a,$k,GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 

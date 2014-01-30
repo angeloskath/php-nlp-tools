@@ -2,7 +2,7 @@
 
 namespace NlpTools\Tokenizers;
 
-use \NlpTools\Classifiers\Classifier;
+use \NlpTools\Classifiers\ClassifierInterface;
 use \NlpTools\Documents\WordDocument;
 
 /**
@@ -40,7 +40,7 @@ use \NlpTools\Documents\WordDocument;
  * !     | EOW
  *
  */
-class ClassifierBasedTokenizer implements Tokenizer
+class ClassifierBasedTokenizer implements TokenizerInterface
 {
     const EOW = 'EOW';
     protected static $classSet = array('O','EOW');
@@ -53,7 +53,7 @@ class ClassifierBasedTokenizer implements Tokenizer
     // used when joining the tokens into one
     protected $sep;
 
-    public function __construct(Classifier $cls, Tokenizer $tok=null,$sep=' ')
+    public function __construct(ClassifierInterface $cls, TokenizerInterface $tok=null,$sep=' ')
     {
         if ($tok == null) {
             $this->tok = new WhitespaceAndPunctuationTokenizer();

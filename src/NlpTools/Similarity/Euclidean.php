@@ -6,7 +6,7 @@ namespace NlpTools\Similarity;
  * This class computes the very simple euclidean distance between
  * two vectors ( sqrt(sum((a_i-b_i)^2)) ).
  */
-class Euclidean implements Distance
+class Euclidean implements DistanceInterface
 {
     /**
      * see class description

@@ -7,7 +7,7 @@ namespace NlpTools\Similarity;
  * similar those two instances are (with any metric).
  *
  */
-interface Similarity
+interface SimilarityInterface
 {
     public function similarity(&$A, &$B);
 }

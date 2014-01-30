@@ -5,7 +5,7 @@ namespace NlpTools\Random\Generators;
 /**
  * A simple wrapper over the built in mt_rand() method
  */
-class MersenneTwister implements GeneratorI
+class MersenneTwister implements GeneratorInterface
 {
     public function generate()
     {

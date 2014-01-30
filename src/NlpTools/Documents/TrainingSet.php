@@ -34,7 +34,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
      * @param $d The Document
      * @return void
      */
-    public function addDocument($class, Document $d)
+    public function addDocument($class, DocumentInterface $d)
     {
         $this->documents[] = new TrainingDocument($class,$d);
         $this->classSet[$class] = 1;
@@ -58,6 +58,20 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
             default:
                 $this->keytype = self::CLASS_AS_KEY;
                 break;
+        }
+    }
+
+    /**
+     * Apply an array of transformations to all documents in this container.
+     *
+     * @param array An array of TransformationInterface instances
+     */
+    public function applyTransformations(array $transforms)
+    {
+        foreach ($this->documents as $doc) {
+            foreach ($transforms as $transform) {
+                $doc->applyTransformation($transform);
+            }
         }
     }
 

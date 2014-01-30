@@ -2,7 +2,7 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * HeapLinkage is an abstract merge strategy.
@@ -19,7 +19,7 @@ use NlpTools\Similarity\Distance;
  *  1. if x>y swap x,y
  *  2. index = y*(y-1)/2 + x
  */
-abstract class HeapLinkage implements MergeStrategy
+abstract class HeapLinkage implements MergeStrategyInterface
 {
     protected $L;
     protected $queue;
@@ -38,10 +38,10 @@ abstract class HeapLinkage implements MergeStrategy
      * Initialize the distance matrix and any other data structure needed
      * to calculate the merges later.
      *
-     * @param Distance $d    The distance metric used to calculate the distance matrix
-     * @param array    $docs The docs to be clustered
+     * @param DistanceInterface $d    The distance metric used to calculate the distance matrix
+     * @param array             $docs The docs to be clustered
      */
-    public function initializeStrategy(Distance $d, array &$docs)
+    public function initializeStrategy(DistanceInterface $d, array &$docs)
     {
         // the number of documents and the dimensions of the matrix
         $this->L = count($docs);

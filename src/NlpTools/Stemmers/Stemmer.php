@@ -2,10 +2,12 @@
 
 namespace NlpTools\Stemmers;
 
+use NlpTools\Utils\TransformationInterface;
+
 /**
  * http://en.wikipedia.org/wiki/Stemming
  */
-abstract class Stemmer
+abstract class Stemmer implements TransformationInterface
 {
 
     /**
@@ -25,4 +27,12 @@ abstract class Stemmer
         return array_map(array($this,'stem'),$tokens);
     }
 
+    /**
+     * A stemmer's transformation is simply the replacing of a word
+     * with its stem.
+     */
+    public function transform($word)
+    {
+        return $this->stem($word);
+    }
 }

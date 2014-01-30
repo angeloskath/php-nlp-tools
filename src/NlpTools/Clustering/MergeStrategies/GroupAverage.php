@@ -2,7 +2,7 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * In single linkage clustering the new distance of the merged cluster with
@@ -16,7 +16,7 @@ class GroupAverage extends HeapLinkage
 {
     protected $cluster_size;
 
-    public function initializeStrategy(Distance $d, array &$docs)
+    public function initializeStrategy(DistanceInterface $d, array &$docs)
     {
         parent::initializeStrategy($d,$docs);
 

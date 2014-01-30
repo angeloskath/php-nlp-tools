@@ -2,10 +2,10 @@
 
 namespace NlpTools\Clustering;
 
-use NlpTools\Similarity\Distance;
-use NlpTools\Clustering\CentroidFactories\CentroidFactory;
+use NlpTools\Similarity\DistanceInterface;
+use NlpTools\Clustering\CentroidFactories\CentroidFactoryInterface;
 use NlpTools\Documents\TrainingSet;
-use NlpTools\FeatureFactories\FeatureFactory;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
 
 /**
  * This clusterer uses the KMeans algorithm for clustering documents.
@@ -26,12 +26,12 @@ class KMeans extends Clusterer
     /**
      * Initialize the K Means clusterer
      *
-     * @param int             $n      The number of clusters to compute
-     * @param Distance        $d      The distance metric to be used (Euclidean, Hamming, ...)
-     * @param CentroidFactory $cf     This parameter will be used to create the new centroids from a set of documents
-     * @param float           $cutoff When the maximum change of the centroids is smaller than that stop iterating
+     * @param int                      $n      The number of clusters to compute
+     * @param DistanceInterface        $d      The distance metric to be used (Euclidean, Hamming, ...)
+     * @param CentroidFactoryInterface $cf     This parameter will be used to create the new centroids from a set of documents
+     * @param float                    $cutoff When the maximum change of the centroids is smaller than that stop iterating
      */
-    public function __construct($n, Distance $d, CentroidFactory $cf, $cutoff=1e-5)
+    public function __construct($n, DistanceInterface $d, CentroidFactoryInterface $cf, $cutoff=1e-5)
     {
         $this->dist = $d;
         $this->n = $n;
@@ -43,7 +43,7 @@ class KMeans extends Clusterer
      * Apply the feature factory to the documents and then cluster the resulting array
      * using the provided distance metric and centroid factory.
      */
-    public function cluster(TrainingSet $documents, FeatureFactory $ff)
+    public function cluster(TrainingSet $documents, FeatureFactoryInterface $ff)
     {
         // transform the documents according to the FeatureFactory
         $docs = $this->getDocumentArray($documents,$ff);

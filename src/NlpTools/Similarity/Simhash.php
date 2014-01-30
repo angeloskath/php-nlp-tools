@@ -14,7 +14,7 @@ namespace NlpTools\Similarity;
  * features. Weighted features are not supported (unless duplicating a
  * feature is considered adding weight to it).
  */
-class Simhash implements Similarity, Distance
+class Simhash implements SimilarityInterface, DistanceInterface
 {
     // The length in bits of the simhash
     protected $length;
@@ -62,10 +62,14 @@ class Simhash implements Similarity, Distance
     public function simhash(array &$set)
     {
         $boxes = array_fill(0,$this->length,0);
-        foreach ($set as $m) {
+        if (is_int(key($set)))
+            $dict = array_count_values($set);
+        else
+            $dict = &$set;
+        foreach ($dict as $m=>$w) {
             $h = call_user_func($this->h,$m);
             for ($bit_idx=0;$bit_idx<$this->length;$bit_idx++) {
-                    $boxes[$bit_idx] += ($h[$bit_idx]=='1') ? 1 : -1;
+                    $boxes[$bit_idx] += ($h[$bit_idx]=='1') ? $w : -$w;
             }
         }
         $s = '';

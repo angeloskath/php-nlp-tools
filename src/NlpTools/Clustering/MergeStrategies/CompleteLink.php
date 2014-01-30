@@ -2,8 +2,6 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\Distance;
-
 /**
  * In single linkage clustering the new distance of the merged cluster with
  * cluster i is the maximum distance of either cluster x to i or y to i.

@@ -51,4 +51,35 @@ class CosineSimilarityTest extends \PHPUnit_Framework_TestCase
             $sim->similarity($bba,$bbc)
         );
     }
+
+    public function testInvalidArgumentException()
+    {
+        $sim = new CosineSimilarity();
+        $a = array(1);
+        $zero = array();
+        try {
+            $sim->similarity(
+                $a,
+                $zero
+            );
+            $this->fail("Cosine similarity with the zero vector should trigger an exception");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals(
+                "Vector \$B is the zero vector",
+                $e->getMessage()
+            );
+        }
+        try {
+            $sim->similarity(
+                $zero,
+                $a
+            );
+            $this->fail("Cosine similarity with the zero vector should trigger an exception");
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals(
+                "Vector \$A is the zero vector",
+                $e->getMessage()
+            );
+        }
+    }
 }
