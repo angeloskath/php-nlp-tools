@@ -38,9 +38,9 @@ class Lda
 
     /**
      * @param FeatureFactoryInterface $ff      The feature factory will be applied to each document and the resulting feature array will be considered as a document for LDA
-     * @param integer        $ntopics The number of topics assumed by the model
-     * @param float          $a       The dirichlet prior assumed for the per document topic distribution
-     * @param float          $b       The dirichlet prior assumed for the per word topic distribution
+     * @param integer                 $ntopics The number of topics assumed by the model
+     * @param float                   $a       The dirichlet prior assumed for the per document topic distribution
+     * @param float                   $b       The dirichlet prior assumed for the per word topic distribution
      */
     public function __construct(FeatureFactoryInterface $ff,$ntopics,$a=1,$b=1)
     {

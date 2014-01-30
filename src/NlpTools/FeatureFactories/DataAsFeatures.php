@@ -10,7 +10,7 @@ class DataAsFeatures implements FeatureFactoryInterface
      * features. Could contain duplicates (a feature firing twice in
      * for a signle document).
      *
-     * @param  string   $class The class for which we are calculating features
+     * @param  string            $class The class for which we are calculating features
      * @param  DocumentInterface $d     The document to calculate features for.
      * @return array
      */

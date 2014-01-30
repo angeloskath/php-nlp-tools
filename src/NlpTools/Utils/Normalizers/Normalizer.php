@@ -60,6 +60,7 @@ abstract class Normalizer implements TransformationInterface
     public static function factory($language = "English")
     {
         $classname = __NAMESPACE__."\\$language";
+
         return new $classname();
     }
 }

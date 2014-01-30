@@ -15,7 +15,7 @@ class TrainingDocument implements DocumentInterface
     protected $class;
 
     /**
-     * @param string   $class The actual class of the Document $d
+     * @param string            $class The actual class of the Document $d
      * @param DocumentInterface $d     The document to be decorated
      */
     public function __construct($class, DocumentInterface $d)

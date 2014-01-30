@@ -89,21 +89,21 @@ $word = $w;
             if (!preg_match($re,$w)) {
                 $w .= "αδ";
             }
-        } else if (preg_match($re2,$w,$fp)) { //step 2b
+        } elseif (preg_match($re2,$w,$fp)) { //step 2b
             $stem = $fp[1];
             $w = $stem;
             $exept2 = "/(οπ|ιπ|εμπ|υπ|γηπ|δαπ|κρασπ|μιλ)$/u";
             if (preg_match($exept2,$w)) {
                 $w .= "εδ";
             }
-        } else if (preg_match($re3,$w,$fp)) { //step 2c
+        } elseif (preg_match($re3,$w,$fp)) { //step 2c
             $stem = $fp[1];
             $w = $stem;
             $exept3 = "/(αρκ|καλιακ|πεταλ|λιχ|πλεξ|σκ|σ|φλ|φρ|βελ|λουλ|χν|σπ|τραγ|φε)$/u";
             if (preg_match($exept3,$w)) {
                 $w .= "ουδ";
             }
-        } else if (preg_match($re4,$w,$fp)) { //step 2d
+        } elseif (preg_match($re4,$w,$fp)) { //step 2d
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -157,7 +157,7 @@ $word = $w;
         $re16 = "/^(.+?)(ηστε)$/u";
         $re17 = "/^(.+?)(ουνε|ησουνε|ηθουνε)$/u";
         $re18 = "/^(.+?)(ουμε|ησουμε|ηθουμε)$/u";
-        
+
         if ($w == "αγαμε") {
             return "αγαμ";
         }
@@ -166,7 +166,7 @@ $word = $w;
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
-        } else if (preg_match($re,$w,$fp)) {
+        } elseif (preg_match($re,$w,$fp)) {
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -174,7 +174,7 @@ $word = $w;
             if (preg_match($exept6,$w)) {
                 $w .= "αμ";
             }
-        } else if (preg_match($re4,$w,$fp)) { //step 5b
+        } elseif (preg_match($re4,$w,$fp)) { //step 5b
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -182,7 +182,7 @@ $word = $w;
             if (preg_match($re4,$w)) {
                 $w .= "αγαν";
             }
-        } else if (preg_match($re3,$w,$fp)) {
+        } elseif (preg_match($re3,$w,$fp)) {
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -191,11 +191,11 @@ $word = $w;
             if (preg_match($re3,$w) || preg_match($exept7,$w)) {
                 $w .= "αν";
             }
-        } else if (preg_match($re6,$w,$fp)) { //step 5c
+        } elseif (preg_match($re6,$w,$fp)) { //step 5c
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
-        } else if (preg_match($re5,$w,$fp)) {
+        } elseif (preg_match($re5,$w,$fp)) {
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -207,10 +207,10 @@ $word = $w;
 
             if (preg_match($re5,$w) || preg_match($exept8,$w)) {
                 $w .= "ετ";
-            } else if (preg_match($exept9, $w)) {
+            } elseif (preg_match($exept9, $w)) {
                 $w .= "ετ";
             }
-        } else if (preg_match($re7,$w,$fp)) { //step 5d
+        } elseif (preg_match($re7,$w,$fp)) { //step 5d
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -223,7 +223,7 @@ $word = $w;
             if (preg_match($exept11,$w)) {
                 $w .= "ωντ";
             }
-        } else if (preg_match($re8,$w,$fp)) { //step 5e
+        } elseif (preg_match($re8,$w,$fp)) { //step 5e
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -232,7 +232,7 @@ $word = $w;
             if (preg_match($exept11,$w)) {
                 $w .= "ομαστ";
             }
-        } else if (preg_match($re10,$w,$fp)) { //step 5f
+        } elseif (preg_match($re10,$w,$fp)) { //step 5f
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -241,7 +241,7 @@ $word = $w;
             if (preg_match($re10,$w)) {
                $w .= "ιεστ";
             }
-        } else if (preg_match($re9,$w,$fp)) {
+        } elseif (preg_match($re9,$w,$fp)) {
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -250,11 +250,11 @@ $word = $w;
             if (preg_match($exept12,$w)) {
                 $w .= "εστ";
             }
-        } else if (preg_match($re12,$w,$fp)) { //step 5g
+        } elseif (preg_match($re12,$w,$fp)) { //step 5g
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
-        } else if (preg_match($re11,$w,$fp)) {
+        } elseif (preg_match($re11,$w,$fp)) {
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -263,10 +263,10 @@ $word = $w;
             $exept14 = "/^(διαθ|θ|παρακαταθ|προσθ|συνθ|)$/u";
             if (preg_match($exept13,$w)) {
                 $w .= "ηκ";
-            } else if (preg_match($exept14,$w)) {
+            } elseif (preg_match($exept14,$w)) {
                 $w .= "ηκ";
             }
-        } else if (preg_match($re13,$w,$fp)) { //step 5h
+        } elseif (preg_match($re13,$w,$fp)) { //step 5h
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -275,10 +275,10 @@ $word = $w;
             $exept16 = "/(ποδαρ|βλεπ|πανταχ|φρυδ|μαντιλ|μαλλ|κυματ|λαχ|ληγ|φαγ|ομ|πρωτ)$/u";
             if (preg_match($exept15,$w)) {
                 $w .= "ουσ";
-            } else if (preg_match($exept16,$w)) {
+            } elseif (preg_match($exept16,$w)) {
                 $w .= "ουσ";
             }
-        } else if (preg_match($re14,$w,$fp)) { //step 5i
+        } elseif (preg_match($re14,$w,$fp)) { //step 5i
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -292,7 +292,7 @@ $word = $w;
                 && !(preg_match($exept17,$w) || preg_match($exept20,$w))) {
               $w .= "αγ";
             }
-        } else if (preg_match($re15,$w,$fp)) { //step 5j
+        } elseif (preg_match($re15,$w,$fp)) { //step 5j
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -301,7 +301,7 @@ $word = $w;
             if (preg_match($exept21,$w)) {
                 $w .= "ησ";
             }
-        } else if (preg_match($re16,$w,$fp)) { //step 5k
+        } elseif (preg_match($re16,$w,$fp)) { //step 5k
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -310,7 +310,7 @@ $word = $w;
             if (preg_match($exept22,$w)) {
                 $w .= "ηστ";
             }
-        } else if (preg_match($re17,$w,$fp)) { //step 5l
+        } elseif (preg_match($re17,$w,$fp)) { //step 5l
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;
@@ -319,7 +319,7 @@ $word = $w;
             if (preg_match($exept23,$w)) {
                 $w .= "ουν";
             }
-        } else if (preg_match($re18,$w,$fp)) { //step 5l
+        } elseif (preg_match($re18,$w,$fp)) { //step 5l
             $stem = $fp[1];
             $w = $stem;
             $test1 = false;

@@ -2,8 +2,6 @@
 
 namespace NlpTools\Clustering\MergeStrategies;
 
-use NlpTools\Similarity\DistanceInterface;
-
 /**
  * In single linkage clustering the new distance of the merged cluster with
  * cluster i is the smallest distance of either cluster x to i or y to i.

@@ -52,7 +52,7 @@ class ClassifierBasedTransformation implements TransformationInterface
     /**
      * Register a set of transformations for a given class.
      *
-     * @param string                        $class
+     * @param string $class
      * @param array|TransformationInterface Either an array of transformations or a single transformation
      */
     public function register($class, $transforms)
