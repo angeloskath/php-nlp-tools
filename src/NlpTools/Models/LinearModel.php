@@ -2,6 +2,9 @@
 
 namespace NlpTools\Models;
 
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
+use NlpTools\Documents\DocumentInterface;
+
 /**
  * This class represents a linear model of the following form
  * f(x_vec) = l1*x1 + l2*x2 + l3*x3 ...
@@ -39,5 +42,26 @@ class LinearModel
     public function getWeights()
     {
         return $this->l;
+    }
+
+    /**
+     * Compute the features that fire for the Document $d. The sum of
+     * the weights of the features is the vote.
+     *
+     * @param  string                  $class The vote for class $class
+     * @param  FeatureFactoryInterface $ff    The feature factory
+     * @param  DocumentInterface       $d     The vote for Document $d
+     * @return float                   The vote of the model for class $class and Document $d
+     */
+    public function getVote($class, FeatureFactoryInterface $ff, DocumentInterface $d)
+    {
+        $v = 0;
+        $features = $ff->getFeatureArray($class,$d);
+        foreach ($features as $f) {
+            if (isset($this->l[$f]))
+                $v += $this->l[$f];
+        }
+
+        return $v;
     }
 }

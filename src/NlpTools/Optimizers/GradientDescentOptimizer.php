@@ -17,13 +17,19 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
     protected $fprime_vector;
 
     // report the improvement
-    protected $verbose=2;
+    protected $verbose;
 
     public function __construct($precision=0.001, $step=0.1, $maxiter = -1)
     {
         $this->precision = $precision;
         $this->step = $step;
         $this->maxiter = $maxiter;
+        $this->verbose = 0;
+    }
+
+    public function setVerbose($verbosity=2)
+    {
+        $this->verbose = $verbosity;
     }
 
     /**
@@ -68,15 +74,16 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
         $optimized = false;
         $maxiter = $this->maxiter;
         $prec = $this->precision;
+        $step = $this->step;
         $l = array();
         $this->initParameters($feature_array,$l);
-        while (!$optimized && $itercount++<$maxiter) {
+        while (!$optimized && $itercount++!=$maxiter) {
             //$start = microtime(true);
             $optimized = true;
             $this->prepareFprime($feature_array,$l);
             $this->Fprime($feature_array,$l);
             foreach ($this->fprime_vector as $i=>$fprime_i_val) {
-                $l[$i] -= $fprime_i_val;
+                $l[$i] -= $step*$fprime_i_val;
                 if (abs($fprime_i_val) > $prec) {
                     $optimized = false;
                 }
