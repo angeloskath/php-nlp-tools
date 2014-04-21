@@ -145,6 +145,7 @@ abstract class HeapLinkage implements MergeStrategyInterface
         $a = 0;
         $b = $this->L-1;
         $y = 0;
+        $i = 0;
         while ($b-$a > 1) {
             // the middle row in the interval [a,b]
             $y = (int) (($a+$b)/2);

@@ -59,11 +59,6 @@ class GreekStemmer extends Stemmer
 
     public function stem($w)
     {
-$word = $w;
-        $stem="";
-        $suffix="";
-        $firstch="";
-
         $test1 = true;
 
         if (mb_strlen($w, "utf-8") < 4) {

@@ -42,6 +42,7 @@ class Hierarchical extends Clusterer
         // own cluster we 'll merge later
         $clusters = range(0,count($documents)-1);
         $c = count($clusters);
+        $i = 0;
         while ($c>1) {
             // ask the strategy which to merge. The strategy
             // will assume that we will indeed merge the returned clusters
