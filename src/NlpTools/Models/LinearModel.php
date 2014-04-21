@@ -3,6 +3,7 @@
 namespace NlpTools\Models;
 
 use NlpTools\FeatureFactories\FeatureFactoryInterface;
+use NlpTools\Documents\DocumentInterface;
 
 /**
  * This class represents a linear model of the following form

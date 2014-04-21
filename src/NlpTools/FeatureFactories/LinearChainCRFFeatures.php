@@ -23,7 +23,7 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
      *                                                  passed the whole class chain
      */
     public function __construct(
-        FeatureFactoryInterface $singleClassFeats
+        FeatureFactoryInterface $singleClassFeats,
         FeatureFactoryInterface $chainFeats = null
     )
     {
@@ -40,7 +40,7 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
         $ourclass = array_pop(explode("|", $class));
 
         return array_merge(
-            $class,
+            array($class),
             $this->singleClassFeats->getFeatureArray($ourclass, $doc),
             ($this->chainFeats!==null) ? $this->chainFeats->getFeatureArray($class, $doc) : array()
         );

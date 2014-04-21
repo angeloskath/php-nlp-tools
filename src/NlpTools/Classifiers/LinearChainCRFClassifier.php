@@ -48,11 +48,14 @@ class LinearChainCRFClassifier implements SequenceClassifierInterface
      * the queue.
      *
      * TODO: Consider implementing beam search by the book
+     *
+     * {@inheritdoc}
      */
     public function classify(array $classes, TrainingSet $docs)
     {
         $sortbyscore = function ($a, $b) {
-            return ($a[0]/count($a[1])) - ($b[0]/count($b[1]));
+            //return  ($b[0]/count($b[1])) > ($a[0]/count($a[1])) ? 1 : -1;
+            return  $b[0] > $a[0] ? 1 : -1;
         };
 
         // as a transition table we will use from evreywhere to everywhere, so
@@ -77,7 +80,7 @@ class LinearChainCRFClassifier implements SequenceClassifierInterface
                     // calculate the path to going to any other class from this
                     // one
                     $new[] = array(
-                        $this->model->getVote(
+                        $vote+$this->model->getVote(
                             implode("|", array_slice($sequence,-$this->chainLength))."|".$class,
                             $this->ff,
                             $docs[$i]

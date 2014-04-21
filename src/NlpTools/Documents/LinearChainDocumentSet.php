@@ -45,7 +45,7 @@ class LinearChainDocumentSet extends TrainingSet
 
         $classChain = explode("|",$this[count($this)-1]->getClass());
         $classChain[] = $class;
-        if (count($classChain)<=$this->chainLength) {
+        if (count($classChain)<=$this->chainLength+1) {
             return parent::addDocument(implode("|", $classChain), $doc);
         }
 

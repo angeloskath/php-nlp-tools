@@ -2,8 +2,8 @@
 
 namespace NlpTools\Models;
 
-use \NlpTools\FeatureFactories\FeatureFactoryInterface;
-use \NlpTools\Documents\TrainingSet;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
+use NlpTools\Documents\TrainingSet;
 use NlpTools\Optimizers\MaxentOptimizerInterface;
 
 /**
