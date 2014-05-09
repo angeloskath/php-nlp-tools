@@ -239,8 +239,10 @@ class Lda
          $denom = $doccnt + $this->ntopics*$this->a;
          $count_topics_docs = array();
          foreach ($this->count_docs_topics as $doc=>$topics) {
-             foreach ($topics as $t=>$c)
-                $count_topics_docs[$doc][$t]++;
+             foreach ($topics as $t=>$c) {
+                if(!isset($count_topics_docs[$doc][$t])) $count_topics_docs[$doc][$t] = 0;
+                $count_topics_docs[$doc][$t] += $c;
+            }
          }
 
          foreach ($p_t_d as $topic=>&$p) {
