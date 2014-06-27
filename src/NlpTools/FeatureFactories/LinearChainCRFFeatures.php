@@ -37,7 +37,8 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
      */
     public function getFeatureArray($class, DocumentInterface $doc)
     {
-        $ourclass = array_pop(explode("|", $class));
+        $classlist = explode("|", $class);
+        $ourclass = array_pop($classlist);
 
         return array_merge(
             array($class),
