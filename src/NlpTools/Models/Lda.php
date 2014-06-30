@@ -186,8 +186,8 @@ class Lda
       * Get the probability of a word given a topic (phi according to
       * Griffiths and Steyvers)
       *
-      * @param $limit_words Limit the results to the top n words
-      * @return array A two dimensional array that contains the probabilities for each topic
+      * @param  integer $limit_words Limit the results to the top n words
+      * @return array   A two dimensional array that contains the probabilities for each topic
       */
     public function getWordsPerTopicsProbabilities($limit_words=-1)
     {
@@ -225,8 +225,8 @@ class Lda
       * Get the probability of a document given a topic (theta according
       * to Griffiths and Steyvers)
       *
-      * @param $limit_docs Limit the results to the top n docs
-      * @return array A two dimensional array that contains the probabilities for each document
+      * @param  integer  $limit_docs Limit the results to the top n docs
+      * @return array     A two dimensional array that contains the probabilities for each document
       */
      public function getDocumentsPerTopicsProbabilities($limit_docs=-1)
      {
@@ -237,14 +237,9 @@ class Lda
 
          $doccnt = count($this->words_in_doc);
          $denom = $doccnt + $this->ntopics*$this->a;
-         $count_topics_docs = array();
-         foreach ($this->count_docs_topics as $doc=>$topics) {
-             foreach ($topics as $t=>$c)
-                $count_topics_docs[$doc][$t]++;
-         }
 
          foreach ($p_t_d as $topic=>&$p) {
-             foreach ($count_topics_docs as $doc=>$tc) {
+             foreach ($this->count_docs_topics as $doc=>$tc) {
                  $p[$doc] = ($tc[$topic] + $this->a)/$denom;
              }
              if ($limit_docs>0) {

@@ -79,10 +79,12 @@ class LdaTest extends \PHPUnit_Framework_Testcase
 
         $lda->initialize($docs);
 
+        $loglik = array();
+
         for ($i=0;$i<100;$i++) {
             $lda->gibbsSample($docs);
             $topics = $lda->getPhi();
-            echo $lda->getLogLikelihood(),PHP_EOL;
+            $loglik[] = $lda->getLogLikelihood();
             foreach ($topics as $t=>$topic) {
                 $name = sprintf("{$this->path}/results/topic-%04d-%04d",$i,$t);
                 $max = max($topic);
@@ -103,8 +105,82 @@ class LdaTest extends \PHPUnit_Framework_Testcase
             }
         }
 
-        // TODO: assert the resemblance of the inferred topics
-        //       with the actual topics
+        $this->assertTrue(
+            array_sum(array_slice($loglik, 0, 50)) < array_sum(array_slice($loglik, 50))
+        );
+
+        // Keep count the number of columns and rows found as topics. If
+        // correct the array should have 5 items 0..4 each with a count of 2
+        $counts = array(0,0,0,0,0);
+        foreach ($topics as $topic) {
+            arsort($topic, true);
+            $top5 = array_slice(array_keys($topic), 0, 5);
+            sort($top5);
+
+            $idx = 0;
+            while ($idx < 4) {
+                $diff = $top5[$idx+1]-$top5[$idx];
+
+                // assert it is a row or column
+                $this->assertTrue(
+                    $diff == 1 || $diff == 5
+                );
+                $idx++;
+            }
+
+            if ($top5[0]<5)
+                $counts[$top5[0]]++;
+            else
+                $counts[$top5[0]/5]++;
+        }
+
+        for ($i=0; $i<5; $i++) {
+            $this->assertEquals(
+                2,
+                $counts[$i]
+            );
+        }
+    }
+
+    public function testSimpleTextTopics()
+    {
+        $docs = new TrainingSet();
+        $docs->addDocument(
+            "",
+            new TokensDocument(explode(" ", "a a a a c c"))
+        );
+        $docs->addDocument(
+            "",
+            new TokensDocument(explode(" ", "c c c a a a"))
+        );
+        $docs->addDocument(
+            "",
+            new TokensDocument(explode(" ", "c c c c a a"))
+        );
+
+        $lda = new Lda(
+            new DataAsFeatures(),
+            2,
+            1,
+            1
+        );
+        $lda->train($docs, 100);
+
+        // if a is more likely in one topic it should be less likely in the
+        // other
+        $topics = $lda->getPhi();
+        $this->assertEquals(
+            $topics[0]["a"]>$topics[0]["c"],
+            $topics[1]["a"]<$topics[1]["c"]
+        );
+        $this->assertEquals(
+            1.0,
+            array_sum($topics[0])
+        );
+        $this->assertEquals(
+            1.0,
+            array_sum($topics[1])
+        );
     }
 
     // WARNING: Massive set up code follows
