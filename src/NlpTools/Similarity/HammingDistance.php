@@ -12,14 +12,29 @@ class HammingDistance implements DistanceInterface
     /**
      * Count the number of positions that A and B differ.
      *
-     * @param  string $A
-     * @param  string $B
-     * @return int    The hamming distance of the two strings A and B
+     * @param  string|array $A
+     * @param  string|array $B
+     * @return int          The hamming distance of the two strings/sets A and B
      */
     public function dist(&$A, &$B)
     {
-        $l1 = strlen($A);
-        $l2 = strlen($B);
+        if (is_array($A))
+            $l1 = count($A);
+        else if (is_string($A))
+            $l1 = strlen($A);
+        else
+            throw new \InvalidArgumentException(
+                "HammingDistance accepts only strings or arrays"
+            );
+        if (is_array($B))
+            $l2 = count($B);
+        else if (is_string($B))
+            $l2 = strlen($B);
+        else
+            throw new \InvalidArgumentException(
+                "HammingDistance accepts only strings or arrays"
+            );
+
         $l = min($l1,$l2);
         $d = 0;
         for ($i=0;$i<$l;$i++) {

@@ -25,4 +25,47 @@ class HammingDistanceTest extends \PHPUnit_Framework_TestCase
             "10101 ~ 11111 have a hamming distance = 2"
         );
     }
+
+    public function testHammingInArrays()
+    {
+        $dist = new HammingDistance();
+        $A = array("A","B","C","D","E");
+        $B = array("F","G","H","I","J");
+        $C = array("1","0","1","0","1");
+        $D = array("1","1","1","1","1");
+
+        $this->assertEquals(
+            max(count($A),count($B)),
+            $dist->dist($A,$B),
+            "Two completely dissimilar sets should have distance equal to max(count(\$A),count(\$B))"
+        );
+
+        $this->assertEquals(
+            2,
+            $dist->dist($C,$D),
+            "10101 ~ 11111 have a hamming distance = 2"
+        );
+    }
+
+    public function testHammingInArraysVsStrings()
+    {
+        
+        $dist = new HammingDistance();
+        $A = "ABCDE";
+        $B = array("F","G","H","I","J");
+        $C = "10101";
+        $D = array("1","1","1","1","1");
+
+        $this->assertEquals(
+            max(count($A),count($B)),
+            $dist->dist($A,$B),
+            "Two completely dissimilar sets should have distance equal to max(count(\$A),count(\$B))"
+        );
+
+        $this->assertEquals(
+            2,
+            $dist->dist($C,$D),
+            "10101 ~ 11111 have a hamming distance = 2"
+        );
+    }
 }
