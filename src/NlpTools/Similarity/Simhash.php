@@ -58,7 +58,7 @@ class Simhash implements SimilarityInterface, DistanceInterface
      *
      * @param  array  $set
      * @return string The bits of the hash as a string
-     * */
+     */
     public function simhash(array &$set)
     {
         $boxes = array_fill(0,$this->length,0);

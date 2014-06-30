@@ -45,7 +45,7 @@ class FunctionFeatures implements FeatureFactoryInterface
      *
      * @param callable $feature
      */
-    public function add( $feature )
+    public function add($feature)
     {
         $this->functions[] = $feature;
     }

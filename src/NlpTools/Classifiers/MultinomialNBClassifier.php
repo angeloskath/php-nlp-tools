@@ -54,9 +54,9 @@ class MultinomialNBClassifier implements ClassifierInterface
      * @todo perhaps MultinomialNBModel should have precomputed the logs
      *       ex.: getLogPrior() and getLogCondProb()
      *
-     * @param string $class The class for which we are getting a score
-     * @param DocumentInterface The document whose score we are getting
-     * @return float The log of the probability of $d belonging to $class
+     * @param  string            $class The class for which we are getting a score
+     * @param  DocumentInterface $d     The document whose score we are getting
+     * @return float             The log of the probability of $d belonging to $class
      */
     public function getScore($class, DocumentInterface $d)
     {

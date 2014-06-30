@@ -19,7 +19,7 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
     /**
      * @param FeatureFactoryInterface $singleClassFeats This feature factory will be
      *                                                  passed just this document's class
-     * @param FeatureFactoryInterface $chainFeats This feature factory will be
+     * @param FeatureFactoryInterface $chainFeats       This feature factory will be
      *                                                  passed the whole class chain
      */
     public function __construct(

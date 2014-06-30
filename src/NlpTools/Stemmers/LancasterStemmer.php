@@ -1,6 +1,9 @@
 <?php
+
 namespace NlpTools\Stemmers;
+
 use NlpTools\Utils\VowelsAbstractFactory;
+
 /**
  * A word stemmer based on the Lancaster stemming algorithm.
  * Paice, Chris D. "Another Stemmer." ACM SIGIR Forum 24.3 (1990): 56-61.
@@ -38,9 +41,11 @@ class LancasterStemmer extends Stemmer
     protected $vowelChecker = null;
 
     /**
-     * Constructor loads the ruleset into memory
-     * @param array $ruleSet the set of rules that will be used by the lancaster algorithm. if empty
-     * this will use the default ruleset embedded in the LancasterStemmer
+     * Constructor loads the Ruleset into memory
+     *
+     * @param array $ruleSet The set of rules that will be used by the lancaster algorithm
+     *                       if empty this will use the default ruleset
+     *                       embedded in the LancasterStemmer
      */
     public function __construct($ruleSet = array())
     {

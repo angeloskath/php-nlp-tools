@@ -60,12 +60,11 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * It can be used for incremental training. It is not meant to be used
      * with the same training set twice.
      *
-     * @param array                   $train_ctx The previous training context
-     * @param FeatureFactoryInterface $ff        A feature factory to compute features from a training document
-     * @param TrainingSet The training set
-     * @param  integer $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
-     * @return array   Return a training context to be used for further incremental training,
-     *               although this is not necessary since the changes also happen in place
+     * @param  array                   $train_ctx   The previous training context
+     * @param  FeatureFactoryInterface $ff          A feature factory to compute features from a training document
+     * @param  TrainingSet             $tset        The training set
+     * @param  integer                 $a_smoothing The parameter for additive smoothing. Defaults to add-one smoothing.
+     * @return array                   Return a training context to be used for further incremental training, although this is not necessary since the changes also happen in place
      */
     public function train_with_context(array &$train_ctx, FeatureFactoryInterface $ff, TrainingSet $tset, $a_smoothing=1)
     {

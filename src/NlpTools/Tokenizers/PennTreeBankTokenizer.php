@@ -1,6 +1,7 @@
 <?php
 
 namespace NlpTools\Tokenizers;
+
 use NlpTools\Exceptions\InvalidExpression;
 
 /**
@@ -45,7 +46,7 @@ class PennTreeBankTokenizer extends WhitespaceTokenizer
                 $string = $tmp;
             }
         }
-        
+
         return $string;
     }
 

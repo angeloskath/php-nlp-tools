@@ -10,7 +10,7 @@ abstract class VowelsAbstractFactory
     /**
      * Protected from use
      */
-    protected function __construct(){}
+    protected function __construct() {}
 
     /**
      * Return the correct language vowel checker
