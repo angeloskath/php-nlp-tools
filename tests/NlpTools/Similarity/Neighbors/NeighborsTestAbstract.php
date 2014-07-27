@@ -2,7 +2,7 @@
 
 namespace NlpTools\Similarity\Neighbors;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 use NlpTools\Similarity\Euclidean;
 
 abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
@@ -37,7 +37,7 @@ abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideRegionQueries
      */
-    public function testRegionQueries(Distance $dist, $points, $point, $eps, $results)
+    public function testRegionQueries(DistanceInterface $dist, $points, $point, $eps, $results)
     {
         $index = $this->getSpatialIndexInstance();
         $index->setDistanceMetric($dist);

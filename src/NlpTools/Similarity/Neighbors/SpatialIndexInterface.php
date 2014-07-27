@@ -2,7 +2,7 @@
 
 namespace NlpTools\Similarity\Neighbors;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * Interface describing a spatial index to be used for fast spatial
@@ -13,9 +13,9 @@ interface SpatialIndexInterface
     /**
      * Set the distance metric to be used with any operation on this index.
      *
-     * @param Distance $d The distance metric to be used with any operation on this index
+     * @param DistanceInterface $d The distance metric to be used with any operation on this index
      */
-    public function setDistanceMetric(Distance $d);
+    public function setDistanceMetric(DistanceInterface $d);
 
     /**
      * Index the given points with the given distance metric.

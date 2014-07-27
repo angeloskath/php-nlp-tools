@@ -2,7 +2,7 @@
 
 namespace NlpTools\Similarity\Neighbors;
 
-use NlpTools\Similarity\Distance;
+use NlpTools\Similarity\DistanceInterface;
 
 /**
  * Search a set of documents one by one and recompute the distances in order
@@ -16,9 +16,9 @@ class NaiveLinearSearch implements SpatialIndexInterface
     /**
      * Update the distance metric with which the distances are computed
      *
-     * @param Distance $d The distance metric
+     * @param DistanceInterface $d The distance metric
      */
-    public function setDistanceMetric(Distance $d)
+    public function setDistanceMetric(DistanceInterface $d)
     {
         $this->dist = $d;
     }

@@ -4,8 +4,8 @@ namespace NlpTools\Clustering;
 
 use NlpTools\Similarity\Neighbors\SpatialIndexInterface;
 use NlpTools\Similarity\Neighbors\NaiveLinearSearch;
-use NlpTools\Similarity\Distance;
-use NlpTools\FeatureFactories\FeatureFactory;
+use NlpTools\Similarity\DistanceInterface;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
 use NlpTools\Documents\TrainingSet;
 
 /**
@@ -22,10 +22,10 @@ class Dbscan extends Clusterer
     /**
      * @param int                   $minPts    The minimum number of points required in the e-neighborhood
      * @param float                 $e         The distance that defines a neighborhood
-     * @param Distance              $d         The distance to be used with the SpatialIndex
+     * @param DistanceInterface     $d         The distance to be used with the SpatialIndex
      * @param SpatialIndexInterface $neighbors An index for efficiently performing distance related queries
      */
-    public function __construct($minPts, $e, Distance $d, SpatialIndexInterface $neighbors=null)
+    public function __construct($minPts, $e, DistanceInterface $d, SpatialIndexInterface $neighbors=null)
     {
         $this->minPts = $minPts;
         $this->eps = $e;
@@ -37,11 +37,11 @@ class Dbscan extends Clusterer
     }
 
     /**
-     * @param  TrainingSet    $document The documents to be clustered
-     * @param  FeatureFactory $ff       A feature factory to transform the documents given
-     * @return array          The clusters and the noise
+     * @param  TrainingSet             $document The documents to be clustered
+     * @param  FeatureFactoryInterface $ff       A feature factory to transform the documents given
+     * @return array                   The clusters and the noise
      */
-    public function cluster(TrainingSet $tset, FeatureFactory $ff)
+    public function cluster(TrainingSet $tset, FeatureFactoryInterface $ff)
     {
         $docs = $this->getDocumentArray($tset, $ff);
         $this->neighbors->index($docs);
