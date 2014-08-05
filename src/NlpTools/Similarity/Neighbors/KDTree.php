@@ -247,11 +247,30 @@ class KDTree implements SpatialIndexInterface
         // create two sets of docs the ones above and the ones below the median
         $leftDocs = array();
         $rightDocs = array();
-        foreach ($docs as $docIdx) {
-            if ($this->valueOfDocAtDepth($docIdx, $depth) <= $median)
-                $leftDocs[] = $docIdx;
-            else
-                $rightDocs[] = $docIdx;
+
+        // this is a special case where all the values might be equal so split
+        // the docs in half 
+        if ($median == reset($values) && $median == end($values)) {
+            $cnt = 0;
+            foreach ($docs as $docIdx) {
+                if ($this->valueOfDocAtDepth($docIdx, $depth) != $median)
+                    break;
+                $cnt ++;
+            }
+            if ($cnt == count($docs)) {
+                $leftDocs = array_slice($docs, 0, (int)(count($docs)/2));
+                $rightDocs = array_slice($docs, (int)(count($docs)/2));
+            }
+        }
+
+        // we need to split to the median
+        if (empty($leftDocs)) {
+            foreach ($docs as $docIdx) {
+                if ($this->valueOfDocAtDepth($docIdx, $depth) <= $median)
+                    $leftDocs[] = $docIdx;
+                else
+                    $rightDocs[] = $docIdx;
+            }
         }
 
         // create the node
@@ -277,7 +296,7 @@ class KDTree implements SpatialIndexInterface
                 $d = $this->valueOfFullDocAtDepth($doc, $depth) - $node->value;
 
                 // ask the minDistance function whether we should be adding both or not
-                if (abs($d) < call_user_func($minDistance)) {
+                if (abs($d) < call_user_func($minDistance) || $d == 0) {
                     // we 'll add both
                     if ($node->left!==null)
                         array_push($stack, array($node->left, $depth + 1));
