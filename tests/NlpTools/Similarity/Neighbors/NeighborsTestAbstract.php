@@ -9,10 +9,9 @@ abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
 {
     abstract protected function getSpatialIndexInstance();
 
-    public function provideRegionQueries()
+    protected function getPoints()
     {
-        $dist = new Euclidean();
-        $points = array(
+        return array(
                 array('x'=>0,'y'=>0), // 0
                 array('x'=>1,'y'=>1), // 1
                 array('x'=>2,'y'=>2), // 2
@@ -29,8 +28,42 @@ abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
                 array('x'=>3,'y'=>2), // 13
                 array('x'=>4,'y'=>1)  // 14
         );
+    }
+
+    public function provideRegionQueries()
+    {
+        $dist = new Euclidean();
+        $points = $this->getPoints();
         return array(
             array($dist, $points, array('x'=>3,'y'=>3), 1.1, array(3,13))
+        );
+    }
+
+    public function provideKNNQueries()
+    {
+        $dist = new Euclidean();
+        $points = $this->getPoints();
+        return array(
+            array($dist, $points, array('x'=>3, 'y'=>3), 1, array(3))
+        );
+    }
+
+    /**
+     * The nearest neighbor of a point already in the set is itsself
+     *
+     * @dataProvider provideKNNQueries
+     */
+    public function testKNN(DistanceInterface $dist, $points, $point, $k, $results)
+    {
+        $index = $this->getSpatialIndexInstance();
+        $index->setDistanceMetric($dist);
+        $index->index($points);
+
+        $idxs = $index->kNearestNeighbors($point, $k);
+
+        $this->assertEquals(
+            $results,
+            $idxs
         );
     }
 

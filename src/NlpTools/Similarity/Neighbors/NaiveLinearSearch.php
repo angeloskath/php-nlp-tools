@@ -35,16 +35,6 @@ class NaiveLinearSearch implements SpatialIndexInterface
     }
 
     /**
-     * Add another document to the index
-     *
-     * @param mixed $doc The document to be added to the index
-     */
-    public function add($doc)
-    {
-        $this->docs_copy[] = $doc;
-    }
-
-    /**
      * Search all the documents and return those that are within
      * $e distance of $doc
      *
