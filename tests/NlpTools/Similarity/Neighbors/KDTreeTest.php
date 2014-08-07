@@ -34,4 +34,38 @@ class KDTreeTest extends NeighborsTestAbstract
             $idxs
         );
     }
+
+    /**
+     * @group Slow
+     */
+    public function testLargeRandomDataset()
+    {
+        $index = $this->getSpatialIndexInstance();
+        $baseline = new NaiveLinearSearch();
+        $index->setDistanceMetric(new Euclidean());
+        $baseline->setDistanceMetric(new Euclidean());
+
+        $points = array();
+        for ($i=0; $i<10000; $i++) {
+            $points[] = array(
+                'x'=>mt_rand()/mt_getrandmax(),
+                'y'=>mt_rand()/mt_getrandmax()
+            );
+        }
+
+        $point = $points[array_rand($points, 1)];
+
+        $baseline->index($points);
+        $results = $baseline->kNearestNeighbors($point, 5);
+        sort($results);
+
+        $index->index($points);
+        $results2 = $index->kNearestNeighbors($point, 5);
+        sort($results2);
+
+        $this->assertEquals(
+            $results,
+            $results2
+        );
+    }
 }

@@ -44,7 +44,8 @@ abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
         $dist = new Euclidean();
         $points = $this->getPoints();
         return array(
-            array($dist, $points, array('x'=>3, 'y'=>3), 1, array(3))
+            array($dist, $points, array('x'=>3, 'y'=>3), 1, array(3)),
+            array($dist, $points, array('x'=>3, 'y'=>3), 2, array(3,13))
         );
     }
 
