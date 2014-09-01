@@ -68,4 +68,37 @@ class KDTreeTest extends NeighborsTestAbstract
             $results2
         );
     }
+
+    /**
+     * @group Slow
+     * @group VerySlow
+     */
+    public function testSubsquareScaling()
+    {
+        $index = $this->getSpatialIndexInstance();
+        $index->setDistanceMetric(new Euclidean());
+
+        // require too much memory for some systems
+        $sizes = array(10000, 20000, 40000/*, 80000, 160000*/);
+        $duration = array();
+        $points = array();
+        foreach ($sizes as $size) {
+            for ($i=count($points); $i<$size; $i++) {
+                $points[] = array(
+                    'x'=>mt_rand()/mt_getrandmax(),
+                    'y'=>mt_rand()/mt_getrandmax()
+                );
+            }
+            $start = microtime(true);
+            $index->index($points);
+            $duration[$size] = microtime(true) - $start;
+        }
+
+        // assert sub square complexity
+        for ($i=min($sizes); $i<max($sizes); $i *= 2) {
+            $this->assertTrue(
+                $duration[2*$i]/$duration[$i] < 4
+            );
+        }
+    }
 }
