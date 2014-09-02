@@ -35,16 +35,6 @@ class NaiveLinearSearch implements SpatialIndexInterface
     }
 
     /**
-     * Add another document to the index
-     *
-     * @param mixed $doc The document to be added to the index
-     */
-    public function add($doc)
-    {
-        $this->docs_copy[] = $doc;
-    }
-
-    /**
      * Search all the documents and return those that are within
      * $e distance of $doc
      *
@@ -85,22 +75,25 @@ class NaiveLinearSearch implements SpatialIndexInterface
             if ($dist < $neighbors[$last][1]) {
                 $neighbors[$last][1] = $dist;
                 $neighbors[$last][0] = $idx;
-                for ($j=$last-1;$j>0;$j++) {
-                    if ($neighbors[$j][1] < $neighbors[$j+1][1]) {
-                        break;
+                usort(
+                    $neighbors,
+                    function ($a, $b) {
+                        return $a[1] <= $b[1] ? -1 : 1;
                     }
-                    $tmp = $neighbors[$j];
-                    $neighbors[$j] = $neighbors[$j+1];
-                    $neighbors[$j+1] = $tmp;
-                }
+                );
             }
         }
 
-        return array_map(
+        return array_filter(
+            array_map(
+                function ($n) {
+                    return $n[0];
+                },
+                $neighbors
+            ),
             function ($n) {
-                return $n[0];
-            },
-            $neighbors
+                return $n >= 0;
+            }
         );
     }
 }

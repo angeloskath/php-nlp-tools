@@ -6,7 +6,9 @@ use NlpTools\Similarity\DistanceInterface;
 
 /**
  * Interface describing a spatial index to be used for fast spatial
- * queries like kNearestNeighbors or regionQuery.
+ * queries like kNearestNeighbors or regionQuery. This interface allows no
+ * editing of the index and this is a guarantee that could be limiting in some
+ * situations or allow for optimization in other.
  */
 interface SpatialIndexInterface
 {
@@ -23,15 +25,6 @@ interface SpatialIndexInterface
      * @param array $docs The points to be indexed
      */
     public function index(array &$docs);
-
-    /**
-     * Add a point to the index so that it can later be queried.
-     * The distance metric used should be the same with every
-     * previous index operation.
-     *
-     * @param mixed $doc The point to be indexed
-     */
-    public function add($doc);
 
     /**
      * Return the indices of the datapoints that are within the e-neighborhood
