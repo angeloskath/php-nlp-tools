@@ -3,6 +3,8 @@
 namespace NlpTools\FeatureFactories;
 
 use NlpTools\Documents\DocumentInterface;
+use NlpTools\FeatureVector\ArrayFeatureVector;
+use NlpTools\FeatureVector\UnionFeatureVector;
 
 /**
  * LinearChainCRFFeatures eases the creation of features used in linear chain
@@ -40,10 +42,16 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
         $classlist = explode("|", $class);
         $ourclass = array_pop($classlist);
 
-        return array_merge(
-            array($class),
-            $this->singleClassFeats->getFeatureArray($ourclass, $doc),
-            ($this->chainFeats!==null) ? $this->chainFeats->getFeatureArray($class, $doc) : array()
+        $chfv = new ArrayFeatureVector( array());
+        if ($this->chainFeats!==null)
+            $chfv = $this->chainFeats->getFeatureArray($class, $doc);
+
+        return new UnionFeatureVector(
+            array_merge(
+                new ArrayFeatureVector(array($class)),
+                $this->singleClassFeats->getFeatureArray($ourclass, $doc),
+                $chfv
+            )
         );
     }
 }

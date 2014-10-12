@@ -36,19 +36,19 @@ class ArrayFeatureVector extends FeatureVector
     }
 
     /**
-     * Get if the feature named $feature_name exists
+     * Get if the feature named $featureName exists
      */
-    public function offsetExists($feature_name)
+    public function offsetExists($featureName)
     {
-        return isset($this->features[$feature_name]);
+        return isset($this->features[$featureName]);
     }
 
     /**
-     * Get the value of the feature named $feature_name
+     * Get the value of the feature named $featureName
      */
-    public function offsetGet($feature_name)
+    public function offsetGet($featureName)
     {
-        return $this->features[$feature_name];
+        return $this->features[$featureName];
     }
 
     /**

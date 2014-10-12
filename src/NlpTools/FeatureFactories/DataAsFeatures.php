@@ -1,6 +1,7 @@
 <?php
 namespace NlpTools\FeatureFactories;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
 use NlpTools\Documents\DocumentInterface;
 
 class DataAsFeatures implements FeatureFactoryInterface
@@ -12,10 +13,10 @@ class DataAsFeatures implements FeatureFactoryInterface
      *
      * @param  string            $class The class for which we are calculating features
      * @param  DocumentInterface $d     The document to calculate features for.
-     * @return array
+     * @return ArrayFeatureVector
      */
     public function getFeatureArray($class, DocumentInterface $d)
     {
-        return $d->getDocumentData();
+        return new ArrayFeatureVector($d->getDocumentData());
     }
 }

@@ -2,7 +2,8 @@
 
 namespace NlpTools\FeatureFactories;
 
-use \NlpTools\Documents\DocumentInterface;
+use NlpTools\FeatureVector\ArrayFeatureVector;
+use NlpTools\Documents\DocumentInterface;
 
 /**
  * An implementation of FeatureFactoryInterface that takes any number of callables
@@ -60,7 +61,7 @@ class FunctionFeatures implements FeatureFactoryInterface
      *
      * @param  string            $class The class for which we are calculating features
      * @param  DocumentInterface $d     The document for which we are calculating features
-     * @return array
+     * @return ArrayFeatureVector
      */
     public function getFeatureArray($class, DocumentInterface $d)
     {
@@ -85,9 +86,9 @@ class FunctionFeatures implements FeatureFactoryInterface
             }
         }
         if ($this->frequency)
-            return $set;
+            return new ArrayFeatureVector($set);
         else
-            return array_keys($set);
+            return new ArrayFeatureVector(array_keys($set));
     }
 
 }
