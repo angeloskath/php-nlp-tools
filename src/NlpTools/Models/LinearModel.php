@@ -57,7 +57,7 @@ class LinearModel
     {
         $v = 0;
         $features = $ff->getFeatureArray($class,$d);
-        foreach ($features as $f) {
+        foreach ($features as $f=>$v) {
             if (isset($this->l[$f]))
                 $v += $this->l[$f];
         }

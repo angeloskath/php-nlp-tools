@@ -47,7 +47,7 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
             $chfv = $this->chainFeats->getFeatureArray($class, $doc);
 
         return new UnionFeatureVector(
-            array_merge(
+            array(
                 new ArrayFeatureVector(array($class)),
                 $this->singleClassFeats->getFeatureArray($ourclass, $doc),
                 $chfv

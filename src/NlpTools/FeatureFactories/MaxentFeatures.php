@@ -2,6 +2,7 @@
 
 namespace NlpTools\FeatureFactories;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
 use NlpTools\Documents\DocumentInterface;
 
 /**
@@ -26,10 +27,11 @@ class MaxentFeatures implements FeatureFactoryInterface
     public function getFeatureArray($class, DocumentInterface $doc)
     {
         $feats = $this->ff->getFeatureArray($class, $doc);
-        foreach ($feats as &$f) {
-            $f = "$class ^ $f";
+        $newfeatures = array();
+        foreach ($feats as $f=>$v) {
+            $newfeatures["$class ^ $f"] = $v;
         }
 
-        return $feats;
+        return new ArrayFeatureVector($newfeatures);
     }
 }

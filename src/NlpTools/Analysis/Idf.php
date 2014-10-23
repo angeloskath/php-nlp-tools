@@ -31,9 +31,7 @@ class Idf implements \ArrayAccess
 
         $tset->setAsKey(TrainingSet::CLASS_AS_KEY);
         foreach ($tset as $class=>$doc) {
-            $tokens = $ff->getFeatureArray($class,$doc); // extract tokens from the document
-            $tokens = array_fill_keys($tokens,1); // make them occur once
-            foreach ($tokens as $token=>$v) {
+            foreach ($ff->getFeatureArray($class, $doc) as $token=>$v) {
                 if (isset($this->idf[$token]))
                     $this->idf[$token]++;
                 else
