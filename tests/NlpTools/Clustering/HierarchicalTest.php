@@ -10,6 +10,7 @@ use NlpTools\Documents\TrainingSet;
 use NlpTools\Documents\TokensDocument;
 use NlpTools\Documents\EuclideanPoint;
 use NlpTools\FeatureFactories\DataAsFeatures;
+use NlpTools\FeatureVector\ArrayFeatureVector;
 
 class HierarchicalTest extends ClusteringTestBase
 {
@@ -25,11 +26,11 @@ class HierarchicalTest extends ClusteringTestBase
     public function testSingleLink()
     {
         $docs = array(
-            array('x'=>0,'y'=>0),
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>3),
-            array('x'=>4,'y'=>6),
-            array('x'=>6,'y'=>6)
+            new ArrayFeatureVector(array('x'=>0,'y'=>0)),
+            new ArrayFeatureVector(array('x'=>0,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>1,'y'=>3)),
+            new ArrayFeatureVector(array('x'=>4,'y'=>6)),
+            new ArrayFeatureVector(array('x'=>6,'y'=>6))
         );
 
         $sl = new SingleLink();
@@ -91,12 +92,12 @@ class HierarchicalTest extends ClusteringTestBase
     public function testCompleteLink()
     {
         $docs = array(
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>1),
-            array('x'=>2,'y'=>1),
-            array('x'=>3,'y'=>1),
-            array('x'=>4,'y'=>1),
-            array('x'=>7,'y'=>1)
+            new ArrayFeatureVector(array('x'=>0,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>1,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>2,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>3,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>4,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>7,'y'=>1))
         );
 
         $cl = new CompleteLink();
@@ -179,11 +180,11 @@ class HierarchicalTest extends ClusteringTestBase
     public function testGroupAverage()
     {
         $docs = array(
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>1),
-            array('x'=>2,'y'=>1),
-            array('x'=>3,'y'=>1),
-            array('x'=>4.51,'y'=>1),
+            new ArrayFeatureVector(array('x'=>0,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>1,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>2,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>3,'y'=>1)),
+            new ArrayFeatureVector(array('x'=>4.51,'y'=>1)),
         );
 
         $ga = new GroupAverage();
@@ -213,7 +214,7 @@ class HierarchicalTest extends ClusteringTestBase
             $pair
         );
 
-        $docs[4] = array('x'=>4.49,'y'=>1);
+        $docs[4] = new ArrayFeatureVector(array('x'=>4.49,'y'=>1));
         $ga->initializeStrategy(new Euclidean(), $docs);
 
         $pair = $ga->getNextMerge();

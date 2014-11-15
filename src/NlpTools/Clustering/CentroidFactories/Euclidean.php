@@ -2,29 +2,13 @@
 
 namespace NlpTools\Clustering\CentroidFactories;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
+
 /**
  * Computes the euclidean centroid of the provided sparse vectors
  */
 class Euclidean implements CentroidFactoryInterface
 {
-    /**
-     * If the document is a collection of tokens or features transorm it to
-     * a sparse vector with frequency information.
-     *
-     * Ex.: If 'A' appears twice in the doc the dimension 'A' will have value 2
-     * in the resulting vector
-     *
-     * @param  array $doc The doc data to transform to sparse vector
-     * @return array A sparse vector representing the document to the n-dimensional euclidean space
-     */
-    protected function getVector(array $doc)
-    {
-        if (is_int(key($doc)))
-            return array_count_values($doc);
-        else
-            return $doc;
-    }
-
     /**
      * Compute the mean value for each dimension.
      *
@@ -39,8 +23,7 @@ class Euclidean implements CentroidFactoryInterface
             $choose = range(0,count($docs)-1);
         $cnt = count($choose);
         foreach ($choose as $idx) {
-            $doc = $this->getVector($docs[$idx]);
-            foreach ($doc as $k=>$w) {
+            foreach ($docs[$idx] as $k=>$w) {
                 if (!isset($v[$k]))
                     $v[$k] = $w;
                 else
@@ -51,6 +34,6 @@ class Euclidean implements CentroidFactoryInterface
             $w /= $cnt;
         }
 
-        return $v;
+        return new ArrayFeatureVector($v);
     }
 }
