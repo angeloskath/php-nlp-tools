@@ -2,6 +2,7 @@
 
 namespace NlpTools\Similarity\Neighbors;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
 use NlpTools\Similarity\Euclidean;
 
 class KDTreeTest extends NeighborsTestAbstract
@@ -16,16 +17,16 @@ class KDTreeTest extends NeighborsTestAbstract
         $index = $this->getSpatialIndexInstance();
         $index->setDistanceMetric(new Euclidean());
         $points = array(
-            array('x'=>1, 'y'=>2),
-            array('x'=>1, 'y'=>2),
-            array('x'=>1, 'y'=>2),
-            array('x'=>1, 'y'=>2),
-            array('x'=>1, 'y'=>2),
-            array('x'=>1, 'y'=>2),
-            array('x'=>2, 'y'=>2)
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>1, 'y'=>2)),
+            new ArrayFeatureVector(array('x'=>2, 'y'=>2))
         );
         $index->index($points);
-        $point = array('x'=>1, 'y'=>2);
+        $point = new ArrayFeatureVector(array('x'=>1, 'y'=>2));
 
         $idxs = $index->kNearestNeighbors($point, 6);
         sort($idxs);
@@ -47,10 +48,10 @@ class KDTreeTest extends NeighborsTestAbstract
 
         $points = array();
         for ($i=0; $i<10000; $i++) {
-            $points[] = array(
+            $points[] = new ArrayFeatureVector(array(
                 'x'=>mt_rand()/mt_getrandmax(),
                 'y'=>mt_rand()/mt_getrandmax()
-            );
+            ));
         }
 
         $point = $points[array_rand($points, 1)];
@@ -84,10 +85,10 @@ class KDTreeTest extends NeighborsTestAbstract
         $points = array();
         foreach ($sizes as $size) {
             for ($i=count($points); $i<$size; $i++) {
-                $points[] = array(
+                $points[] = new ArrayFeatureVector(array(
                     'x'=>mt_rand()/mt_getrandmax(),
                     'y'=>mt_rand()/mt_getrandmax()
-                );
+                ));
             }
             $start = microtime(true);
             $index->index($points);

@@ -9,5 +9,5 @@ namespace NlpTools\Similarity;
  */
 interface SimilarityInterface
 {
-    public function similarity(&$A, &$B);
+    public function similarity($A, $B);
 }

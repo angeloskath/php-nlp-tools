@@ -8,5 +8,5 @@ namespace NlpTools\Similarity;
  */
 interface DistanceInterface
 {
-    public function dist(&$A, &$B);
+    public function dist($A, $B);
 }

@@ -2,6 +2,8 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\FeatureVector;
+
 /**
  * Given two vectors compute cos(theta) where theta is the angle
  * between the two vectors in a N-dimensional vector space.
@@ -38,50 +40,48 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
      *
      * TODO: Assert $A, $B are arrays
      *
-     * @param  array $A Either feature vector or simply vector
-     * @param  array $B Either feature vector or simply vector
-     * @return float The cosinus of the angle between the two vectors
+     * @param  FeatureVector $A A feature vector
+     * @param  FeatureVector $B Another feature vector
+     * @return float         The cosinus of the angle between the two vectors
      */
-    public function similarity(&$A, &$B)
+    public function similarity($A, $B)
     {
-        // This means they are simple text vectors
-        // so we need to count to make them vectors
-        if (is_int(key($A)))
-            $v1 = array_count_values($A);
-        else
-            $v1 = &$A;
-        if (is_int(key($B)))
-            $v2 = array_count_values($B);
-        else
-            $v2 = &$B;
+        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector))
+            throw new \InvalidArgumentException(
+                "CosineSimilarity accepts only FeatureVector instances"
+            );
 
         $prod = 0.0;
-        $v1_norm = 0.0;
-        foreach ($v1 as $i=>$xi) {
-            if (isset($v2[$i])) {
-                $prod += $xi*$v2[$i];
+        $A_norm = 0.0;
+        foreach ($A as $i=>$xi) {
+            if (isset($B[$i])) {
+                $prod += $xi*$B[$i];
             }
-            $v1_norm += $xi*$xi;
+            $A_norm += $xi*$xi;
         }
-        $v1_norm = sqrt($v1_norm);
-        if ($v1_norm==0)
-            throw new \InvalidArgumentException("Vector \$A is the zero vector");
+        $A_norm = sqrt($A_norm);
+        if ($A_norm==0)
+            throw new \InvalidArgumentException(
+                "Vector \$A is the zero vector"
+            );
 
-        $v2_norm = 0.0;
-        foreach ($v2 as $i=>$xi) {
-            $v2_norm += $xi*$xi;
+        $B_norm = 0.0;
+        foreach ($B as $i=>$xi) {
+            $B_norm += $xi*$xi;
         }
-        $v2_norm = sqrt($v2_norm);
-        if ($v2_norm==0)
-            throw new \InvalidArgumentException("Vector \$B is the zero vector");
+        $B_norm = sqrt($B_norm);
+        if ($B_norm==0)
+            throw new \InvalidArgumentException(
+                "Vector \$B is the zero vector"
+            );
 
-        return $prod/($v1_norm*$v2_norm);
+        return $prod/($A_norm*$B_norm);
     }
 
     /**
      * Cosine distance is simply 1-cosine similarity
      */
-    public function dist(&$A, &$B)
+    public function dist($A, $B)
     {
         return 1-$this->similarity($A,$B);
     }

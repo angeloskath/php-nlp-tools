@@ -2,15 +2,17 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
+
 class JaccardIndexTest extends \PHPUnit_Framework_TestCase
 {
     public function testJaccardIndex()
     {
         $sim = new JaccardIndex();
 
-        $A = array(1,2,3);
-        $B = array(1,2,3,4,5,6);
-        $e = array();
+        $A = new ArrayFeatureVector(array(1,2,3));
+        $B = new ArrayFeatureVector(array(1,2,3,4,5,6));
+        $e = new ArrayFeatureVector(array());
 
         $this->assertEquals(
             1,

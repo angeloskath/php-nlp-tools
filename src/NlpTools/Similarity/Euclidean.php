@@ -2,6 +2,8 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\FeatureVector;
+
 /**
  * This class computes the very simple euclidean distance between
  * two vectors ( sqrt(sum((a_i-b_i)^2)) ).
@@ -9,27 +11,21 @@ namespace NlpTools\Similarity;
 class Euclidean implements DistanceInterface
 {
     /**
-     * see class description
-     * @param  array $A Either a vector or a collection of tokens to be transformed to a vector
-     * @param  array $B Either a vector or a collection of tokens to be transformed to a vector
-     * @return float The euclidean distance between $A and $B
+     * See class description
+     * @param  FeatureVector $A A feature vector
+     * @param  FeatureVector $B Another feature vector
+     * @return float         The euclidean distance between $A and $B
      */
-    public function dist(&$A, &$B)
+    public function dist($A, $B)
     {
-        if (is_int(key($A)))
-            $v1 = array_count_values($A);
-        else
-            $v1 = &$A;
-        if (is_int(key($B)))
-            $v2 = array_count_values($B);
-        else
-            $v2 = &$B;
+        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector))
+            throw new \InvalidArgumentException("Euclidean accepts only FeatureVector instances");
 
         $r = array();
-        foreach ($v1 as $k=>$v) {
+        foreach ($A as $k=>$v) {
             $r[$k] = $v;
         }
-        foreach ($v2 as $k=>$v) {
+        foreach ($B as $k=>$v) {
             if (isset($r[$k]))
                 $r[$k] -= $v;
             else
