@@ -2,15 +2,17 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
+
 class CosineSimilarityTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetSimilarity()
     {
         $sim = new CosineSimilarity();
 
-        $A = array(1,2,3);
-        $A_times_2 = array(1,2,3,1,2,3);
-        $B = array(1,2,3,4,5,6);
+        $A = new ArrayFeatureVector(array(1,2,3));
+        $A_times_2 = new ArrayFeatureVector(array(1,2,3,1,2,3));
+        $B = new ArrayFeatureVector(array(1,2,3,4,5,6));
 
         $this->assertEquals(
             1,
@@ -35,10 +37,10 @@ class CosineSimilarityTest extends \PHPUnit_Framework_TestCase
     {
         $sim = new CosineSimilarity();
 
-        $ba = array(1,1,2,2,2,2); // ba = (2,4)
-        $bc = array(1,1,1,2,2); // bc = (3,2)
-        $bba = array('a'=>2,'b'=>4);
-        $bbc = array('a'=>3,'b'=>2);
+        $ba = new ArrayFeatureVector(array(1,1,2,2,2,2)); // ba = (2,4)
+        $bc = new ArrayFeatureVector(array(1,1,1,2,2)); // bc = (3,2)
+        $bba = new ArrayFeatureVector(array('a'=>2,'b'=>4));
+        $bbc = new ArrayFeatureVector(array('a'=>3,'b'=>2));
         $ba_to_bc = cos(0.5191461142); // approximately 30 deg
 
         $this->assertEquals(
@@ -55,8 +57,8 @@ class CosineSimilarityTest extends \PHPUnit_Framework_TestCase
     public function testInvalidArgumentException()
     {
         $sim = new CosineSimilarity();
-        $a = array(1);
-        $zero = array();
+        $a = new ArrayFeatureVector(array(1));
+        $zero = new ArrayFeatureVector(array());
         try {
             $sim->similarity(
                 $a,

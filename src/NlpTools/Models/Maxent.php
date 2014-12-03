@@ -56,7 +56,14 @@ class Maxent extends LinearModel
         foreach ($tset as $offset=>$doc) {
             $features[$offset] = array();
             foreach ($classes as $class) {
-                $features[$offset][$class] = $ff->getFeatureArray($class,$doc);
+                // this effectively makes any feature factory modelling
+                // presence only since we just keep track of whether a feature
+                // fires or not
+                $features[$offset][$class] = array_keys(
+                    iterator_to_array(
+                        $ff->getFeatureArray($class,$doc)
+                    )
+                );
             }
             $features[$offset]['__label__'] = $doc->getClass();
         }
@@ -80,7 +87,11 @@ class Maxent extends LinearModel
         $exps = array();
         foreach ($classes as $cl) {
             $tmp = 0.0;
-            foreach ($ff->getFeatureArray($cl,$d) as $i) {
+            // After the introduction of the FeatureVector instance all feature
+            // factories return FeatureVector instances which when iterated
+            // upon have both the feature and a value (which is ignored in this
+            // case)
+            foreach ($ff->getFeatureArray($cl,$d) as $i=>$v) {
                 $tmp += $this->l[$i];
             }
             $exps[$cl] = exp($tmp);

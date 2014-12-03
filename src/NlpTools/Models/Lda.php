@@ -60,8 +60,15 @@ class Lda
     public function generateDocs(TrainingSet $tset)
     {
         $docs = array();
-        foreach ($tset as $d)
-            $docs[] = $this->ff->getFeatureArray('',$d);
+        foreach ($tset as $d) {
+            $doc = array();
+            foreach ($this->ff->getFeatureArray('',$d) as $word=>$frequency) {
+                for ($i=0; $i<$frequency; $i++) {
+                    $doc[] = $word;
+                }
+            }
+            $docs[] = $doc;
+        }
 
         return $docs;
     }

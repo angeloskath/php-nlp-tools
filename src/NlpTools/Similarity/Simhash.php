@@ -2,6 +2,8 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\FeatureVector;
+
 /**
  * Simhash is an implementation of the locality sensitive hash function
  * families proposed by Moses Charikar using the Earth Mover's Distance
@@ -59,14 +61,11 @@ class Simhash implements SimilarityInterface, DistanceInterface
      * @param  array  $set
      * @return string The bits of the hash as a string
      */
-    public function simhash(array &$set)
+    public function simhash(FeatureVector $set)
     {
         $boxes = array_fill(0,$this->length,0);
-        if (is_int(key($set)))
-            $dict = array_count_values($set);
-        else
-            $dict = &$set;
-        foreach ($dict as $m=>$w) {
+
+        foreach ($set as $m=>$w) {
             $h = call_user_func($this->h,$m);
             for ($bit_idx=0;$bit_idx<$this->length;$bit_idx++) {
                     $boxes[$bit_idx] += ($h[$bit_idx]=='1') ? $w : -$w;
@@ -90,7 +89,7 @@ class Simhash implements SimilarityInterface, DistanceInterface
      * @param  array $B
      * @return int   [0,$this->length]
      */
-    public function dist(&$A, &$B)
+    public function dist($A, $B)
     {
         $h1 = $this->simhash($A);
         $h2 = $this->simhash($B);
@@ -111,7 +110,7 @@ class Simhash implements SimilarityInterface, DistanceInterface
      * @param  array $B
      * @return float [0,1]
      */
-    public function similarity(&$A, &$B)
+    public function similarity($A, $B)
     {
         return ($this->length-$this->dist($A,$B))/$this->length;
     }

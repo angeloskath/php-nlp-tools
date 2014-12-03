@@ -2,6 +2,8 @@
 
 namespace NlpTools\Similarity;
 
+use NlpTools\FeatureVector\FeatureVector;
+
 /**
  * This class implements the hamming distance of two strings or sets.
  * To be used with numbers one should pass the numbers to decbin() first
@@ -12,28 +14,30 @@ class HammingDistance implements DistanceInterface
     /**
      * Count the number of positions that A and B differ.
      *
-     * @param  string|array $A
-     * @param  string|array $B
-     * @return int          The hamming distance of the two strings/sets A and B
+     * @param  string|FeatureVector $A
+     * @param  string|FeatureVector $B
+     * @return int                  The hamming distance of the two
+     *                              strings/sets A and B
      */
-    public function dist(&$A, &$B)
+    public function dist($A, $B)
     {
-        if (is_array($A))
-            $l1 = count($A);
-        else if (is_string($A))
-            $l1 = strlen($A);
-        else
-            throw new \InvalidArgumentException(
-                "HammingDistance accepts only strings or arrays"
-            );
-        if (is_array($B))
-            $l2 = count($B);
-        else if (is_string($B))
-            $l2 = strlen($B);
-        else
-            throw new \InvalidArgumentException(
-                "HammingDistance accepts only strings or arrays"
-            );
+        if (is_string($A) && is_string($B))
+            return $this->hammingOfStrings($A, $B);
+        else if ($A instanceof FeatureVector && $B instanceof FeatureVector)
+            return $this->hammingOfFeatureVectors($A, $B);
+
+        throw new \InvalidArgumentException(
+            "HammingDistance accepts only strings or FeatureVector instances, not mixed"
+        );
+    }
+
+    /**
+     * Count the number of positions that A and B differ them being strings.
+     */
+    private function hammingOfStrings($A, $B)
+    {
+        $l1 = strlen($A);
+        $l2 = strlen($B);
 
         $l = min($l1,$l2);
         $d = 0;
@@ -42,5 +46,26 @@ class HammingDistance implements DistanceInterface
         }
 
         return $d + (int) abs($l1-$l2);
+    }
+
+    /**
+     * Count the number of dimensions in which the two FeatureVector instances
+     * differ.
+     */
+    private function hammingOfFeatureVectors($A, $B)
+    {
+        $keys = array();
+        foreach ($A as $k=>$v)
+            $keys[$k] = 1;
+        foreach ($B as $k=>$v)
+            $keys[$k] = 1;
+
+        $cnt = 0;
+        foreach ($keys as $k=>$v)
+        {
+            $cnt += (int)($A[$k] !== $B[$k]);
+        }
+
+        return $cnt;
     }
 }

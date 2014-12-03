@@ -12,7 +12,7 @@ interface FeatureFactoryInterface
      *
      * @param  string            $class The class for which we are calculating features
      * @param  DocumentInterface $d     The document for which we are calculating features
-     * @return array
+     * @return NlpTools\FeatureVector\FeatureVector
      */
     public function getFeatureArray($class, DocumentInterface $d);
 }

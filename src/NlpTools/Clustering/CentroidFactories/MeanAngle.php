@@ -2,29 +2,28 @@
 
 namespace NlpTools\Clustering\CentroidFactories;
 
+use NlpTools\FeatureVector\ArrayFeatureVector;
+use NlpTools\FeatureVector\FeatureVector;
+
 /**
  * MeanAngle computes the unit vector with angle the average of all
  * the given vectors. The purpose is to compute a vector M such that
  * sum(cosine_similarity(M,x_i)) is maximized
  */
-class MeanAngle extends Euclidean
+class MeanAngle extends CentroidFactoryInterface
 {
-    protected function normalize(array $v)
+    protected function normalize(FeatureVector $vector)
     {
-        $norm = array_reduce(
-            $v,
-            function ($v,$w) {
-                return $v+$w*$w;
-            }
-        );
+        $norm = 0;
+        foreach ($vector as $k=>$v)
+            $norm += $v*$v;
         $norm = sqrt($norm);
 
-        return array_map(
-            function ($vi) use ($norm) {
-                return $vi/$norm;
-            },
-            $v
-        );
+        $normalized = array();
+        foreach ($vector as $k=>$v)
+            $normalized[$k] = $v/$norm;
+
+        return $normalized;
     }
 
     public function getCentroid(array &$docs, array $choose=array())
@@ -34,7 +33,7 @@ class MeanAngle extends Euclidean
         $cnt = count($choose);
         $v = array();
         foreach ($choose as $idx) {
-            $d = $this->normalize($this->getVector($docs[$idx]));
+            $d = $this->normalize($docs[$idx]);
             foreach ($d as $i=>$vi) {
                 if (!isset($v[$i]))
                     $v[$i] = $vi;
@@ -43,11 +42,11 @@ class MeanAngle extends Euclidean
             }
         }
 
-        return array_map(
+        return new ArrayFeatureVector(array_map(
             function ($vi) use ($cnt) {
                 return $vi/$cnt;
             },
             $v
-        );
+        ));
     }
 }
