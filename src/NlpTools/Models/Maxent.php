@@ -30,7 +30,7 @@ class Maxent extends LinearModel
     {
         $classSet = $tset->getClassSet();
 
-        $features = $this->calculateFeatureArray($classSet,$tset,$ff);
+        $features = $this->calculateFeatureArray($classSet, $tset, $ff);
         $this->l = $opt->optimize($features);
     }
 
@@ -61,7 +61,7 @@ class Maxent extends LinearModel
                 // fires or not
                 $features[$offset][$class] = array_keys(
                     iterator_to_array(
-                        $ff->getFeatureArray($class,$doc)
+                        $ff->getFeatureArray($class, $doc)
                     )
                 );
             }
@@ -82,7 +82,7 @@ class Maxent extends LinearModel
      * @param  string $class A class for which we calculate the probability
      * @return float  The probability that document $d belongs to class $class
      */
-    public function P(array $classes,FeatureFactoryInterface $ff,DocumentInterface $d,$class)
+    public function P(array $classes, FeatureFactoryInterface $ff, DocumentInterface $d, $class)
     {
         $exps = array();
         foreach ($classes as $cl) {
@@ -91,7 +91,7 @@ class Maxent extends LinearModel
             // factories return FeatureVector instances which when iterated
             // upon have both the feature and a value (which is ignored in this
             // case)
-            foreach ($ff->getFeatureArray($cl,$d) as $i=>$v) {
+            foreach ($ff->getFeatureArray($cl, $d) as $i=>$v) {
                 $tmp += $this->l[$i];
             }
             $exps[$cl] = exp($tmp);
@@ -107,7 +107,7 @@ class Maxent extends LinearModel
      *
      * @throws \Exception
      */
-    public function CLogLik(TrainingSet $tset,FeatureFactoryInterface $ff)
+    public function CLogLik(TrainingSet $tset, FeatureFactoryInterface $ff)
     {
         throw new \Exception("Unimplemented");
     }
@@ -120,5 +120,4 @@ class Maxent extends LinearModel
     {
         print_r($this->l);
     }
-
 }

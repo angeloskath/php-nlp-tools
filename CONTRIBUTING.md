@@ -10,28 +10,16 @@ NlpTools adheres to the [psr-2][1] standard. It also follows the convention of
 appending the word *Interface* to any interface.
 
 To enforce the psr-2 style it is suggested to use the [php-cs-fixer][2] tool.
-While you 're at it why not enforce some more styles as well. The fixers used
-are the **default** (which are more than the psr-2 level uses) but they will be
-explicitly listed here in case they change in the future.
+A config.php_cs file is provided and can be used to enforce the correct coding
+style. Use it in the following way:
 
-* indentation
-* linefeed
-* trailing_spaces
-* unused_use
-* phpdoc_params
-* visibility
-* return
-* short_tag
-* braces
-* include
-* php_closing_tag
-* extra_empty_lines
-* psr0
-* control_spaces
-* elseif
-* eof_ending
+``` bash
+# assuming current working directory at the root of the project
+php-cs-fixer fix --config-file=config.php_cs
+```
 
-The above fixers are the default.
+You could also use a [pre-commit hook][3] to add another level of protection against
+commiting unstyled code.
 
 Commenting Style
 --------------------------
@@ -138,3 +126,4 @@ very little information regarding the cause of the error. Both are acceptable
 
 [1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 [2]: http://cs.sensiolabs.org/
+[3]: https://gist.github.com/angeloskath/624c32b897118069438b

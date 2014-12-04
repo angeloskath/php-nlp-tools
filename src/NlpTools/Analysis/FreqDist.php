@@ -9,7 +9,6 @@ use NlpTools\Documents\TokensDocument;
  */
 class FreqDist
 {
-
     /**
      * An associative array that holds all the frequencies per token
      * @var array
@@ -106,7 +105,7 @@ class FreqDist
      */
     public function getHapaxes()
     {
-            $hapaxes = array();
+        $hapaxes = array();
 
             //get the head key
             $head = key($this->keyValues);
@@ -118,16 +117,14 @@ class FreqDist
                 return array();
             }
 
-            do {
-                $hapaxes[] = key($this->keyValues);
-                prev($this->keyValues);
-
-            } while (current($this->keyValues) == 1 && key($this->keyValues) !== $head);
+        do {
+            $hapaxes[] = key($this->keyValues);
+            prev($this->keyValues);
+        } while (current($this->keyValues) == 1 && key($this->keyValues) !== $head);
 
             //reset the internal pointer in the array
             reset($this->keyValues);
 
-            return $hapaxes;
+        return $hapaxes;
     }
-
 }

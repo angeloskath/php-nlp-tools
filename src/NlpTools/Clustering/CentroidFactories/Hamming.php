@@ -9,7 +9,6 @@ to only contain the characters 1 and 0).
  */
 class Hamming implements CentroidFactoryInterface
 {
-
     /**
      * Return a number in binary encoding in a string such that the sum of its
      * hamming distances of each document is minimized.
@@ -21,18 +20,20 @@ class Hamming implements CentroidFactoryInterface
     {
         $bitl = strlen($docs[0]);
         $buckets = array_fill_keys(
-            range(0,$bitl-1),
+            range(0, $bitl-1),
             0
         );
-        if (empty($choose))
-            $choose = range(0,count($docs)-1);
+        if (empty($choose)) {
+            $choose = range(0, count($docs)-1);
+        }
         foreach ($choose as $idx) {
             $s = $docs[$idx];
             foreach ($buckets as $i=>&$v) {
-                if ($s[$i]=='1')
+                if ($s[$i]=='1') {
                     $v += 1;
-                else
+                } else {
                     $v -= 1;
+                }
             }
         }
 
@@ -46,5 +47,4 @@ class Hamming implements CentroidFactoryInterface
             )
         );
     }
-
 }

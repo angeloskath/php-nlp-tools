@@ -44,12 +44,13 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      * @param  string $class The class
      * @return float
      */
-    public function getCondProb($term,$class)
+    public function getCondProb($term, $class)
     {
-        if (!isset($this->condprob[$term][$class]))
+        if (!isset($this->condprob[$term][$class])) {
             return $this->unknown[$class];
-        else
+        } else {
             return $this->condprob[$term][$class];
+        }
     }
 
     /**
@@ -113,14 +114,14 @@ class FeatureBasedNB implements MultinomialNBModelInterface
         $class_set = $tset->getClassSet();
 
         $ctx = array(
-            'termcount_per_class'=>array_fill_keys($class_set,0),
-            'termcount'=>array_fill_keys($class_set,array()),
-            'ndocs_per_class'=>array_fill_keys($class_set,0),
+            'termcount_per_class'=>array_fill_keys($class_set, 0),
+            'termcount'=>array_fill_keys($class_set, array()),
+            'ndocs_per_class'=>array_fill_keys($class_set, 0),
             'voc'=>array(),
             'ndocs'=>0
         );
 
-        return $this->train_with_context($ctx,$ff,$tset,$a_smoothing);
+        return $this->train_with_context($ctx, $ff, $tset, $a_smoothing);
     }
 
     /**
@@ -143,18 +144,21 @@ class FeatureBasedNB implements MultinomialNBModelInterface
             $ndocs++;
             $c = $tdoc->getClass();
             $ndocs_per_class[$c]++;
-            $features = $ff->getFeatureArray($c,$tdoc);
-            if (is_int(key($features)))
+            $features = $ff->getFeatureArray($c, $tdoc);
+            if (is_int(key($features))) {
                 $features = array_count_values($features);
+            }
             foreach ($features as $f=>$fcnt) {
-                if (!isset($voc[$f]))
+                if (!isset($voc[$f])) {
                     $voc[$f] = 0;
+                }
 
                 $termcount_per_class[$c]+=$fcnt;
-                if (isset($termcount[$c][$f]))
+                if (isset($termcount[$c][$f])) {
                     $termcount[$c][$f]+=$fcnt;
-                else
+                } else {
                     $termcount[$c][$f] = $fcnt;
+                }
             }
         }
     }

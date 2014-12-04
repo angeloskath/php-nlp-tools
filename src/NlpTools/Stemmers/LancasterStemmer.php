@@ -95,14 +95,11 @@ class LancasterStemmer extends Stemmer
                 return $word;
             }
             foreach ($this->indexedRules[$lookupChar] as $rule) {
-                if(strrpos($word, substr($rule[self::ENDING_STRING],-1)) ===
-                        (strlen($word)-strlen($rule[self::ENDING_STRING]))){
-
+                if (strrpos($word, substr($rule[self::ENDING_STRING], -1)) ===
+                        (strlen($word)-strlen($rule[self::ENDING_STRING]))) {
                     if (!empty($rule[self::INTACT_FLAG])) {
-
-                        if($this->originalToken == $word &&
-                            $this->isAcceptable($word, (int) $rule[self::REMOVE_TOTAL])){
-
+                        if ($this->originalToken == $word &&
+                            $this->isAcceptable($word, (int) $rule[self::REMOVE_TOTAL])) {
                             $word = $this->applyRule($word, $rule);
                             $ruleApplied = true;
                             if ($rule[self::CONTINUE_FLAG] === '.') {
@@ -125,7 +122,6 @@ class LancasterStemmer extends Stemmer
         } while ($ruleApplied);
 
         return $word;
-
     }
 
     /**
@@ -149,7 +145,7 @@ class LancasterStemmer extends Stemmer
         $length =  strlen($word) - $removeTotal;
         if ($this->vowelChecker->isVowel($word, 0)&& $length >= 2) {
             return true;
-        } elseif($length >= 3 &&
+        } elseif ($length >= 3 &&
                 ($this->vowelChecker->isVowel($word, 1) || $this->vowelChecker->isVowel($word, 2))) {
             return true;
         }
@@ -971,5 +967,4 @@ class LancasterStemmer extends Stemmer
                 "continue_flag"=> ".")
         );
     }
-
 }

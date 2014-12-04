@@ -27,11 +27,11 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
     public function __construct(
         FeatureFactoryInterface $singleClassFeats,
         FeatureFactoryInterface $chainFeats = null
-    )
-    {
+    ) {
         $this->singleClassFeats = new MaxentFeatures($singleClassFeats);
-        if ($chainFeats)
+        if ($chainFeats) {
             $this->chainFeats = new MaxentFeatures($chainFeats);
+        }
     }
 
     /**
@@ -42,9 +42,10 @@ class LinearChainCRFFeatures implements FeatureFactoryInterface
         $classlist = explode("|", $class);
         $ourclass = array_pop($classlist);
 
-        $chfv = new ArrayFeatureVector( array());
-        if ($this->chainFeats!==null)
+        $chfv = new ArrayFeatureVector(array());
+        if ($this->chainFeats!==null) {
             $chfv = $this->chainFeats->getFeatureArray($class, $doc);
+        }
 
         return new UnionFeatureVector(
             array(

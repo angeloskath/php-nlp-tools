@@ -21,10 +21,11 @@ class HammingDistance implements DistanceInterface
      */
     public function dist($A, $B)
     {
-        if (is_string($A) && is_string($B))
+        if (is_string($A) && is_string($B)) {
             return $this->hammingOfStrings($A, $B);
-        else if ($A instanceof FeatureVector && $B instanceof FeatureVector)
+        } elseif ($A instanceof FeatureVector && $B instanceof FeatureVector) {
             return $this->hammingOfFeatureVectors($A, $B);
+        }
 
         throw new \InvalidArgumentException(
             "HammingDistance accepts only strings or FeatureVector instances, not mixed"
@@ -39,7 +40,7 @@ class HammingDistance implements DistanceInterface
         $l1 = strlen($A);
         $l2 = strlen($B);
 
-        $l = min($l1,$l2);
+        $l = min($l1, $l2);
         $d = 0;
         for ($i=0;$i<$l;$i++) {
             $d += (int) ($A[$i]!=$B[$i]);
@@ -55,14 +56,15 @@ class HammingDistance implements DistanceInterface
     private function hammingOfFeatureVectors($A, $B)
     {
         $keys = array();
-        foreach ($A as $k=>$v)
+        foreach ($A as $k=>$v) {
             $keys[$k] = 1;
-        foreach ($B as $k=>$v)
+        }
+        foreach ($B as $k=>$v) {
             $keys[$k] = 1;
+        }
 
         $cnt = 0;
-        foreach ($keys as $k=>$v)
-        {
+        foreach ($keys as $k=>$v) {
             $cnt += (int)($A[$k] !== $B[$k]);
         }
 

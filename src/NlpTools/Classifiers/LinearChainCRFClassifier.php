@@ -29,8 +29,7 @@ class LinearChainCRFClassifier implements SequenceClassifierInterface
         LinearModel $model,
         $chainLength = 1,
         $keepBest = 10
-    )
-    {
+    ) {
         $this->ff = $ff;
         $this->model = $model;
         $this->chainLength = $chainLength;
@@ -75,13 +74,13 @@ class LinearChainCRFClassifier implements SequenceClassifierInterface
             // expand each path in the queue
             $new = array();
             while ($queue) {
-                list($vote,$sequence) = array_pop($queue);
+                list($vote, $sequence) = array_pop($queue);
                 foreach ($classes as $class) {
                     // calculate the path to going to any other class from this
                     // one
                     $new[] = array(
                         $vote+$this->model->getVote(
-                            implode("|", array_slice($sequence,-$this->chainLength))."|".$class,
+                            implode("|", array_slice($sequence, -$this->chainLength))."|".$class,
                             $this->ff,
                             $docs[$i]
                         ),

@@ -9,7 +9,7 @@ class Normal extends AbstractDistribution
     protected $m;
     protected $sigma;
 
-    public function __construct($m=0.0,$sigma=1.0, GeneratorInterface $rnd=null)
+    public function __construct($m=0.0, $sigma=1.0, GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 

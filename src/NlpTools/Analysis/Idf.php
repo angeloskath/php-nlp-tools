@@ -26,16 +26,18 @@ class Idf implements \ArrayAccess
      */
     public function __construct(TrainingSet $tset, FeatureFactoryInterface $ff=null)
     {
-        if ($ff===null)
+        if ($ff===null) {
             $ff = new DataAsFeatures();
+        }
 
         $tset->setAsKey(TrainingSet::CLASS_AS_KEY);
         foreach ($tset as $class=>$doc) {
             foreach ($ff->getFeatureArray($class, $doc) as $token=>$v) {
-                if (isset($this->idf[$token]))
+                if (isset($this->idf[$token])) {
                     $this->idf[$token]++;
-                else
+                } else {
                     $this->idf[$token] = 1;
+                }
             }
         }
 

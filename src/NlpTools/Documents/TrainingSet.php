@@ -36,7 +36,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
      */
     public function addDocument($class, DocumentInterface $d)
     {
-        $this->documents[] = new TrainingDocument($class,$d);
+        $this->documents[] = new TrainingDocument($class, $d);
         $this->classSet[$class] = 1;
     }
     // return the classset
@@ -108,7 +108,7 @@ class TrainingSet implements \Iterator,\ArrayAccess,\Countable
     // === Implementation of \Iterator interface finished ===
 
     // ====== Implementation of \ArrayAccess interface =========
-    public function offsetSet($key,$value)
+    public function offsetSet($key, $value)
     {
         throw new \Exception("Shouldn't add documents this way, add them through addDocument()");
     }

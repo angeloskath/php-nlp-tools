@@ -34,9 +34,9 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
     public function classify(array $classes, DocumentInterface $d)
     {
         $maxclass = current($classes);
-        $maxvote = $this->getVote($maxclass,$d);
+        $maxvote = $this->getVote($maxclass, $d);
         while ($class = next($classes)) {
-            $v = $this->getVote($class,$d);
+            $v = $this->getVote($class, $d);
             if ($v>$maxvote) {
                 $maxclass = $class;
                 $maxvote = $v;
@@ -57,7 +57,7 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
     public function getVote($class, DocumentInterface $d)
     {
         $v = 0;
-        $features = $this->feature_factory->getFeatureArray($class,$d);
+        $features = $this->feature_factory->getFeatureArray($class, $d);
         foreach ($features as $f) {
             $v += $this->model->getWeight($f);
         }

@@ -46,11 +46,11 @@ class KMeans extends Clusterer
     public function cluster(TrainingSet $documents, FeatureFactoryInterface $ff)
     {
         // transform the documents according to the FeatureFactory
-        $docs = $this->getDocumentArray($documents,$ff);
+        $docs = $this->getDocumentArray($documents, $ff);
 
         // choose N centroids at random
         $centroids = array();
-        foreach (array_rand($docs,$this->n) as $key) {
+        foreach (array_rand($docs, $this->n) as $key) {
             $centroids[] = $docs[$key];
         }
 
@@ -64,9 +64,9 @@ class KMeans extends Clusterer
             // compute the distance each document has from our centroids
             // the array is MxN where M = count($docs) and N = count($centroids)
             $distances = array_map(
-                function ($doc) use (&$centroids,$dist) {
+                function ($doc) use (&$centroids, $dist) {
                     return array_map(
-                        function ($c) use ($dist,$doc) {
+                        function ($c) use ($dist, $doc) {
                             // it is passed with an array because dist expects references
                             // and it failed when run with phpunit.
                             // see http://php.net/manual/en/function.call-user-func.php
@@ -92,13 +92,13 @@ class KMeans extends Clusterer
             );
             foreach ($distances as $idx=>$d) {
                 // assign document idx to the closest centroid
-                $clusters[array_search(min($d),$d)][] = $idx;
+                $clusters[array_search(min($d), $d)][] = $idx;
             }
 
             // compute the new centroids from the assigned documents
             // using the centroid factory function
             $new_centroids = array_map(
-                function ($cluster) use (&$docs,$cf) {
+                function ($cluster) use (&$docs, $cf) {
                     return call_user_func_array(
                         $cf,
                         array(

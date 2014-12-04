@@ -15,7 +15,9 @@ class MersenneTwister implements GeneratorInterface
     protected static $instance;
     public static function get()
     {
-        if (self::$instance!=null) return self::$instance;
+        if (self::$instance!=null) {
+            return self::$instance;
+        }
         self::$instance = new MersenneTwister();
 
         return self::$instance;

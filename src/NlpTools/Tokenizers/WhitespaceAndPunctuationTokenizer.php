@@ -28,7 +28,7 @@ class WhitespaceAndPunctuationTokenizer implements TokenizerInterface
                     ([\pZ\pC]*)			# match a sequence of separators
                                         # that follows
                 /xu';
-        preg_match_all($pat,$str,$arr);
+        preg_match_all($pat, $str, $arr);
 
         return $arr[2];
     }

@@ -21,10 +21,11 @@ class ArrayFeatureVector extends FeatureVector
      */
     public function __construct(array $raw_features=array())
     {
-        if (is_int(key($raw_features)))
+        if (is_int(key($raw_features))) {
             $this->features = array_count_values($raw_features);
-        else
+        } else {
             $this->features = $raw_features;
+        }
     }
 
     /**

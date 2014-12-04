@@ -18,18 +18,20 @@ class Euclidean implements DistanceInterface
      */
     public function dist($A, $B)
     {
-        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector))
+        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector)) {
             throw new \InvalidArgumentException("Euclidean accepts only FeatureVector instances");
+        }
 
         $r = array();
         foreach ($A as $k=>$v) {
             $r[$k] = $v;
         }
         foreach ($B as $k=>$v) {
-            if (isset($r[$k]))
+            if (isset($r[$k])) {
                 $r[$k] -= $v;
-            else
+            } else {
                 $r[$k] = $v;
+            }
         }
 
         return sqrt(

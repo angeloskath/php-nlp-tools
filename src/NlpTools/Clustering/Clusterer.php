@@ -23,7 +23,7 @@ abstract class Clusterer
     {
         $docs = array();
         foreach ($documents as $d) {
-            $docs[] = $ff->getFeatureArray('',$d);
+            $docs[] = $ff->getFeatureArray('', $d);
         }
 
         return $docs;

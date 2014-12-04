@@ -17,7 +17,7 @@ class FromFile implements GeneratorInterface
      */
     public function __construct($f)
     {
-        $this->h = fopen($f,'r');
+        $this->h = fopen($f, 'r');
     }
 
     /**
@@ -31,8 +31,9 @@ class FromFile implements GeneratorInterface
      */
     public function generate()
     {
-        if (feof($this->h))
+        if (feof($this->h)) {
             rewind($this->h);
+        }
 
         return (float) fgets($this->h);
     }

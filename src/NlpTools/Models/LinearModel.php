@@ -30,8 +30,11 @@ class LinearModel
      */
     public function getWeight($feature)
     {
-        if (!isset($this->l[$feature])) return 0;
-        else return $this->l[$feature];
+        if (!isset($this->l[$feature])) {
+            return 0;
+        } else {
+            return $this->l[$feature];
+        }
     }
 
     /**
@@ -56,10 +59,11 @@ class LinearModel
     public function getVote($class, FeatureFactoryInterface $ff, DocumentInterface $d)
     {
         $v = 0;
-        $features = $ff->getFeatureArray($class,$d);
+        $features = $ff->getFeatureArray($class, $d);
         foreach ($features as $f=>$v) {
-            if (isset($this->l[$f]))
+            if (isset($this->l[$f])) {
                 $v += $this->l[$f];
+            }
         }
 
         return $v;

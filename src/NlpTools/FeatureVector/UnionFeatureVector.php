@@ -23,8 +23,9 @@ class UnionFeatureVector extends FeatureVector
     public function __construct(array $fvs)
     {
         foreach ($fvs as $fv) {
-            if (!($fv instanceof FeatureVector))
+            if (!($fv instanceof FeatureVector)) {
                 throw new \InvalidArgumentException("UnionFeatureVector accepts only feature vectors");
+            }
         }
 
         $this->fvs = $fvs;
@@ -35,8 +36,9 @@ class UnionFeatureVector extends FeatureVector
      */
     public function count()
     {
-        if ($this->featureCount)
+        if ($this->featureCount) {
             return $this->featureCount;
+        }
 
         $this->featureCount = array_sum(array_map('count', $this->fvs));
 
@@ -49,8 +51,9 @@ class UnionFeatureVector extends FeatureVector
     public function offsetExists($featureName)
     {
         foreach ($this->fvs as $fv) {
-            if (isset($fv[$featureName]))
+            if (isset($fv[$featureName])) {
                 return true;
+            }
         }
 
         return false;
@@ -63,8 +66,9 @@ class UnionFeatureVector extends FeatureVector
     public function offsetGet($featureName)
     {
         foreach ($this->fvs as $fv) {
-            if (isset($fv[$featureName]))
+            if (isset($fv[$featureName])) {
                 return $fv[$featureName];
+            }
         }
 
         // should we be throwing an exception?
@@ -77,8 +81,9 @@ class UnionFeatureVector extends FeatureVector
     public function getIterator()
     {
         $it = new \AppendIterator();
-        foreach ($this->fvs as $fv)
+        foreach ($this->fvs as $fv) {
             $it->append($fv->getIterator());
+        }
 
         return $it;
     }

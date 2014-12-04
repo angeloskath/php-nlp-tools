@@ -16,17 +16,17 @@ class Gamma extends AbstractDistribution
     protected $shape;
     protected $scale;
 
-    public function __construct($shape,$scale,  GeneratorInterface $rnd=null)
+    public function __construct($shape, $scale,  GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 
         $this->scale = $scale;
         $this->shape = abs($shape);
-        if ($this->shape >= 1)
-            $this->normal = new Normal(0,1,$this->rnd);
-        else
+        if ($this->shape >= 1) {
+            $this->normal = new Normal(0, 1, $this->rnd);
+        } else {
             $this->gamma = new Gamma($this->shape + 1, 1, $this->rnd);
-
+        }
     }
 
     public function sample()
@@ -42,14 +42,15 @@ class Gamma extends AbstractDistribution
                 $v = $v*$v*$v;
                 $u = $this->rnd->generate();
                 $xsq = $x*$x;
-                if ($u < 1-.0331*$xsq*$xsq || log($u) < 0.5*$xsq + $d*(1-$v+log($v)))
+                if ($u < 1-.0331*$xsq*$xsq || log($u) < 0.5*$xsq + $d*(1-$v+log($v))) {
                     return $this->scale*$d*$v;
+                }
             }
         } else {
             $g = $this->gamma->sample();
             $w = $this->rnd->generate();
 
-            return $this->scale*$g*pow($w,1/$this->shape);
+            return $this->scale*$g*pow($w, 1/$this->shape);
         }
     }
 }

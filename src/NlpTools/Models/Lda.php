@@ -42,7 +42,7 @@ class Lda
      * @param float                   $a       The dirichlet prior assumed for the per document topic distribution
      * @param float                   $b       The dirichlet prior assumed for the per word topic distribution
      */
-    public function __construct(FeatureFactoryInterface $ff,$ntopics,$a=1,$b=1)
+    public function __construct(FeatureFactoryInterface $ff, $ntopics, $a=1, $b=1)
     {
         $this->ff = $ff;
 
@@ -62,7 +62,7 @@ class Lda
         $docs = array();
         foreach ($tset as $d) {
             $doc = array();
-            foreach ($this->ff->getFeatureArray('',$d) as $word=>$frequency) {
+            foreach ($this->ff->getFeatureArray('', $d) as $word=>$frequency) {
                 for ($i=0; $i<$frequency; $i++) {
                     $doc[] = $word;
                 }
@@ -81,8 +81,8 @@ class Lda
      */
     public function initialize(array &$docs)
     {
-        $doc_keys = range(0,count($docs)-1);
-        $topic_keys = range(0,$this->ntopics-1);
+        $doc_keys = range(0, count($docs)-1);
+        $topic_keys = range(0, $this->ntopics-1);
 
         // initialize the arrays
         $this->words_in_doc = array_fill_keys(
@@ -120,8 +120,9 @@ class Lda
                 $this->words_in_topic[$topic]++;
                 $this->count_docs_topics[$i][$topic]++;
 
-                if (!isset($this->count_topics_words[$topic][$w]))
+                if (!isset($this->count_topics_words[$topic][$w])) {
                     $this->count_topics_words[$topic][$w]=0;
+                }
                 $this->count_topics_words[$topic][$w]++;
 
                 $this->word_doc_assigned_topic[$i][$idx] = $topic;
@@ -139,7 +140,7 @@ class Lda
      * @param TrainingSet The docs to run lda on
      * @param $it The number of iterations to run
      */
-    public function train(TrainingSet $tset,$it)
+    public function train(TrainingSet $tset, $it)
     {
         $docs = $this->generateDocs($tset);
 
@@ -148,7 +149,7 @@ class Lda
         while ($it-- > 0) {
             $this->gibbsSample($docs);
         }
-     }
+    }
 
      /**
       * Generate one gibbs sample.
@@ -171,13 +172,14 @@ class Lda
 
                 // recompute the probabilities of all topics and
                 // resample a topic for this word $w
-                $p_topics = $this->conditionalDistribution($i,$w);
+                $p_topics = $this->conditionalDistribution($i, $w);
                 $topic = $this->drawIndex($p_topics);
                 // ---------------------------
 
                 // add word $w back into the dataset
-                if (!isset($this->count_topics_words[$topic][$w]))
+                if (!isset($this->count_topics_words[$topic][$w])) {
                     $this->count_topics_words[$topic][$w]=0;
+                }
                 $this->count_topics_words[$topic][$w]++;
 
                 $this->count_docs_topics[$i][$topic]++;
@@ -187,7 +189,7 @@ class Lda
                 // ---------------------------
             }
         }
-     }
+    }
 
      /**
       * Get the probability of a word given a topic (phi according to
@@ -198,27 +200,28 @@ class Lda
       */
     public function getWordsPerTopicsProbabilities($limit_words=-1)
     {
-         $p_t_w = array_fill_keys(
-            range(0,$this->ntopics-1),
+        $p_t_w = array_fill_keys(
+            range(0, $this->ntopics-1),
             array()
          );
-         foreach ($p_t_w as $topic=>&$p) {
-             $denom = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
-             foreach ($this->voc as $w) {
-                 if (isset($this->count_topics_words[$topic][$w]))
+        foreach ($p_t_w as $topic=>&$p) {
+            $denom = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
+            foreach ($this->voc as $w) {
+                if (isset($this->count_topics_words[$topic][$w])) {
                     $p[$w] = $this->count_topics_words[$topic][$w]+$this->b;
-                 else
+                } else {
                     $p[$w] = $this->b;
-                 $p[$w] /= $denom;
-             }
-             if ($limit_words>0) {
-                 arsort($p);
-                 $p = array_slice($p,0,$limit_words,true); // true to preserve the keys
-             }
-         }
+                }
+                $p[$w] /= $denom;
+            }
+            if ($limit_words>0) {
+                arsort($p);
+                $p = array_slice($p, 0, $limit_words, true); // true to preserve the keys
+            }
+        }
 
-         return $p_t_w;
-     }
+        return $p_t_w;
+    }
 
      /**
       * Shortcut to getWordsPerTopicsProbabilities
@@ -238,7 +241,7 @@ class Lda
      public function getDocumentsPerTopicsProbabilities($limit_docs=-1)
      {
          $p_t_d = array_fill_keys(
-            range(0,$this->ntopics-1),
+            range(0, $this->ntopics-1),
             array()
          );
 
@@ -251,7 +254,7 @@ class Lda
              }
              if ($limit_docs>0) {
                  arsort($p);
-                 $p = array_slice($p,0,$limit_docs,true); // true to preserve the keys
+                 $p = array_slice($p, 0, $limit_docs, true); // true to preserve the keys
              }
          }
 
@@ -308,21 +311,22 @@ class Lda
       *
       * @return array The vector of probabilites for all topics as computed by the equation 5
       */
-     protected function conditionalDistribution($i,$w)
+     protected function conditionalDistribution($i, $w)
      {
-         $p = array_fill_keys(range(0,$this->ntopics-1),0);
+         $p = array_fill_keys(range(0, $this->ntopics-1), 0);
          for ($topic=0;$topic<$this->ntopics;$topic++) {
-            if (isset($this->count_topics_words[$topic][$w]))
-                $numerator = $this->count_topics_words[$topic][$w]+$this->b;
-            else
-                $numerator = $this->b;
+             if (isset($this->count_topics_words[$topic][$w])) {
+                 $numerator = $this->count_topics_words[$topic][$w]+$this->b;
+             } else {
+                 $numerator = $this->b;
+             }
 
-            $numerator *= $this->count_docs_topics[$i][$topic]+$this->a;
+             $numerator *= $this->count_docs_topics[$i][$topic]+$this->a;
 
-            $denominator = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
-            $denominator *= $this->words_in_doc[$i]+$this->ntopics*$this->a;
+             $denominator = $this->words_in_topic[$topic]+$this->voccnt*$this->b;
+             $denominator *= $this->words_in_doc[$i]+$this->ntopics*$this->a;
 
-            $p[$topic] = $numerator/$denominator;
+             $p[$topic] = $numerator/$denominator;
          }
 
          // divide by sum to obtain probabilities
@@ -348,8 +352,9 @@ class Lda
          $p = 0.0;
          foreach ($d as $i=>$v) {
              $p+=$v;
-             if ($p > $x)
-                return $i;
+             if ($p > $x) {
+                 return $i;
+             }
          }
      }
 
@@ -482,12 +487,13 @@ class Lda
 
     private function log_gamma_array($a)
     {
-        foreach ($a as &$x)
+        foreach ($a as &$x) {
             $x = $this->log_gamma($x);
+        }
 
         return $a;
     }
-    private function log_multi_beta($a,$y=0,$k=null)
+    private function log_multi_beta($a, $y=0, $k=null)
     {
         if ($k==null) {
             $ay = array_map(

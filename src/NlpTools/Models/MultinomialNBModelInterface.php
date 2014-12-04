@@ -10,5 +10,5 @@ namespace NlpTools\Models;
 interface MultinomialNBModelInterface
 {
     public function getPrior($class);
-    public function getCondProb($term,$class);
+    public function getCondProb($term, $class);
 }

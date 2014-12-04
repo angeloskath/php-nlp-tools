@@ -9,7 +9,6 @@ use NlpTools\Utils\TransformationInterface;
  */
 abstract class Stemmer implements TransformationInterface
 {
-
     /**
      * Remove the suffix from $word
      *
@@ -24,7 +23,7 @@ abstract class Stemmer implements TransformationInterface
      */
     public function stemAll(array $tokens)
     {
-        return array_map(array($this,'stem'),$tokens);
+        return array_map(array($this, 'stem'), $tokens);
     }
 
     /**

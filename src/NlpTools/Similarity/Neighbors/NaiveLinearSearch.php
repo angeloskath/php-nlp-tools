@@ -46,7 +46,7 @@ class NaiveLinearSearch implements SpatialIndexInterface
     {
         $idxs = array();
         foreach ($this->docs_copy as $idx=>$d) {
-            if ($this->dist->dist($d,$doc) < $e) {
+            if ($this->dist->dist($d, $doc) < $e) {
                 $idxs[] = $idx;
             }
         }
@@ -66,8 +66,8 @@ class NaiveLinearSearch implements SpatialIndexInterface
         // We keep a sorted array with the k nearest neighbors while
         // traversing through all the documents
         $neighbors = array_fill_keys(
-            range(0,$k-1),
-            array(-1,INF)
+            range(0, $k-1),
+            array(-1, INF)
         );
         $last = $k-1;
         foreach ($this->docs_copy as $idx=>$d) {

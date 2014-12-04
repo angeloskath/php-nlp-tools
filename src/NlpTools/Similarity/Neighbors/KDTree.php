@@ -7,7 +7,7 @@ use NlpTools\Similarity\Euclidean;
 
 /**
  * KDTree is a binary search tree for n dimensional data.
- * 
+ *
  * This KDTree implementation only accepts euclidean distance as metric.
  * http://en.wikipedia.org/wiki/K-d_tree
  */
@@ -50,8 +50,9 @@ class KDTree implements SpatialIndexInterface
      */
     public function setDistanceMetric(DistanceInterface $d)
     {
-        if (!($d instanceof Euclidean))
+        if (!($d instanceof Euclidean)) {
             throw new \InvalidArgumentException();
+        }
 
         $this->dist = $d;
     }
@@ -68,7 +69,7 @@ class KDTree implements SpatialIndexInterface
         // find out if we are given a map or a set of keys without count
         $this->docs_is_map = !is_int(key($docs[0]));
 
-        // generate 
+        // generate
         $this->generateVocabulary($docs);
 
         // recursively build the tree
@@ -85,10 +86,11 @@ class KDTree implements SpatialIndexInterface
         $dist = $this->dist;
         $this->traverseTree(
             $doc,
-            function () use($e) { return $e; },
-            function ($docIdx) use(&$nn, &$docs_reference, &$doc, $dist, $e) {
-                if ($dist->dist($doc, $docs_reference[$docIdx]) <= $e)
+            function () use ($e) { return $e; },
+            function ($docIdx) use (&$nn, &$docs_reference, &$doc, $dist, $e) {
+                if ($dist->dist($doc, $docs_reference[$docIdx]) <= $e) {
                     $nn[] = $docIdx;
+                }
             }
         );
 
@@ -100,8 +102,9 @@ class KDTree implements SpatialIndexInterface
      */
     public function kNearestNeighbors($doc, $k)
     {
-        if ($k > count($this->docs_reference))
+        if ($k > count($this->docs_reference)) {
             return range(0, count($this->docs_reference) - 1);
+        }
 
         $nn = array_fill(0, $k, null);
         $nnD = array_fill(0, $k, INF);
@@ -110,10 +113,10 @@ class KDTree implements SpatialIndexInterface
 
         $this->traverseTree(
             $doc,
-            function () use(&$nnD) {
+            function () use (&$nnD) {
                 return end($nnD);
             },
-            function ($docIdx) use(&$nn, &$nnD, &$docs_reference, &$doc, $dist) {
+            function ($docIdx) use (&$nn, &$nnD, &$docs_reference, &$doc, $dist) {
                 $d = $dist->dist(
                     $doc,
                     $docs_reference[$docIdx]
@@ -124,10 +127,11 @@ class KDTree implements SpatialIndexInterface
                 if ($d < end($nnD)) {
                     $idx = 0;
                     foreach ($nnD as $distance) {
-                        if ($distance < $d)
+                        if ($distance < $d) {
                             $idx++;
-                        else
+                        } else {
                             break;
+                        }
                     }
                     array_splice($nn, $idx, 0, $docIdx);
                     array_pop($nn);
@@ -171,14 +175,16 @@ class KDTree implements SpatialIndexInterface
         $key = $this->vocabulary[$depth % count($this->vocabulary)];
 
         if ($this->docs_is_map) {
-            if (isset($this->docs_reference[$docIdx][$key]))
+            if (isset($this->docs_reference[$docIdx][$key])) {
                 return $this->docs_reference[$docIdx][$key];
-            else
+            } else {
                 return 0;
+            }
         } else {
             $v = 0;
-            foreach ($this->docs_reference[$docIdx] as $axis)
+            foreach ($this->docs_reference[$docIdx] as $axis) {
                 $v += (int)($axis == $key);
+            }
 
             return $v;
         }
@@ -189,9 +195,10 @@ class KDTree implements SpatialIndexInterface
         $key = $this->vocabulary[$depth % count($this->vocabulary)];
 
         if (is_int(key($doc))) {
-            $v = 0; 
-            foreach ($doc as $axis)
+            $v = 0;
+            foreach ($doc as $axis) {
                 $v += (int)($axis == $key);
+            }
 
             return $v;
         } else {
@@ -202,10 +209,11 @@ class KDTree implements SpatialIndexInterface
     protected function plane($depth, $value, &$doc)
     {
         $plane = null;
-        if (is_int(key($doc)))
+        if (is_int(key($doc))) {
             $plane = array_count_values($doc);
-        else
+        } else {
             $plane = $doc;
+        }
         $plane[$this->vocabulary[$depth % count($this->vocabulary)]] = $value;
 
         return $plane;
@@ -249,12 +257,13 @@ class KDTree implements SpatialIndexInterface
         $rightDocs = array();
 
         // this is a special case where all the values might be equal so split
-        // the docs in half 
+        // the docs in half
         if ($median == reset($values) && $median == end($values)) {
             $cnt = 0;
             foreach ($docs as $docIdx) {
-                if ($this->valueOfDocAtDepth($docIdx, $depth) != $median)
+                if ($this->valueOfDocAtDepth($docIdx, $depth) != $median) {
                     break;
+                }
                 $cnt ++;
             }
             if ($cnt == count($docs)) {
@@ -266,10 +275,11 @@ class KDTree implements SpatialIndexInterface
         // we need to split to the median
         if (empty($leftDocs)) {
             foreach ($docs as $docIdx) {
-                if ($this->valueOfDocAtDepth($docIdx, $depth) <= $median)
+                if ($this->valueOfDocAtDepth($docIdx, $depth) <= $median) {
                     $leftDocs[] = $docIdx;
-                else
+                } else {
                     $rightDocs[] = $docIdx;
+                }
             }
         }
 
@@ -298,18 +308,22 @@ class KDTree implements SpatialIndexInterface
                 // ask the minDistance function whether we should be adding both or not
                 if (abs($d) < call_user_func($minDistance) || $d == 0) {
                     // we 'll add both
-                    if ($node->left!==null)
+                    if ($node->left!==null) {
                         array_push($stack, array($node->left, $depth + 1));
-                    if ($node->right!==null)
+                    }
+                    if ($node->right!==null) {
                         array_push($stack, array($node->right, $depth + 1));
+                    }
                 } else {
                     // we 'll only add one
                     if ($d > 0) {
-                        if ($node->right!==null)
+                        if ($node->right!==null) {
                             array_push($stack, array($node->right, $depth + 1));
+                        }
                     } else {
-                        if ($node->left!==null)
+                        if ($node->left!==null) {
                             array_push($stack, array($node->left, $depth + 1));
+                        }
                     }
                 }
             } else {

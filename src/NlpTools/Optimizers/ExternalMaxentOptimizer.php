@@ -70,20 +70,20 @@ class ExternalMaxentOptimizer implements MaxentOptimizerInterface
         );
 
         // Run the optimizer
-        $process = proc_open($this->optimizer,$desrciptorspec,$pipes);
+        $process = proc_open($this->optimizer, $desrciptorspec, $pipes);
         if (!is_resource($process)) {
             return array();
         }
 
         // send the data
-        fwrite($pipes[0],json_encode($feature_array));
+        fwrite($pipes[0], json_encode($feature_array));
         fclose($pipes[0]);
 
         // get the weights
         $json = stream_get_contents($pipes[1]);
 
         // decode as an associative array
-        $l = json_decode( $json , true );
+        $l = json_decode($json, true);
 
         // close up the optimizer
         fclose($pipes[1]);
@@ -91,5 +91,4 @@ class ExternalMaxentOptimizer implements MaxentOptimizerInterface
 
         return $l;
     }
-
 }

@@ -15,7 +15,6 @@ use NlpTools\Documents\DocumentInterface;
  */
 class FunctionFeatures implements FeatureFactoryInterface
 {
-
     protected $functions;
     protected $frequency;
 
@@ -66,7 +65,7 @@ class FunctionFeatures implements FeatureFactoryInterface
     public function getFeatureArray($class, DocumentInterface $d)
     {
         $features = array_filter(
-            array_map( function ($feature) use ($class,$d) {
+            array_map(function ($feature) use ($class, $d) {
                     return call_user_func($feature, $class, $d);
                 },
                 $this->functions
@@ -75,20 +74,22 @@ class FunctionFeatures implements FeatureFactoryInterface
         foreach ($features as $f) {
             if (is_array($f)) {
                 foreach ($f as $ff) {
-                    if (!isset($set[$ff]))
+                    if (!isset($set[$ff])) {
                         $set[$ff] = 0;
+                    }
                     $set[$ff]++;
                 }
             } else {
-                if (!isset($set[$f]))
+                if (!isset($set[$f])) {
                     $set[$f] = 0;
+                }
                 $set[$f]++;
             }
         }
-        if ($this->frequency)
+        if ($this->frequency) {
             return new ArrayFeatureVector($set);
-        else
+        } else {
             return new ArrayFeatureVector(array_keys($set));
+        }
     }
-
 }

@@ -14,19 +14,22 @@ class JaccardIndex implements SimilarityInterface, DistanceInterface
      */
     public function similarity($A, $B)
     {
-        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector))
+        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector)) {
             throw new \InvalidArgumentException(
                 "JaccardIndex accepts only FeatureVector instances"
             );
+        }
 
         $a = array();
         $b = array();
-        foreach ($A as $k=>$v)
+        foreach ($A as $k=>$v) {
             $a[$k] = 1;
-        foreach ($B as $k=>$v)
+        }
+        foreach ($B as $k=>$v) {
             $b[$k] = 1;
+        }
 
-        $intersect = count(array_intersect_key($a,$b));
+        $intersect = count(array_intersect_key($a, $b));
         $union = count($a+$b);
 
         return $intersect/$union;
@@ -37,7 +40,6 @@ class JaccardIndex implements SimilarityInterface, DistanceInterface
      */
     public function dist($A, $B)
     {
-        return 1-$this->similarity($A,$B);
+        return 1-$this->similarity($A, $B);
     }
-
 }

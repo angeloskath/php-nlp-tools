@@ -40,7 +40,9 @@ class RegexTokenizer implements TokenizerInterface
     {
         $str = array($str);
         foreach ($this->patterns as $p) {
-            if (!is_array($p)) $p = array($p);
+            if (!is_array($p)) {
+                $p = array($p);
+            }
             if (count($p)==1) { // split pattern
                 $this->split($str, $p[0]);
             } elseif (is_int($p[1])) { // match pattern

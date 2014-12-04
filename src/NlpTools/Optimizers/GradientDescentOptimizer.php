@@ -76,12 +76,12 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
         $prec = $this->precision;
         $step = $this->step;
         $l = array();
-        $this->initParameters($feature_array,$l);
+        $this->initParameters($feature_array, $l);
         while (!$optimized && $itercount++!=$maxiter) {
             //$start = microtime(true);
             $optimized = true;
-            $this->prepareFprime($feature_array,$l);
-            $this->Fprime($feature_array,$l);
+            $this->prepareFprime($feature_array, $l);
+            $this->Fprime($feature_array, $l);
             foreach ($this->fprime_vector as $i=>$fprime_i_val) {
                 $l[$i] -= $step*$fprime_i_val;
                 if (abs($fprime_i_val) > $prec) {
@@ -89,8 +89,9 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
                 }
             }
             //fprintf(STDERR,"%f\n",microtime(true)-$start);
-            if ($this->verbose>0)
+            if ($this->verbose>0) {
                 $this->reportProgress($itercount);
+            }
         }
 
         return $l;
@@ -106,6 +107,6 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
             $norm += $fprime_i_val*$fprime_i_val;
         }
         $norm = sqrt($norm);
-        printf("%d\t%.3f\n",$itercount,$norm);
+        printf("%d\t%.3f\n", $itercount, $norm);
     }
 }

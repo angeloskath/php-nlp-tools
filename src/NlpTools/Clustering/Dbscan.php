@@ -14,7 +14,6 @@ use NlpTools\Documents\TrainingSet;
  */
 class Dbscan extends Clusterer
 {
-
     protected $neighbors;
     protected $minPts;
     protected $eps;
@@ -46,14 +45,15 @@ class Dbscan extends Clusterer
         $docs = $this->getDocumentArray($tset, $ff);
         $this->neighbors->index($docs);
 
-        $visited = array_fill_keys(range(0,count($docs)-1), false);
-        $clusters = array_fill_keys(range(0,count($docs)-1), -1);
+        $visited = array_fill_keys(range(0, count($docs)-1), false);
+        $clusters = array_fill_keys(range(0, count($docs)-1), -1);
         $c = -1; // current cluster
 
         // for every data point
         foreach ($docs as $idx=>$d) {
-            if ($visited[$idx])
+            if ($visited[$idx]) {
                 continue;
+            }
 
             $visited[$idx] = true;
             $neighbors = $this->neighbors->regionQuery($d, $this->eps);

@@ -10,7 +10,9 @@ abstract class VowelsAbstractFactory
     /**
      * Protected from use
      */
-    protected function __construct() {}
+    protected function __construct()
+    {
+    }
 
     /**
      * Return the correct language vowel checker
@@ -31,5 +33,4 @@ abstract class VowelsAbstractFactory
      * Check if the the letter at the given index is a vowel
      */
     abstract public function isVowel($word, $index);
-
 }

@@ -53,7 +53,7 @@ class ClassifierBasedTokenizer implements TokenizerInterface
     // used when joining the tokens into one
     protected $sep;
 
-    public function __construct(ClassifierInterface $cls, TokenizerInterface $tok=null,$sep=' ')
+    public function __construct(ClassifierInterface $cls, TokenizerInterface $tok=null, $sep=' ')
     {
         if ($tok == null) {
             $this->tok = new WhitespaceAndPunctuationTokenizer();
@@ -81,7 +81,7 @@ class ClassifierBasedTokenizer implements TokenizerInterface
         $tokens = $this->tok->tokenize($str);
         $docs = array();
         foreach ($tokens as $offset=>$tok) {
-            $docs[] = new WordDocument($tokens,$offset,5);
+            $docs[] = new WordDocument($tokens, $offset, 5);
         }
 
         // classify each token as an EOW or O
@@ -96,7 +96,7 @@ class ClassifierBasedTokenizer implements TokenizerInterface
         foreach ($tokens as $offset=>$tok) {
             $currentToken[] = $tok;
             if ($tags[$offset] == self::EOW) {
-                $realtokens[] = implode($this->sep,$currentToken);
+                $realtokens[] = implode($this->sep, $currentToken);
                 $currentToken = array();
             }
         }

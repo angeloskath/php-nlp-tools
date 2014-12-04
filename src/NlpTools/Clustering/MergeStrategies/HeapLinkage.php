@@ -32,7 +32,7 @@ abstract class HeapLinkage implements MergeStrategyInterface
      * Ex.: for single link this function would be
      * return min($this->dm[$xi],$this->dm[$yi]);
      */
-    abstract protected function newDistance($xi,$yi,$x,$y);
+    abstract protected function newDistance($xi, $yi, $x, $y);
 
     /**
      * Initialize the distance matrix and any other data structure needed
@@ -58,8 +58,8 @@ abstract class HeapLinkage implements MergeStrategyInterface
         // save it in the heap and distance matrix
         for ($x=0;$x<$this->L;$x++) {
             for ($y=$x+1;$y<$this->L;$y++) {
-                $index = $this->packIndex($y,$x);
-                $tmp_d = $d->dist($docs[$x],$docs[$y]);
+                $index = $this->packIndex($y, $x);
+                $tmp_d = $d->dist($docs[$x], $docs[$y]);
                 $this->dm[$index] = $tmp_d;
                 $this->queue->insert($index, -$tmp_d);
             }
@@ -81,33 +81,33 @@ abstract class HeapLinkage implements MergeStrategyInterface
         $tmp = $this->queue->extract();
         $index = $tmp["data"];
         $d = -$tmp["priority"];
-        list($y,$x) = $this->unravelIndex($index);
+        list($y, $x) = $this->unravelIndex($index);
         // check if it is invalid
         while ($this->removed[$y] || $this->removed[$x] || $this->dm[$index]!=$d) {
             $tmp = $this->queue->extract();
             $index = $tmp["data"];
             $d = -$tmp["priority"];
-            list($y,$x) = $this->unravelIndex($index);
+            list($y, $x) = $this->unravelIndex($index);
         }
 
         // Now that we have a valid pair to be merged
         // calculate the distances of the merged cluster with any
         // other cluster
-        $yi = $this->packIndex($y,0);
-        $xi = $this->packIndex($x,0);
+        $yi = $this->packIndex($y, 0);
+        $xi = $this->packIndex($x, 0);
 
         // for every cluster with index i<x<y
-        for ($i=0;$i<$x;$i++,$yi++,$xi++) {
-            $d = $this->newDistance($xi,$yi,$x,$y);
+        for ($i=0;$i<$x;$i++, $yi++, $xi++) {
+            $d = $this->newDistance($xi, $yi, $x, $y);
             if ($d!=$this->dm[$xi]) {
                 $this->dm[$xi] = $d;
                 $this->queue->insert($xi, -$d);
             }
         }
         // for every cluster with index x<i<y
-        for ($i=$x+1;$i<$y;$i++,$yi++) {
-            $xi = $this->packIndex($i,$x);
-            $d = $this->newDistance($xi,$yi,$x,$y);
+        for ($i=$x+1;$i<$y;$i++, $yi++) {
+            $xi = $this->packIndex($i, $x);
+            $d = $this->newDistance($xi, $yi, $x, $y);
             if ($d!=$this->dm[$xi]) {
                 $this->dm[$xi] = $d;
                 $this->queue->insert($xi, -$d);
@@ -115,9 +115,9 @@ abstract class HeapLinkage implements MergeStrategyInterface
         }
         // for every cluster x<y<i
         for ($i=$y+1;$i<$this->L;$i++) {
-            $xi = $this->packIndex($i,$x);
-            $yi = $this->packIndex($i,$y);
-            $d = $this->newDistance($xi,$yi,$x,$y);
+            $xi = $this->packIndex($i, $x);
+            $yi = $this->packIndex($i, $y);
+            $d = $this->newDistance($xi, $yi, $x, $y);
             if ($d!=$this->dm[$xi]) {
                 $this->dm[$xi] = $d;
                 $this->queue->insert($xi, -$d);
@@ -156,7 +156,7 @@ abstract class HeapLinkage implements MergeStrategyInterface
             if ($i > $index) {
                 $b = $y;
             } else {
-            // else it will be in the offset [y,b]
+                // else it will be in the offset [y,b]
                 $a = $y;
             }
         }
@@ -168,7 +168,7 @@ abstract class HeapLinkage implements MergeStrategyInterface
             $y++;
             $x = $index - $y*($y-1)/2;
         } elseif ($x < 0) {
-        // this means that it is a and we have b
+            // this means that it is a and we have b
             $y--;
             $x = $index - $y*($y-1)/2;
         }

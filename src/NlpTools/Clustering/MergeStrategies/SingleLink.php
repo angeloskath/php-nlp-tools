@@ -45,8 +45,8 @@ namespace NlpTools\Clustering\MergeStrategies;
  */
 class SingleLink extends HeapLinkage
 {
-    protected function newDistance($xi,$yi,$x,$y)
+    protected function newDistance($xi, $yi, $x, $y)
     {
-        return min($this->dm[$xi],$this->dm[$yi]);
+        return min($this->dm[$xi], $this->dm[$yi]);
     }
 }

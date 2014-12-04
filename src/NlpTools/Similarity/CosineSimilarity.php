@@ -29,7 +29,6 @@ use NlpTools\FeatureVector\FeatureVector;
  */
 class CosineSimilarity implements SimilarityInterface, DistanceInterface
 {
-
     /**
      * Returns a number between 0,1 that corresponds to the cos(theta)
      * where theta is the angle between the two sets if they are treated
@@ -46,10 +45,11 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
      */
     public function similarity($A, $B)
     {
-        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector))
+        if (!($A instanceof FeatureVector) || !($B instanceof FeatureVector)) {
             throw new \InvalidArgumentException(
                 "CosineSimilarity accepts only FeatureVector instances"
             );
+        }
 
         $prod = 0.0;
         $A_norm = 0.0;
@@ -60,20 +60,22 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
             $A_norm += $xi*$xi;
         }
         $A_norm = sqrt($A_norm);
-        if ($A_norm==0)
+        if ($A_norm==0) {
             throw new \InvalidArgumentException(
                 "Vector \$A is the zero vector"
             );
+        }
 
         $B_norm = 0.0;
         foreach ($B as $i=>$xi) {
             $B_norm += $xi*$xi;
         }
         $B_norm = sqrt($B_norm);
-        if ($B_norm==0)
+        if ($B_norm==0) {
             throw new \InvalidArgumentException(
                 "Vector \$B is the zero vector"
             );
+        }
 
         return $prod/($A_norm*$B_norm);
     }
@@ -83,6 +85,6 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
      */
     public function dist($A, $B)
     {
-        return 1-$this->similarity($A,$B);
+        return 1-$this->similarity($A, $B);
     }
 }

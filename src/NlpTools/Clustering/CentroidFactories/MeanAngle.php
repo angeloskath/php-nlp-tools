@@ -15,30 +15,34 @@ class MeanAngle extends CentroidFactoryInterface
     protected function normalize(FeatureVector $vector)
     {
         $norm = 0;
-        foreach ($vector as $k=>$v)
+        foreach ($vector as $k=>$v) {
             $norm += $v*$v;
+        }
         $norm = sqrt($norm);
 
         $normalized = array();
-        foreach ($vector as $k=>$v)
+        foreach ($vector as $k=>$v) {
             $normalized[$k] = $v/$norm;
+        }
 
         return $normalized;
     }
 
     public function getCentroid(array &$docs, array $choose=array())
     {
-        if (empty($choose))
-            $choose = range(0,count($docs)-1);
+        if (empty($choose)) {
+            $choose = range(0, count($docs)-1);
+        }
         $cnt = count($choose);
         $v = array();
         foreach ($choose as $idx) {
             $d = $this->normalize($docs[$idx]);
             foreach ($d as $i=>$vi) {
-                if (!isset($v[$i]))
+                if (!isset($v[$i])) {
                     $v[$i] = $vi;
-                else
+                } else {
                     $v[$i] += $vi;
+                }
             }
         }
 

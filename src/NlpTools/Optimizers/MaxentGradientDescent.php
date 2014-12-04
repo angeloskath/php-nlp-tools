@@ -33,7 +33,9 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
         $this->fprime_vector = array();
         foreach ($feature_array as $doc) {
             foreach ($doc as $class=>$features) {
-                if (!is_array($features)) continue;
+                if (!is_array($features)) {
+                    continue;
+                }
                 foreach ($features as $fi) {
                     $l[$fi] = 0;
                     $this->fprime_vector[$fi] = 0;
@@ -61,10 +63,12 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
     {
         $this->denominators = array();
         foreach ($feature_array as $offset=>$doc) {
-            $numerator = array_fill_keys(array_keys($doc),0.0);
+            $numerator = array_fill_keys(array_keys($doc), 0.0);
             $denominator = 0.0;
             foreach ($doc as $cl=>$f) {
-                if (!is_array($f)) continue;
+                if (!is_array($f)) {
+                    continue;
+                }
                 $tmp = 0.0;
                 foreach ($f as $i) {
                     $tmp += $l[$i];
@@ -74,7 +78,9 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
                 $denominator += $tmp;
             }
             foreach ($doc as $class=>$features) {
-                if (!is_array($features)) continue;
+                if (!is_array($features)) {
+                    continue;
+                }
                 foreach ($features as $fi) {
                     if (!isset($this->denominators[$fi])) {
                         $this->denominators[$fi] = 0;
@@ -103,5 +109,4 @@ class MaxentGradientDescent extends GradientDescentOptimizer implements MaxentOp
             $fprime_i_val = $this->denominators[$i] - $this->numerators[$i];
         }
     }
-
 }

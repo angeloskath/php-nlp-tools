@@ -12,19 +12,19 @@ class Dirichlet extends AbstractDistribution
 {
     protected $gamma;
 
-    public function __construct($a,$k,GeneratorInterface $rnd=null)
+    public function __construct($a, $k, GeneratorInterface $rnd=null)
     {
         parent::__construct($rnd);
 
         $k = (int) abs($k);
         if (!is_array($a)) {
-            $a = array_fill_keys(range(0,$k-1),$a);
+            $a = array_fill_keys(range(0, $k-1), $a);
         }
 
         $rnd = $this->rnd;
         $this->gamma = array_map(
             function ($a) use ($rnd) {
-                return new Gamma($a,1,$rnd);
+                return new Gamma($a, 1, $rnd);
             },
             $a
         );

@@ -11,6 +11,6 @@ class English extends Normalizer
 {
     public function normalize($w)
     {
-        return mb_strtolower($w,"utf-8");
+        return mb_strtolower($w, "utf-8");
     }
 }

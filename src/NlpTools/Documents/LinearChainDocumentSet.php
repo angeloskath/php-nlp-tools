@@ -37,13 +37,15 @@ class LinearChainDocumentSet extends TrainingSet
      */
     public function addDocument($class, DocumentInterface $doc)
     {
-        if (strpos($class,"|")!==false)
+        if (strpos($class, "|")!==false) {
             throw new \RuntimeException("In LinearChainDocumentSet the class cannot contain the pipe character");
+        }
 
-        if (count($this)==0)
+        if (count($this)==0) {
             return parent::addDocument($class, $doc);
+        }
 
-        $classChain = explode("|",$this[count($this)-1]->getClass());
+        $classChain = explode("|", $this[count($this)-1]->getClass());
         $classChain[] = $class;
         if (count($classChain)<=$this->chainLength+1) {
             return parent::addDocument(implode("|", $classChain), $doc);

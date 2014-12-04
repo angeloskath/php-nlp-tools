@@ -19,15 +19,17 @@ class Euclidean implements CentroidFactoryInterface
     public function getCentroid(array &$docs, array $choose=array())
     {
         $v = array();
-        if (empty($choose))
-            $choose = range(0,count($docs)-1);
+        if (empty($choose)) {
+            $choose = range(0, count($docs)-1);
+        }
         $cnt = count($choose);
         foreach ($choose as $idx) {
             foreach ($docs[$idx] as $k=>$w) {
-                if (!isset($v[$k]))
+                if (!isset($v[$k])) {
                     $v[$k] = $w;
-                else
+                } else {
                     $v[$k] += $w;
+                }
             }
         }
         foreach ($v as &$w) {

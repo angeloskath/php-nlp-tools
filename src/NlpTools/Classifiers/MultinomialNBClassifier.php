@@ -34,9 +34,9 @@ class MultinomialNBClassifier implements ClassifierInterface
     public function classify(array $classes, DocumentInterface $d)
     {
         $maxclass = current($classes);
-        $maxscore = $this->getScore($maxclass,$d);
+        $maxscore = $this->getScore($maxclass, $d);
         while ($class=next($classes)) {
-            $score = $this->getScore($class,$d);
+            $score = $this->getScore($class, $d);
             if ($score>$maxscore) {
                 $maxclass = $class;
                 $maxscore = $score;
@@ -61,14 +61,14 @@ class MultinomialNBClassifier implements ClassifierInterface
     public function getScore($class, DocumentInterface $d)
     {
         $score = log($this->model->getPrior($class));
-        $features = $this->feature_factory->getFeatureArray($class,$d);
-        if (is_int(key($features)))
+        $features = $this->feature_factory->getFeatureArray($class, $d);
+        if (is_int(key($features))) {
             $features = array_count_values($features);
+        }
         foreach ($features as $f=>$fcnt) {
-            $score += $fcnt*log($this->model->getCondProb($f,$class));
+            $score += $fcnt*log($this->model->getCondProb($f, $class));
         }
 
         return $score;
     }
-
 }
