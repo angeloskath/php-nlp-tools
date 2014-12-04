@@ -1,10 +1,10 @@
 <phpunit
-    bootstrap="./bootstrap.php"
+    bootstrap="./tests/bootstrap.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true">
 	<testsuite name="NlpTools" >
-			<directory>./NlpTools/</directory>
+			<directory>./tests/NlpTools/</directory>
 	</testsuite>
 </phpunit>

@@ -22,5 +22,5 @@ Currently only one testsuite is defined (all tests). Because some tests take a l
 run you can try running `phpunit --exclude-group Slow` or `phpunit --exclude-group VerySlow`
 to avoid some slow tests.
 
-PHPUnit should be run from inside the tests folder or the phpunit.xml file should be provided
+PHPUnit should be run from inside the root folder or the phpunit.xml file should be provided
 as config.
