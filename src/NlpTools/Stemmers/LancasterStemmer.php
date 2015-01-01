@@ -80,6 +80,10 @@ class LancasterStemmer extends Stemmer
     {
         $this->originalToken = $word;
 
+        // account for the case of the string being empty
+        if (empty($word))
+            return $word;
+
         //only iterate out loop if a rule is applied
         do {
             $ruleApplied = false;
@@ -89,6 +93,7 @@ class LancasterStemmer extends Stemmer
             if (!array_key_exists($lookupChar, $this->indexedRules)) {
                 return $word;
             }
+
             foreach ($this->indexedRules[$lookupChar] as $rule) {
                 if(strrpos($word, substr($rule[self::ENDING_STRING],-1)) ===
                         (strlen($word)-strlen($rule[self::ENDING_STRING]))){

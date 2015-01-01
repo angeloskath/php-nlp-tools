@@ -22,7 +22,15 @@ class LancasterStemmerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('string', $stemmer->stem('string'));
         $this->assertEquals('meant', $stemmer->stem('meant')); 
         $this->assertEquals('cem', $stemmer->stem('cement')); 
-        
-    }    
+    }
+
+    /**
+     * Added to cover issue #34
+     */
+    public function testEmptyStringForWord()
+    {
+        $stemmer = new LancasterStemmer();
+        $this->assertEquals("", $stemmer->stem(""));
+    }
 }
 
