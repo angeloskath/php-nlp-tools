@@ -34,7 +34,9 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      */
     public function getPrior($class)
     {
-        return $this->priors[$class];
+        return isset($this->priors[$class])
+            ? $this->priors[$class]
+            : 0;
     }
 
     /**
@@ -46,10 +48,15 @@ class FeatureBasedNB implements MultinomialNBModelInterface
      */
     public function getCondProb($term,$class)
     {
-        if (!isset($this->condprob[$term][$class]))
-            return $this->unknown[$class];
-        else
+        if (!isset($this->condprob[$term][$class])) {
+            
+            return isset($this->unknown[$class])
+                ? $this->unknown[$class]
+                : 0;
+
+        } else {
             return $this->condprob[$term][$class];
+        }
     }
 
     /**
