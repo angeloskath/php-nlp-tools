@@ -13,17 +13,26 @@ namespace NlpTools\Utils;
 class StopWords implements TransformationInterface
 {
     protected $stopwords;
+    protected $inner_transform;
 
-    public function __construct(array $stopwords)
+    public function __construct(array $stopwords, TransformationInterface $transform = null)
     {
         $this->stopwords = array_fill_keys(
             $stopwords,
             true
         );
+
+        $this->inner_transform = $transform;
     }
 
     public function transform($token)
     {
-        return isset($this->stopwords[$token]) ? null : $token;
+        $tocheck = $token;
+
+        if ($this->inner_transform) {
+            $tocheck = $this->inner_transform->transform($token);
+        }
+
+        return isset($this->stopwords[$tocheck]) ? null : $token;
     }
 }
