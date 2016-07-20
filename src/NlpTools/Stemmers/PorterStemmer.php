@@ -155,7 +155,7 @@ class PorterStemmer extends Stemmer
     {
         if ($s[$length-1] != $this->b[$this->k])
             return false;
-        if ($length > $this->k+1)
+        if ($length >= $this->k+1)
             return false;
         if (substr_compare($this->b,$s,$this->k-$length+1,$length)!=0)
             return false;
