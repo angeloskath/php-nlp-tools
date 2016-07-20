@@ -36,11 +36,11 @@ class StopWordsTest extends \PHPUnit_Framework_TestCase
             Normalizer::factory("English")
         );
 
-        $doc = new TokensDocument(explode(" ", "if you tell The truth you do not have To remember anything"));
+        $doc = new TokensDocument(explode(" ", "If you Tell The truth You do not have To remember Anything"));
         $doc->applyTransformation($stopwords);
         $this->assertEquals(
             array(
-                "if", "you", "tell", "truth", "you", "do", "not", "have", "remember", "anything"
+                "If", "you", "Tell", "truth", "You", "do", "not", "have", "remember", "Anything"
             ),
             $doc->getDocumentData()
         );
