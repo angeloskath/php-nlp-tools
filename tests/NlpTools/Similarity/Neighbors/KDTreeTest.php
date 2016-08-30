@@ -47,26 +47,51 @@ class KDTreeTest extends NeighborsTestAbstract
         $baseline->setDistanceMetric(new Euclidean());
 
         $points = array();
-        for ($i=0; $i<10000; $i++) {
+        for ($i=0; $i<50000; $i++) {
             $points[] = new ArrayFeatureVector(array(
-                'x'=>mt_rand()/mt_getrandmax(),
-                'y'=>mt_rand()/mt_getrandmax()
+                'a'=>mt_rand()/mt_getrandmax(),
+                'b'=>mt_rand()/mt_getrandmax(),
+                'c'=>mt_rand()/mt_getrandmax(),
+                'd'=>mt_rand()/mt_getrandmax(),
+                'e'=>mt_rand()/mt_getrandmax(),
+                'f'=>mt_rand()/mt_getrandmax(),
+                'g'=>mt_rand()/mt_getrandmax(),
+                'h'=>mt_rand()/mt_getrandmax(),
+                'j'=>mt_rand()/mt_getrandmax(),
+                'k'=>mt_rand()/mt_getrandmax()
             ));
         }
-
-        $point = $points[array_rand($points, 1)];
+        $queries = array_rand($points, 100);
 
         $baseline->index($points);
-        $results = $baseline->kNearestNeighbors($point, 5);
+        $resultsBaseline = [];
+        $start = microtime(true);
+        foreach ($queries as $query) {
+            $resultsBaseline[] = $baseline->kNearestNeighbors($points[$query], 5);
+        }
+        $baselineDuration = microtime(true) - $start;
+        $resultsBaseline = call_user_func_array("array_merge", $resultsBaseline);
+        sort($resultsBaseline);
+
+        $start = microtime(true);
+        $index->index($points);
+        $buildTime = microtime(true) - $start;
+        $results = [];
+        $start = microtime(true);
+        foreach ($queries as $query) {
+            $results[] = $index->kNearestNeighbors($points[$query], 5);
+        }
+        $duration = microtime(true) - $start;
+        $results = call_user_func_array("array_merge", $results);
         sort($results);
 
-        $index->index($points);
-        $results2 = $index->kNearestNeighbors($point, 5);
-        sort($results2);
-
         $this->assertEquals(
-            $results,
-            $results2
+            $resultsBaseline,
+            $results
+        );
+        $this->assertLessThan(
+            $baselineDuration,
+            $duration + $buildTime
         );
     }
 
@@ -90,8 +115,11 @@ class KDTreeTest extends NeighborsTestAbstract
                     'y'=>mt_rand()/mt_getrandmax()
                 ));
             }
-            $start = microtime(true);
             $index->index($points);
+            $start = microtime(true);
+            for ($i=0; $i<10; $i++) {
+                $index->kNearestNeighbors($points[mt_rand() % count($points)], 10);
+            }
             $duration[$size] = microtime(true) - $start;
         }
 

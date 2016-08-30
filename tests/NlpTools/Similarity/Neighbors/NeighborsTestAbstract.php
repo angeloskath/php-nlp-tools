@@ -79,6 +79,7 @@ abstract class NeighborsTestAbstract extends \PHPUnit_Framework_TestCase
         $index->index($points);
 
         $idxs = $index->regionQuery($point, $eps);
+        sort($idxs);
 
         $this->assertEquals(
             $results,

@@ -14,7 +14,7 @@ use NlpTools\Similarity\Euclidean;
 class KDTree implements SpatialIndexInterface
 {
     /**
-     * The sample size that the median will be calculated with
+     * The amount of documents to use to compute the median of an axis.
      */
     const SAMPLE_SIZE = 50;
 
@@ -28,19 +28,24 @@ class KDTree implements SpatialIndexInterface
      */
     protected $tree;
     /**
-     * A reference to the docs so that we do not copy our data around
-     */
-    protected $docs_reference;
-    /**
-     * A boolean that is true when the docs are in the form key=>value and
-     * false if they are in the form key1, key1, key2, key3, etc
-     */
-    protected $docs_is_map;
-    /**
      * Our vocabulary that contains the axes that we have in this tree and the
      * order in which we traverse them
      */
     protected $vocabulary;
+    /**
+     * A local copy of the documents
+     */
+    protected $docs;
+    /**
+     * The number of documents in the leaves
+     */
+    protected $leafSize;
+
+    public function __construct($leafSize = 100)
+    {
+        $this->dist = new Euclidean();
+        $this->leafSize = $leafSize;
+    }
 
     /**
      * KDTree only accepts EuclideanDistance instances as distance metrics.
@@ -62,18 +67,14 @@ class KDTree implements SpatialIndexInterface
      */
     public function index(array &$docs)
     {
-        // hold a reference to the docs so we will only be keeping integers in
-        // our tree and we might reduce a bit the memory overhead of the tree.
-        $this->docs_reference = &$docs;
-
-        // find out if we are given a map or a set of keys without count
-        $this->docs_is_map = !is_int(key($docs[0]));
+        // copy the docs (the copy is shallow so not to memory intensive)
+        $this->docs = $docs;
 
         // generate
-        $this->generateVocabulary($docs);
+        $this->generateVocabulary();
 
         // recursively build the tree
-        $this->tree = $this->buildTree(0, range(0, count($docs)-1));
+        $this->tree = $this->buildTree(0, range(0, count($this->docs)-1));
     }
 
     /**
@@ -82,13 +83,15 @@ class KDTree implements SpatialIndexInterface
     public function regionQuery($doc, $e)
     {
         $nn = array();
-        $docs_reference = &$this->docs_reference;
+        $docs = &$this->docs;
         $dist = $this->dist;
         $this->traverseTree(
             $doc,
-            function () use ($e) { return $e; },
-            function ($docIdx) use (&$nn, &$docs_reference, &$doc, $dist, $e) {
-                if ($dist->dist($doc, $docs_reference[$docIdx]) <= $e) {
+            function () use ($e) {
+                return $e;
+            },
+            function ($docIdx) use (&$nn, &$docs, &$doc, $dist, $e) {
+                if ($dist->dist($doc, $docs[$docIdx]) <= $e) {
                     $nn[] = $docIdx;
                 }
             }
@@ -102,24 +105,24 @@ class KDTree implements SpatialIndexInterface
      */
     public function kNearestNeighbors($doc, $k)
     {
-        if ($k > count($this->docs_reference)) {
-            return range(0, count($this->docs_reference) - 1);
+        if ($k > count($this->docs)) {
+            return range(0, count($this->docs) - 1);
         }
 
         $nn = array_fill(0, $k, null);
         $nnD = array_fill(0, $k, INF);
         $dist = $this->dist;
-        $docs_reference = &$this->docs_reference;
+        $docs = &$this->docs;
 
         $this->traverseTree(
             $doc,
             function () use (&$nnD) {
                 return end($nnD);
             },
-            function ($docIdx) use (&$nn, &$nnD, &$docs_reference, &$doc, $dist) {
+            function ($docIdx) use (&$nn, &$nnD, &$docs, &$doc, $dist) {
                 $d = $dist->dist(
                     $doc,
-                    $docs_reference[$docIdx]
+                    $docs[$docIdx]
                 );
 
                 // ok this is nearest than the last neighbor insert it to the
@@ -148,19 +151,13 @@ class KDTree implements SpatialIndexInterface
      * Loop through all the docs to generate the vocabulary. The vocabulary is
      * the axis that we are going to cycle through in the KDTree
      */
-    protected function generateVocabulary(array &$docs)
+    private function generateVocabulary()
     {
         $this->vocabulary = array();
-        foreach ($docs as $doc) {
+        foreach ($this->docs as $doc) {
             // add them in the set
-            if ($this->docs_is_map) {
-                foreach ($doc as $axis=>$value) {
-                    $this->vocabulary[$axis] = 1;
-                }
-            } else {
-                foreach ($doc as $axis) {
-                    $this->vocabulary[$axis] = 1;
-                }
+            foreach ($doc as $axis=>$value) {
+                $this->vocabulary[$axis] = 1;
             }
         }
 
@@ -170,116 +167,75 @@ class KDTree implements SpatialIndexInterface
         $this->vocabulary = array_keys($this->vocabulary);
     }
 
-    private function valueOfDocAtDepth($docIdx, $depth)
+    /**
+     * Return the value of a document at a specific depth which means find the
+     * axis and return its value.
+     */
+    private function valueOfDocAtDepth($depth, $doc)
     {
         $key = $this->vocabulary[$depth % count($this->vocabulary)];
 
-        if ($this->docs_is_map) {
-            if (isset($this->docs_reference[$docIdx][$key])) {
-                return $this->docs_reference[$docIdx][$key];
-            } else {
-                return 0;
-            }
-        } else {
-            $v = 0;
-            foreach ($this->docs_reference[$docIdx] as $axis) {
-                $v += (int)($axis == $key);
-            }
-
-            return $v;
-        }
+        return isset($doc[$key]) ? $doc[$key] : 0;
     }
 
-    private function valueOfFullDocAtDepth($doc, $depth)
+    /**
+     * Estimate the median by examining SAMPLE_SIZE random documents.
+     *
+     * Although we could use reservoir sampling or another sampling method we
+     * don't care for examining exactly SAMPLE_SIZE documents so we use a
+     * simpler alternative.
+     */
+    private function estimateMedian($depth, $docs)
     {
-        $key = $this->vocabulary[$depth % count($this->vocabulary)];
+        // To hold the values that we need to sort and choose the median from
+        $values = array();
 
-        if (is_int(key($doc))) {
-            $v = 0;
-            foreach ($doc as $axis) {
-                $v += (int)($axis == $key);
+        // Collect the values from each document with
+        // probability SAMPLE_SIZE/$N
+        $N = count($docs);
+        foreach ($docs as $doc) {
+            if (mt_rand(0, $N) <= self::SAMPLE_SIZE) {
+                $values[] = $this->valueOfDocAtDepth($depth, $this->docs[$doc]);
             }
-
-            return $v;
-        } else {
-            return (isset($doc[$key])) ? $doc[$key] : 0;
         }
+
+        // Return the median
+        sort($values);
+
+        return $values[(int)((count($values)-1)/2)];
     }
 
-    protected function plane($depth, $value, &$doc)
-    {
-        $plane = null;
-        if (is_int(key($doc))) {
-            $plane = array_count_values($doc);
-        } else {
-            $plane = $doc;
-        }
-        $plane[$this->vocabulary[$depth % count($this->vocabulary)]] = $value;
-
-        return $plane;
-    }
-
-    protected function buildTree($depth, $docs)
+    /**
+     * Build the tree recursively.
+     */
+    private function buildTree($depth, $docs)
     {
         if (count($docs)==0) {
             return null;
         }
 
-        if (count($docs)==1) {
+        if (count($docs) <= $this->leafSize) {
             $node = new \stdClass;
-            $node->value = $docs[0];
+            $node->value = $docs;
             $node->left = null;
             $node->right = null;
             return $node;
         }
 
-        // pick 50 random docs to calculate an estimate of the median of docs
-        // at this axis
-        $random_picks = array();
-        if (count($docs) < self::SAMPLE_SIZE) {
-            $random_picks = range(0, count($docs)-1);
-        } else {
-            $random_picks = array_rand($docs, self::SAMPLE_SIZE);
-        }
-
-        // get the value of the 50 docs
-        $values = array();
-        foreach ($random_picks as $doc) {
-            $values[] = $this->valueOfDocAtDepth($docs[$doc], $depth);
-        }
-        sort($values);
-
-        // this is our median
-        $median = $values[(int)(count($values)/2)-1];
+        // estimate a splitting point (an approximation of the median which is
+        // optimal) at this axis and depth
+        $median = $this->estimateMedian($depth, $docs);
 
         // create two sets of docs the ones above and the ones below the median
         $leftDocs = array();
         $rightDocs = array();
 
-        // this is a special case where all the values might be equal so split
-        // the docs in half
-        if ($median == reset($values) && $median == end($values)) {
-            $cnt = 0;
-            foreach ($docs as $docIdx) {
-                if ($this->valueOfDocAtDepth($docIdx, $depth) != $median) {
-                    break;
-                }
-                $cnt ++;
-            }
-            if ($cnt == count($docs)) {
-                $leftDocs = array_slice($docs, 0, (int)(count($docs)/2));
-                $rightDocs = array_slice($docs, (int)(count($docs)/2));
-            }
-        }
-
         // we need to split to the median
-        if (empty($leftDocs)) {
-            foreach ($docs as $docIdx) {
-                if ($this->valueOfDocAtDepth($docIdx, $depth) <= $median) {
-                    $leftDocs[] = $docIdx;
-                } else {
-                    $rightDocs[] = $docIdx;
-                }
+        foreach ($docs as $doc) {
+            if ($this->valueOfDocAtDepth($depth, $this->docs[$doc]) <= $median) {
+                $leftDocs[] = $doc;
+            } else {
+                $rightDocs[] = $doc;
             }
         }
 
@@ -292,7 +248,13 @@ class KDTree implements SpatialIndexInterface
         return $node;
     }
 
-    protected function traverseTree(&$doc, $minDistance, $pointNode)
+    /**
+     * Traverse the tree in depth first order (and close to the passed in doc)
+     * and then when unfolding the stack to traverse the rest of the tree prune
+     * branches according to the value returned by the $minDistance function.
+     * Each point that is accessed is passed to the $pointNode function.
+     */
+    protected function traverseTree($doc, $minDistance, $pointNode)
     {
         // create a stack for depth first traversal
         $stack = array(array($this->tree, 0));
@@ -300,35 +262,43 @@ class KDTree implements SpatialIndexInterface
         while (!empty($stack)) {
             list($node, $depth) = array_pop($stack);
 
-            // splitting line, see if we are going to add all the children
-            // to the search
-            if ($node->left!==null || $node->right!==null) {
-                $d = $this->valueOfFullDocAtDepth($doc, $depth) - $node->value;
+            if ($node === null) {
+                continue;
+            }
 
-                // ask the minDistance function whether we should be adding both or not
-                if (abs($d) < call_user_func($minDistance) || $d == 0) {
-                    // we 'll add both
-                    if ($node->left!==null) {
-                        array_push($stack, array($node->left, $depth + 1));
-                    }
-                    if ($node->right!==null) {
-                        array_push($stack, array($node->right, $depth + 1));
-                    }
-                } else {
-                    // we 'll only add one
-                    if ($d > 0) {
-                        if ($node->right!==null) {
-                            array_push($stack, array($node->right, $depth + 1));
-                        }
-                    } else {
-                        if ($node->left!==null) {
-                            array_push($stack, array($node->left, $depth + 1));
-                        }
-                    }
+            // If it is a point node examine it by calling $pointNode.
+            if (is_array($node->value)) {
+                foreach ($node->value as $leaf) {
+                    call_user_func($pointNode, $leaf);
                 }
             } else {
-                // this is a point so call the appropriate function
-                call_user_func($pointNode, $node->value);
+                // This node splits the dataset with a plane. This plane is
+                // $distance far away from our $doc. We must check stuff that
+                // are less than $minDistanceValue away.
+                $distance = $this->valueOfDocAtDepth($depth, $doc) - $node->value;
+                $minDistanceValue = call_user_func($minDistance);
+                $left = array($node->left, $depth+1);
+                $right = array($node->right, $depth+1);
+
+                // The plane is closer than the minDistanceValue so we cannot
+                // discard anything we need to check both sides of the plane
+                if (abs($distance) <= $minDistanceValue) {
+                    // But we will first check the side which is closest to our
+                    // point. If the distance is negative then that means that
+                    // the point resides to the left of the plane otherwise to
+                    // the right.
+                    if ($distance <= 0) {
+                        array_push($stack, $right);
+                        array_push($stack, $left);
+                    } else {
+                        array_push($stack, $left);
+                        array_push($stack, $right);
+                    }
+                } elseif ($distance <= 0) {
+                    array_push($stack, $left);
+                } else {
+                    array_push($stack, $right);
+                }
             }
         }
     }
