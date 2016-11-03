@@ -68,15 +68,16 @@ abstract class GradientDescentOptimizer implements FeatureBasedLinearOptimizerIn
         $optimized = false;
         $maxiter = $this->maxiter;
         $prec = $this->precision;
+        $step = $this->step;
         $l = array();
         $this->initParameters($feature_array,$l);
-        while (!$optimized && $itercount++<$maxiter) {
+        while (!$optimized && $itercount++!=$maxiter) {
             //$start = microtime(true);
             $optimized = true;
             $this->prepareFprime($feature_array,$l);
             $this->Fprime($feature_array,$l);
             foreach ($this->fprime_vector as $i=>$fprime_i_val) {
-                $l[$i] -= $fprime_i_val;
+                $l[$i] -= $step*$fprime_i_val;
                 if (abs($fprime_i_val) > $prec) {
                     $optimized = false;
                 }
