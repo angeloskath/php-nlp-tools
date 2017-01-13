@@ -11056,6 +11056,7 @@ inward
 inwardly
 inwardness
 inwards
+ion
 ionia
 ionian
 ipse
