@@ -36,14 +36,17 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
      * See the class comment about why the number is in [0,1] and not
      * in [-1,1] as it normally should.
      *
-     * TODO: Assert $A, $B are arrays
-     *
      * @param  array $A Either feature vector or simply vector
      * @param  array $B Either feature vector or simply vector
      * @return float The cosinus of the angle between the two vectors
      */
     public function similarity(&$A, &$B)
     {
+
+        if (!is_array($A) || !is_array($B)) {
+            throw new \InvalidArgumentException('Vector $' . (!is_array($A) ? 'A' : 'B') . ' is not an array');
+        }
+
         // This means they are simple text vectors
         // so we need to count to make them vectors
         if (is_int(key($A)))
