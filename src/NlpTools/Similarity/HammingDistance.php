@@ -18,12 +18,22 @@ class HammingDistance implements DistanceInterface
      */
     public function dist(&$A, &$B)
     {
-        $l1 = strlen($A);
-        $l2 = strlen($B);
+	if(is_array($A))
+		$a = implode(' ', $A);
+	else
+		$a = $A;
+
+	if(is_array($B))
+		$b = implode(' ', $B);
+	else
+		$b = $B;
+
+        $l1 = strlen($a);
+        $l2 = strlen($b);
         $l = min($l1,$l2);
         $d = 0;
         for ($i=0;$i<$l;$i++) {
-            $d += (int) ($A[$i]!=$B[$i]);
+            $d += (int) ($a[$i]!=$b[$i]);
         }
 
         return $d + (int) abs($l1-$l2);
