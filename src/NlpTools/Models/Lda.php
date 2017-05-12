@@ -240,7 +240,11 @@ class Lda
          $count_topics_docs = array();
          foreach ($this->count_docs_topics as $doc=>$topics) {
              foreach ($topics as $t=>$c)
-                $count_topics_docs[$doc][$t]++;
+                 try {
+                     $count_topics_docs[$doc][$t]++;
+                 } catch (\Exception $ex){
+                     $count_topics_docs[$doc][$t] = 1;
+                 }
          }
 
          foreach ($p_t_d as $topic=>&$p) {
