@@ -12,14 +12,35 @@ class LevenshteinDistance implements DistanceInterface
     /**
      * Count the number of positions that A and B differ.
      *
-     * @param  string $A
-     * @param  string $B
+     * @param  string|array $A
+     * @param  string|array $B
      * @return int    The Levenshtein distance of the two strings A and B
      */
     public function dist(&$A, &$B)
     {
-        $m = strlen($A);
-        $n = strlen($B);
+        if(is_array($A)) {
+             $m = count($A);
+         }
+         elseif(is_string($A)) {
+             $m = strlen($A);
+         }
+         else {
+            throw new \InvalidArgumentException(
+                 "LevenshteinDistance accepts only strings or arrays"
+            );
+         }
+
+         if (is_array($B)){
+             $n = count($B);
+         }
+         else if (is_string($B)){
+             $n = strlen($B);
+         }
+         else {
+             throw new \InvalidArgumentException(
+                 "LevenshteinDistance accepts only strings or arrays"
+                 );
+         }
         
         for($i=0;$i<=$m;$i++) $d[$i][0] = $i;
         for($i=0;$i<=$n;$i++) $d[0][$i] = $i;
