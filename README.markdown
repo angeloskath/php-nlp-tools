@@ -11,7 +11,7 @@ This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools
 1. [Tversky Index](https://en.wikipedia.org/wiki/Tversky_index)
 2. [Overlap Coefficient Similarity](https://en.wikipedia.org/wiki/Overlap_coefficient)
 3. [Sørensen/Dice Coefficient Similarity](http://en.wikipedia.org/wiki/Sørensen–Dice_coefficient)
-4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
+4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) - because PHP's levenshtein() implementation is limitted to 255 characters.
 5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
 
 
