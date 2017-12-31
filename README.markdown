@@ -4,6 +4,16 @@
 NlpTools is a set of php 5.3+ classes for beginner to
 semi advanced natural language processing work.
 
+This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools) and it contains some additions that was helpful for me at the time.
+
+### Added Features ###
+
+1. [Tversky Index](https://en.wikipedia.org/wiki/Tversky_index)
+2. [Overlap Coefficient Similarity](https://en.wikipedia.org/wiki/Overlap_coefficient)
+3. [Sorensen/Dice Coefficient Similarity](http://en.wikipedia.org/wiki/Sørensen–Dice_coefficient)
+4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
+
+
 Documentation
 -------------
 
