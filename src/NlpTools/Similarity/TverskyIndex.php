@@ -39,8 +39,8 @@ class TverskyIndex implements SimilarityInterface, DistanceInterface
     }
 
 
-    public function dist(&$A, &$B)
+    public function dist(&$A, &$B, $alpha = 0.5, $beta = 1)
     {
-        return 1-$this->similarity($A,$B);
+        return 1-$this->similarity($A,$B,$alpha,$beta);
     }
 }
