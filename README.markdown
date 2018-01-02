@@ -14,6 +14,15 @@ This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools
 4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) - because PHP's levenshtein() implementation is limitted to 255 characters.
 5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
 
+### Changes ###
+1. Optimized getHapaxes method.
+2. Extending FreqDist's Term Weighing feature.
+```
+$freqDist = new FreqDist(array("time", "flies", "like", "an", "arrow"));
+$freqDist->getTotalByToken('an');
+$freqDist->getTokenWeight('an');
+```
+
 
 Documentation
 -------------
