@@ -99,6 +99,35 @@ class FreqDist
     }
 
     /**
+     * Return a token's count
+     * @param string $string
+     * @return array
+     */
+    public function getTotalByToken($string)
+    {
+        $array = $this->keyValues;
+        if(array_key_exists($string, $array)) {
+            return $array[$string];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Return a token's weight (for user's own tf-idf/pdf/iduf implem)
+     * @param string $string
+     * @return array
+     */
+    public function getTokenWeight($string)
+    {
+        if($this->getTotalByToken($string)){
+            return $this->getTotalByToken($string)/$this->getTotalTokens();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      *
      * Returns an array of tokens that occurred once
      * @todo This is an inefficient approach
