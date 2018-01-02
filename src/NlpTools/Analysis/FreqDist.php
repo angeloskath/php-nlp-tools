@@ -101,7 +101,7 @@ class FreqDist
     /**
      * Return a token's count
      * @param string $string
-     * @return array
+     * @return mixed
      */
     public function getTotalByToken($string)
     {
@@ -116,7 +116,7 @@ class FreqDist
     /**
      * Return a token's weight (for user's own tf-idf/pdf/iduf implem)
      * @param string $string
-     * @return array
+     * @return mixed
      */
     public function getTokenWeight($string)
     {
