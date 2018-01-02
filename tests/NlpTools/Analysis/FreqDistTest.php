@@ -21,8 +21,8 @@ class FreqDistTest extends \PHPUnit_Framework_TestCase
     public function testSimpleFreqWeight()
     { 
         $freqDist = new FreqDist(array("time", "flies", "like", "an", "arrow", "time", "flies", "like", "what"));
-        $this->assertEquals(1, $freqDist->getTermTotal('an'));
-        $this->assertEquals(0.111, $freqDist->getTermWeight('an'));
+        $this->assertEquals(1, $freqDist->getTotalByToken('an'));
+        $this->assertEquals(0.111, $freqDist->getTokenWeight('an'));
     }
     
     public function testEmptyHapaxesFreqDist()
