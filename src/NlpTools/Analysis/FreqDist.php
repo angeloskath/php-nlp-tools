@@ -106,28 +106,13 @@ class FreqDist
      */
     public function getHapaxes()
     {
-            $hapaxes = array();
-
-            //get the head key
-            $head = key($this->keyValues);
-
-            //get the tail value,. set the internal pointer to the tail
-            $tail = end($this->keyValues);
-            // no hapaxes available
-            if ($tail > 1) {
-                return array();
+        $samples = array();
+        foreach ($this->getKeyValues() as $sample => $count) {
+            if ($count == 1) {
+                $samples[] = $sample;
             }
-
-            do {
-                $hapaxes[] = key($this->keyValues);
-                prev($this->keyValues);
-
-            } while (current($this->keyValues) == 1 && key($this->keyValues) !== $head);
-
-            //reset the internal pointer in the array
-            reset($this->keyValues);
-
-            return $hapaxes;
+        }
+        return $samples;
     }
 
 }
