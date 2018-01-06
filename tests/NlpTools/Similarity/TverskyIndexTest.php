@@ -41,7 +41,7 @@ class TverskyIndexTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             0.5,
-            $this->sim($A,$B, 0.5, 2),
+            $this->sim($C,$D, 0.5, 2),
             "similarity({1,2,3},{1,2,3,4,5,6}) = 0.5"
         );
     }
