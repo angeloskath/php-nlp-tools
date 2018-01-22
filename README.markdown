@@ -51,7 +51,7 @@ printf($idf->numberofCollectionTokens());  //8
 ### Work-In-Progress ###
 
 1. *'Ranking'* namespace (BM25, VSM, PL2, HiemstraLM, Lemur Project's tf\*idf, etc)
-2. Formalize tf\*idf as a feature factory [with scheme selection] (https://en.wikipedia.org/wiki/Tf%E2%80%93idf) instead of the current disconnected state.
+2. Formalize tf\*idf as a feature factory [with scheme selection](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) instead of the current disconnected state.
 3. Math Namespace
 4. Document Pipeline
 
