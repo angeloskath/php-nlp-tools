@@ -22,7 +22,29 @@ $freqDist = new FreqDist(array("time", "flies", "like", "an", "arrow"));
 $freqDist->getTotalByToken('an');
 $freqDist->getTokenWeight('an');
 ```
+3. Extending Idf's global collection stats.
+```
+$ts = new TrainingSet();
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","b","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a"))
+        );
 
+$idf = new Idf($ts);
+printf($idf->idf("b")); //1.098 (exposing it thru a method)
+printf($idf->numberofDocuments()); //3
+printf($idf->termFrequency("a"));  //3
+printf($idf->documentFrequency("b"));  //1
+printf($idf->numberofCollectionTokens());  //8
+```
 
 Documentation
 -------------
