@@ -15,6 +15,7 @@ This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools
 5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
 
 ### Changes ###
+
 1. Optimized getHapaxes method.
 2. Extending FreqDist's Term Weighing feature.
 ```
@@ -45,6 +46,15 @@ printf($idf->termFrequency("a"));  //3
 printf($idf->documentFrequency("b"));  //1
 printf($idf->numberofCollectionTokens());  //8
 ```
+
+
+### Work-In-Progress ###
+
+1. *'Ranking'* namespace (BM25, VSM, PL2, HiemstraLM, Lemur Project's tf\*idf, etc)
+2. Formalize tf\*idf as a feature factory [with scheme selection] (https://en.wikipedia.org/wiki/Tf%E2%80%93idf) instead of the current disconnected state.
+3. Math Namespace
+4. Document Pipeline
+
 
 Documentation
 -------------
