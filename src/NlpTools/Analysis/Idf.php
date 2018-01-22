@@ -7,22 +7,26 @@ use NlpTools\FeatureFactories\FeatureFactoryInterface;
 use NlpTools\FeatureFactories\DataAsFeatures;
 
 /**
- * Idf implements the inverse document frequency measure.
- * Idf is a measure of whether a term T is common or rare accross
- * a set of documents.
+ * Idf implements global collection statistics for use in different ranking schemes (DFR,VSM, etc.).
+ * numberofTokens is the number of all tokens in the entire collection.
+ * numberofDocuments is the number of documents in the collection.
+ * termFrequency is the number of occurences of the word in the entire collection.
+ * documentFrequency is the number of documents containing the word in the entire collection.
  *
- * Idf implements the ArrayAccess interface so it should be used
- * as a read only array that contains tokens as keys and idf values
- * as values.
  */
-class Idf implements \ArrayAccess
+
+class Idf
 {
-    protected $logD;
-    protected $idf;
+    protected $numberofTokens;
+    protected $numberofDocuments;
+    protected $termFrequency;
+    protected $documentFrequency;
+
 
     /**
-     * @param TrainingSet             $tset The set of documents for which we will compute the idf
-     * @param FeatureFactoryInterface $ff   A feature factory to translate the document data to single tokens
+     * @param TrainingSet $tset The set of documents for which we will compute the stats ()
+     * @param FeatureFactoryInterface $ff   A feature factory to translate the document data to 
+     * single tokens
      */
     public function __construct(TrainingSet $tset, FeatureFactoryInterface $ff=null)
     {
@@ -30,70 +34,107 @@ class Idf implements \ArrayAccess
             $ff = new DataAsFeatures();
 
         $tset->setAsKey(TrainingSet::CLASS_AS_KEY);
+        $this->numberofTokens = 0;
+        $this->numberofDocuments = 0;
         foreach ($tset as $class=>$doc) {
-            $tokens = $ff->getFeatureArray($class,$doc); // extract tokens from the document
-            $tokens = array_fill_keys($tokens,1); // make them occur once
-            foreach ($tokens as $token=>$v) {
-                if (isset($this->idf[$token]))
-                    $this->idf[$token]++;
-                else
-                    $this->idf[$token] = 1;
+            $this->numberofDocuments++;
+            $tokens = $ff->getFeatureArray($class,$doc);
+            $flag = array();
+            foreach ($tokens as $term) {
+                    $this->numberofTokens++;
+                    $flag[$term] = isset($flag[$term]) && $flag[$term] === true ? true : false;
+
+                    if (isset($this->termFrequency[$term])){
+                        $this->termFrequency[$term]++;
+                    } else {
+                        $this->termFrequency[$term] = 1;
+                    }
+
+                    if (isset($this->documentFrequency[$term])){
+                        if ($flag[$term] === false){
+                            $flag[$term] = true;
+                            $this->documentFrequency[$term]++;
+                        }
+                    } else {
+                        $flag[$term] = true;
+                        $this->documentFrequency[$term] = 1;
+                    }
             }
         }
 
-        // this idf so far contains the doc frequency
-        // we will now inverse it and take the log
-        $D = count($tset);
-        foreach ($this->idf as &$v) {
-            $v = log($D/$v);
-        }
-        $this->logD = log($D);
     }
 
     /**
-     * Implements the array access interface. Return the computed idf or
-     * the logarithm of the count of the documents for a token we have not
-     * seen before.
-     *
-     * @param  string $token The token to return the idf for
-     * @return float  The idf
+     * Returns the idf weight containing the query word in the entire collection.
+     * 
+     * @param  string $term
+     * @return mixed
      */
-    public function offsetGet($token)
+    public function idf($term)
     {
-        if (isset($this->idf[$token])) {
-            return $this->idf[$token];
+
+        if (isset($this->documentFrequency[$term])) {
+            return log($this->numberofDocuments/$this->documentFrequency[$term]);
         } else {
-            return $this->logD;
+            return log($this->numberofDocuments);
+        }
+
+    }
+
+    /**
+     * Returns number of documents in the collection.
+     * 
+     * @return mixed
+     */
+    public function numberofDocuments()
+    {
+
+        return $this->numberofDocuments;
+
+    }
+
+    /**
+     * Returns number of occurences of the word in the entire collection.
+     * 
+     * @param  string $term
+     * @return int
+     */
+    public function termFrequency($term)
+    {
+
+        if (isset($this->termFrequency[$term])) {
+            return $this->termFrequency[$term];
+        } else {
+            return 0;
         }
     }
 
     /**
-     * Implements the array access interface. Return true if the token exists
-     * in the corpus.
-     *
-     * @param  string $token The token to check if it exists in the corpus
-     * @return bool
+     * Returns number of documents containing the word in the entire collection.
+     * 
+     * @param  string $term
+     * @return int
      */
-    public function offsetExists($token)
+    public function documentFrequency($term)
     {
-        return isset($this->idf[$token]);
+
+        if (isset($this->documentFrequency[$term])) {
+            return $this->documentFrequency[$term];
+        } else {
+            return 0;
+        }
     }
 
     /**
-     * Will not be implemented. Throws \BadMethodCallException because
-     * one should not be able to alter the idf values directly.
+     * Returns number of all tokens in the entire collection.
+     * 
+     * @return int
      */
-    public function offsetSet($token, $value)
+    public function numberofCollectionTokens()
     {
-        throw new \BadMethodCallException("The idf of a specific token cannot be set explicitly");
+
+        return $this->numberofTokens;
     }
 
-    /**
-     * Will not be implemented. Throws \BadMethodCallException because
-     * one should not be able to alter the idf values directly.
-     */
-    public function offsetUnset($token)
-    {
-        throw new \BadMethodCallException("The idf of a specific token cannot be unset");
-    }
+
 }

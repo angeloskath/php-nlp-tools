@@ -27,25 +27,45 @@ class IdfTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             0.405,
-            $idf["c"],
+            $idf->idf("c"),
             null,
             0.001
         );
         $this->assertEquals(
             1.098,
-            $idf["b"],
+            $idf->idf("b"),
             null,
             0.001
         );
         $this->assertEquals(
             1.098,
-            $idf["non-existing"],
+            $idf->idf("non-existing"),
             null,
             0.001
         );
         $this->assertEquals(
             0,
-            $idf["a"]
+            $idf->idf("a")
+        );
+
+        $this->assertEquals(
+            3,
+            $idf->numberofDocuments()
+        );
+
+        $this->assertEquals(
+            3,
+            $idf->termFrequency("a")
+        );
+
+        $this->assertEquals(
+            1,
+            $idf->documentFrequency("b")
+        );
+
+        $this->assertEquals(
+            8,
+            $idf->numberofCollectionTokens()
         );
     }
 }
