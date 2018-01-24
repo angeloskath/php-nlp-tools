@@ -85,6 +85,7 @@ $search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] 
 2. DFR Models (BB2, IFB2, InB2, InL2, PL2)
 3. HiemstraLM
 4. DirichletLM
+5. XSqrA_M
 
 Documentation
 -------------

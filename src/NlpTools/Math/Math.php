@@ -35,6 +35,17 @@ class Math
     }
 
     /**
+     * Returns $base raised to the power of $exp.
+     * 
+     * @param  mixed $expression
+     * @return mixed
+     */
+    public function pow($base, $exp)
+    {
+        return pow($base, $exp);
+    }
+
+    /**
      * Returns the logarithm in base 2 of e, used to change the base of logarithms
      *
      * @param  mixed $expression
