@@ -4,6 +4,88 @@
 NlpTools is a set of php 5.3+ classes for beginner to
 semi advanced natural language processing work.
 
+This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools) and it contains some additions that was helpful for me at the time.
+
+### Added Features ###
+
+1. [Tversky Index](https://en.wikipedia.org/wiki/Tversky_index)
+2. [Overlap Coefficient Similarity](https://en.wikipedia.org/wiki/Overlap_coefficient)
+3. [Sørensen/Dice Coefficient Similarity](http://en.wikipedia.org/wiki/Sørensen–Dice_coefficient)
+4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) - because PHP's levenshtein() implementation is limitted to 255 characters.
+5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+6. WeightedScoring - NLP meets IR.
+
+### Changes ###
+
+1. Optimized getHapaxes method.
+2. Extending FreqDist's Term Weighing feature.
+```
+$freqDist = new FreqDist(array("time", "flies", "like", "an", "arrow"));
+$freqDist->getTotalByToken('an');
+$freqDist->getTokenWeight('an');
+```
+3. Extending Idf's global collection stats.
+```
+$ts = new TrainingSet();
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","b","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a"))
+        );
+
+$idf = new Idf($ts);
+printf($idf->idf("b")); //1.098 (exposing it thru a method)
+printf($idf->numberofDocuments()); //3
+printf($idf->termFrequency("a"));  //3
+printf($idf->documentFrequency("b"));  //1
+printf($idf->numberofCollectionTokens());  //8
+```
+4. WeightedScoring.
+```
+// your documents
+$tset = new TrainingSet();
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("this","is","a","big", "fish"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("deadpool","is","a","big", "jerk"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("i","love","a","big", "salmon"))
+        );
+
+// your query
+$query = 'big salmon';
+$tokens = $tokenizer->tokenize($query);
+$query_tokenized = new TokensDocument($tokens);
+
+// or
+
+$query_tokenized = new TokensDocument(array("big","salmon"));
+
+// select scoring algorithm
+$search = new Ranking(new BM25(), $tset);
+$search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
+```
+
+
+### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking): ###
+
+1. Okapi BM25/BM25+.
+2. DFR Models (BB2, IFB2, InB2, InL2, PL2)
+3. HiemstraLM
+4. DirichletLM
+
 Documentation
 -------------
 
