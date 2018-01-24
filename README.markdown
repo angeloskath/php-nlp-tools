@@ -13,6 +13,7 @@ This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools
 3. [Sørensen/Dice Coefficient Similarity](http://en.wikipedia.org/wiki/Sørensen–Dice_coefficient)
 4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) - because PHP's levenshtein() implementation is limitted to 255 characters.
 5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+6. WeightedScoring - NLP meets IR.
 
 ### Changes ###
 
@@ -46,15 +47,44 @@ printf($idf->termFrequency("a"));  //3
 printf($idf->documentFrequency("b"));  //1
 printf($idf->numberofCollectionTokens());  //8
 ```
+4. WeightedScoring.
+```
+// your documents
+$tset = new TrainingSet();
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("this","is","a","big", "fish"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("deadpool","is","a","big", "jerk"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("i","love","a","big", "salmon"))
+        );
+
+// your query
+$query = 'big salmon';
+$tokens = $tokenizer->tokenize($query);
+$query_tokenized = new TokensDocument($tokens);
+
+// or
+
+$query_tokenized = new TokensDocument(array("big","salmon"));
+
+// select scoring algorithm
+$search = new Ranking(new BM25(), $tset);
+$search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
+```
 
 
-### Work-In-Progress ###
+### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking): ###
 
-1. *'Ranking'* namespace (BM25, VSM, PL2, HiemstraLM, Lemur Project's tf\*idf, etc)
-2. Formalize tf\*idf as a feature factory [with scheme selection](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) instead of the current disconnected state.
-3. Math Namespace
-4. Document Pipeline
-
+1. Okapi BM25/BM25+.
+2. DFR Models (BB2, IFB2, InB2, InL2, PL2)
+3. HiemstraLM
+4. DirichletLM
 
 Documentation
 -------------
