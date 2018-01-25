@@ -84,7 +84,7 @@ $search->search($query_tokenized);
 
 1. Probabilistic Models (BM25/+).
 2. Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
-3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM)
+3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM, TwoStageLM)
 4. Divergence-From-Independence Models (DFI(<1 to 3>))
 
 
