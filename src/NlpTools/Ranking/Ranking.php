@@ -2,10 +2,10 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Analysis\Idf;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Ranking\ScoringInterface;
 use NlpTools\Documents\DocumentInterface;
+use NlpTools\FeatureFactories\TfFeatureFactory;
 
 
 /**
@@ -15,41 +15,41 @@ use NlpTools\Documents\DocumentInterface;
  * search and compute each TrainingSet document's score.
  */
 
-class Ranking
+class Ranking extends AbstractRanking
 {
 
-    protected $tset;
-
-    protected $stats;
-
-    protected $type;
 
     protected $query;
 
     protected $score;
 
+    protected $type;
+
+    protected $tf;
+
     public function __construct(ScoringInterface $type, TrainingSet $tset)
     {
-        $this->tset = $tset;
-        if(count($this->tset) === 0){
-           throw new \InvalidArgumentException(
-                 "There are no Documents added."
-            ); 
-        }
-
-        $this->stats = new Idf($this->tset);
+        parent::__construct($tset);
         $this->type = $type;
-        
     }
 
     /**
      * Returns result ordered by rank.
      *
-     * @param  string $term
+     * @param  DocumentInterface $q
      * @return array
      */
+
     public function search(DocumentInterface $q)
     {
+
+        $this->tf = new TfFeatureFactory(
+            array(
+                function ($c, $d) {
+                    return $d->getDocumentData();
+                }
+            )
+        );
 
         $this->query = $q;
 
@@ -64,8 +64,8 @@ class Ranking
             $collectionCount = $this->stats->numberofDocuments();
             for($i = 0; $i < $collectionCount; $i++){
                 $this->score[$i] = isset($this->score[$i]) ? $this->score[$i] : 0;
-                $docLength = $this->stats->numberofDocumentTokens($i);
-                $tf = $this->stats->tf($i, $term); 
+                $docLength = array_sum($this->tf->getFeatureArray('', $this->tset->offsetGet($i)));
+                $tf = isset($this->tf->getFeatureArray('', $this->tset->offsetGet($i))[$term]) ?: 0;
                 $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount);
             }
         }

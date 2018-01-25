@@ -64,28 +64,33 @@ $tset = new TrainingSet();
             new TokensDocument(array("i","love","a","big", "salmon"))
         );
 
-// your query
-$query = 'big salmon';
-$tokens = $tokenizer->tokenize($query);
-$query_tokenized = new TokensDocument($tokens);
+$query_tokenized = new TokensDocument(array("big","salmon"));
+
+// select probabilistic model
+$search = new Ranking(new BM25(), $tset);
+$search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
 
 // or
 
-$query_tokenized = new TokensDocument(array("big","salmon"));
-
-// select scoring algorithm
-$search = new Ranking(new BM25(), $tset);
-$search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
+// select algebraic model
+$search = new VectorRanking(new VectorSpaceModel(), $tset);
+$search->search($query_tokenized);
 ```
 
 
 ### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking): ###
+
+##### Probabilistic Models #####
 
 1. Okapi BM25/BM25+.
 2. DFR Models (BB2, IFB2, InB2, InL2, PL2)
 3. HiemstraLM
 4. DirichletLM
 5. XSqrA_M
+
+##### Algebraic Models #####
+
+1. Vector Space Model
 
 Documentation
 -------------

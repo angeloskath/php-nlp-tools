@@ -19,10 +19,10 @@ namespace NlpTools\Similarity;
  * vector is supposed to have been passed as a mapping between the feature name
  * and a value like the following
  * array(
- * 	'feature_1'=>1,
- * 	'feature_2'=>0.55,
- * 	'feature_3'=>12.7,
- * 	....
+ *  'feature_1'=>1,
+ *  'feature_2'=>0.55,
+ *  'feature_3'=>12.7,
+ *  ....
  * )
  */
 class CosineSimilarity implements SimilarityInterface, DistanceInterface
@@ -67,16 +67,18 @@ class CosineSimilarity implements SimilarityInterface, DistanceInterface
             $v1_norm += $xi*$xi;
         }
         $v1_norm = sqrt($v1_norm);
+        if ($v1_norm==0)
+            throw new \InvalidArgumentException("Vector \$A is the zero vector");
 
         $v2_norm = 0.0;
         foreach ($v2 as $i=>$xi) {
             $v2_norm += $xi*$xi;
         }
         $v2_norm = sqrt($v2_norm);
+        if ($v2_norm==0)
+            throw new \InvalidArgumentException("Vector \$B is the zero vector");
 
-        return (($v1_norm * $v2_norm) != 0)
-               ? $prod / ($v1_norm*$v2_norm)
-               : 0;
+        return $prod/($v1_norm*$v2_norm);
     }
 
     /**
