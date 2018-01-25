@@ -5,7 +5,6 @@ namespace NlpTools\Ranking;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Ranking\ScoringInterface;
 use NlpTools\Documents\DocumentInterface;
-use NlpTools\FeatureFactories\TfFeatureFactory;
 
 
 /**
@@ -42,14 +41,6 @@ class Ranking extends AbstractRanking
 
     public function search(DocumentInterface $q)
     {
-
-        $this->tf = new TfFeatureFactory(
-            array(
-                function ($c, $d) {
-                    return $d->getDocumentData();
-                }
-            )
-        );
 
         $this->query = $q;
 
