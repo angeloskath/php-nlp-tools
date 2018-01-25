@@ -29,7 +29,7 @@ class JelinekMercerLM implements ScoringInterface
 
     protected $mu;
 
-    public function __construct($mu = self::C)
+    public function __construct($mu = self::MU)
     {
         $this->mu = $mu;
         $this->math = new Math();
