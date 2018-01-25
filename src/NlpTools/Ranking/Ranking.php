@@ -64,8 +64,8 @@ class Ranking extends AbstractRanking
             $collectionCount = $this->stats->numberofDocuments();
             for($i = 0; $i < $collectionCount; $i++){
                 $this->score[$i] = isset($this->score[$i]) ? $this->score[$i] : 0;
-                $docLength = array_sum($this->tf->getFeatureArray('', $this->tset->offsetGet($i)));
-                $tf = isset($this->tf->getFeatureArray('', $this->tset->offsetGet($i))[$term]) ?: 0;
+                $docLength = $this->stats->numberofDocumentTokens($i);
+                $tf = $this->stats->tf($i, $term); 
                 $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount);
             }
         }
