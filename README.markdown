@@ -82,11 +82,11 @@ $search->search($query_tokenized);
 
 ##### Probabilistic Models #####
 
-1. Okapi BM25/BM25+.
-2. DFR Models (BB2, IFB2, InB2, InL2, PL2)
-3. HiemstraLM
-4. DirichletLM
-5. XSqrA_M
+1. Probabilistic Models (BM25/+).
+2. Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
+3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM)
+4. Divergence-From-Independence Models (DFI(<1 to 3>))
+
 
 ##### Algebraic Models #####
 
