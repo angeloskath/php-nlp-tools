@@ -14,7 +14,7 @@ use NlpTools\Ranking\ScoringInterface;
  * to Ad Hoc information retrieval. In Proceedings of the 24th annual international ACM SIGIR conference on 
  * Research and development in information retrieval (SIGIR '01).
  * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.94.8019&rep=rep1&type=pdf
- * The optimal for μ appears to have a wide range (500-10000) and usually is around 2000.
+ * The optimal for μ appears to have a wide range (500-10000).
  *
  * @author Jericko Tejido <jtbibliomania@gmail.com>
  */
@@ -23,15 +23,15 @@ use NlpTools\Ranking\ScoringInterface;
 class DirichletLM implements ScoringInterface
 {
 
-    const C = 2000;
+    const LAMBDA = 2500;
 
     protected $math;
 
-    protected $c;
+    protected $lambda;
 
-    public function __construct($c = self::C)
+    public function __construct($lambda = self::LAMBDA)
     {
-        $this->c    = $c;
+        $this->lambda = $lambda;
         $this->math = new Math();
 
     }
@@ -45,7 +45,9 @@ class DirichletLM implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $score += $this->math->mathLog(1 + ($tf/($this->c * ($termFrequency / $collectionLength))) ) + $this->math->mathLog($this->c/($docLength+$this->c));
+            $smoothed_probability = $termFrequency / $collectionLength;
+            $score += $this->math->mathLog(1 + ($tf + $this->lambda * $smoothed_probability) / ($docLength + $this->lambda));
+
         }
 
         return $score;

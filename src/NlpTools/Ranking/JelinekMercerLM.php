@@ -7,8 +7,8 @@ use NlpTools\Ranking\ScoringInterface;
 
 
 /**
- * JelinekMercerLM is a class for ranking documents against a query based on Bayesian smoothing with 
- * Dirichlet Prior for language modelling.
+ * JelinekMercerLM is a class for ranking documents against a query based on Linear interpolation of the maximum 
+ * likelihood model.
  *
  * From Chengxiang Zhai and John Lafferty. 2001. A study of smoothing methods for language models applied
  * to Ad Hoc information retrieval. In Proceedings of the 24th annual international ACM SIGIR conference on 
@@ -23,15 +23,15 @@ use NlpTools\Ranking\ScoringInterface;
 class JelinekMercerLM implements ScoringInterface
 {
 
-    const C = 0.15;
+    const MU = 0.20;
 
     protected $math;
 
-    protected $c;
+    protected $mu;
 
-    public function __construct($c = self::C)
+    public function __construct($mu = self::C)
     {
-        $this->c    = $c;
+        $this->mu = $mu;
         $this->math = new Math();
 
     }
@@ -45,7 +45,8 @@ class JelinekMercerLM implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $score += $this->math->mathLog(1 + (1 - $this->c) * $tf / $docLength) + ($this->c * ($termFrequency / $collectionLength));
+            $smoothed_probability = $termFrequency / $collectionLength;
+            $score += $this->math->mathLog(1 + (((1 - $this->mu) * $tf) / $docLength) + ($this->mu * $smoothed_probability));
         }
 
         return $score;
