@@ -45,7 +45,7 @@ class JelinekMercerLM implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $score += $this->math->mathLog(1 + $tf / ($this->c * ($termFrequency / $collectionLength))) +        $this->math->mathLog($this->c / ($docLength + $this->c));
+            $score += $this->math->mathLog(1 + $tf / ($this->c * ($termFrequency / $collectionLength))) + $this->math->mathLog($this->c / ($docLength + $this->c));
         }
 
         return $score;

@@ -78,7 +78,7 @@ $search->search($query_tokenized);
 ```
 
 
-### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking): ###
+### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking) ###
 
 ##### Probabilistic Models #####
 
@@ -91,6 +91,14 @@ $search->search($query_tokenized);
 ##### Algebraic Models #####
 
 1. Vector Space Model
+2. Generalized Vector Space Model (TO-DO)
+3. Latent Semantic Indexing (TO-DO, not very much focused on, due to PHP's current speed at SVD's complexity)
+4. Lemur TF_IDF (TO-DO)
+
+### Work-In-Progress ###
+
+1. Persistent support for indeces.
+
 
 Documentation
 -------------
