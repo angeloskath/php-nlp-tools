@@ -23,7 +23,7 @@ use NlpTools\Ranking\ScoringInterface;
 class JelinekMercerLM implements ScoringInterface
 {
 
-    const C = 0.7;
+    const C = 0.15;
 
     protected $math;
 
@@ -45,7 +45,7 @@ class JelinekMercerLM implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $score += $this->math->mathLog(1 + $tf / ($this->c * ($termFrequency / $collectionLength))) + $this->math->mathLog($this->c / ($docLength + $this->c));
+            $score += $this->math->mathLog(1 + (1 - $this->c) * $tf / $docLength) + ($this->c * ($termFrequency / $collectionLength));
         }
 
         return $score;
