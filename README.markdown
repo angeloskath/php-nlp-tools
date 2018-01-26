@@ -67,12 +67,15 @@ $tset = new TrainingSet();
 $query_tokenized = new TokensDocument(array("big","salmon"));
 
 // select Probabilistic model
+
 $search = new Ranking(new BM25(), $tset);
 $search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
 
 // or basic DFR model
+
 $search = new DFRRanking(new In(), new B(), new NormalizationH1(), $tset);
 $search->search($query_tokenized);
+
 // or
 
 // select algebraic model
@@ -81,28 +84,91 @@ $search->search($query_tokenized);
 ```
 
 
-### [Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking) ###
+[Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking)
+-------------
 
-##### Probabilistic Models #####
+### Probabilistic Models ###
 
-1. Probabilistic Models (BM25/+).
-2. Divergence-From-Randomness Models
- * Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
- * [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) - where DFR Model is obtained by instantiating three components.
-3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM, TwoStageLM)
-4. Divergence-From-Independence Models (DFI(1..3), IRRA12)
+These are specified via the **Ranking(model, documentset)** class.
+
+***Probabilistic Relevance Models***
+
+1. BM25() - Okapi's Best Matching algorithm.
 
 
-##### Algebraic Models #####
+***Divergence-From-Randomness (DFR)***
+
+1. BB2() - Bernoulli-Einstein model with Bernoulli after-effect and normalization 2.
+2. IFB2() - Inverse Term Frequency model with Bernoulli after-effect and normalization 2.
+3. InB2() - Inverse Document Frequency model with Bernoulli after-effect and normalization 2.
+4. InL2() - Inverse Document Frequency model with Laplace after-effect and normalization 2.
+5. PL2() - Poisson model with Laplace after-effect and normalization 2.
+6. XSqrA_M() - Inner product of Pearson's X^2 with the information growth computed with the multinomial M.
+
+
+***Language Models***
+
+1. HiemstraLM() - Based on Hiemstra's [work](https://pdfs.semanticscholar.org/67ba/b01706d3aada95e383f1296e5f019b869ae6.pdf)
+2. DirichletLM() - Bayesian smoothing with Dirichlet Prior.
+3. JelinekMercerLM() - Based on the Jelinek-Mercer smoothing method.
+4. AbsoluteDiscountingLM() - Absolute Discounting smoothing method.
+5. TwoStageLM() - Leave-one-out method. This is also a generalization of both DirichletLM and JelinekMercerLM methods.
+
+
+***Divergence-From-Independence (DFI)***
+
+1. DFI(1) - Saturated measure of distance from independence.
+2. DFI(2) - Normalized chi-squared measure of distance from independence.
+3. DFI(3) - Standardized measure of distance from independence.
+4. IRRA12() -  Term weighting model developed on the basis of Shannon’s [Information Theory](https://en.wikipedia.org/wiki/Information_theory). 
+
+
+#### [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) ####
+
+DFR models are obtained by instantiating the three components of the framework: 
+
+1. Selecting a basic randomness model.
+2. Applying the first normalisation.
+3. Normalising the term frequencies.
+
+These are all used via the **DFRRanking(model, aftereffect, normalization, documentset)** class.
+
+
+***Models:***
+
+1. P() - Approximation of the binomial.
+2. BE() - Bose-Einstein distribution.
+3. G() - Geometric approximation of the Bose-Einstein.
+4. In() - Inverse Document Frequency model.
+5. InFreq() - Inverse Term Frequency model.
+6. InExp() - Inverse Expected Document Frequency model.
+
+
+***After Effect:***
+
+1. L() - Laplace’s law of succession.
+2. B() - Ratio of two Bernoulli processes.
+
+
+***Normalization:***
+
+1. NormalizationH1() - Uniform distribution of the term frequency.
+2. NormalizationH2() - The term frequency density is inversely related to the length.
+
+
+### Algebraic Models ###
+
+These are specified via the **VectorRanking(model, documentset)** class.
 
 1. Vector Space Model
 2. Generalized Vector Space Model (TO-DO)
 3. Latent Semantic Indexing (TO-DO, not very much focused on, due to PHP's current speed at SVD's complexity)
 4. Lemur TF_IDF (TO-DO)
 
+
 ### Work-In-Progress ###
 
-1. Persistent support for indeces.
+1. Persistent support for indexing.
 
 
 Documentation
