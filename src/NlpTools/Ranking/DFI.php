@@ -7,8 +7,8 @@ use NlpTools\Ranking\ScoringInterface;
 
 
 /**
- * Divergence from Independence (DFI) is a class for ranking documents against a query based on 
- * Chi-square statistics.
+ * Divergence from Independence (DFI) is a non-parametric/parameter-free DFR-counterpart class for ranking documents
+ * against a query based on Chi-square statistics.
  * Kocabas, Dincer & Karaoglan
  * http://dx.doi.org/10.1007/s10791-013-9225-4
  * http://trec.nist.gov/pubs/trec18/papers/muglau.WEB.MQ.pdf
@@ -45,7 +45,7 @@ class DFI implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
     {
         $score = 0;
         $expected = ($termFrequency * $docLength) / $collectionLength;
@@ -61,7 +61,7 @@ class DFI implements ScoringInterface
             } elseif($this->type == self::CHI_SQUARED) {
                 $measure = $this->math->pow(($tf - $expected), 2)/$expected;
             }
-            $score += $this->math->log($measure + 1);
+            $score += $keyFrequency * $this->math->log($measure + 1);
             return $score;
         
 

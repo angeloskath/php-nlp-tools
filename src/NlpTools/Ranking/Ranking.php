@@ -28,10 +28,6 @@ class Ranking extends AbstractRanking
     {
         parent::__construct($tset);
         $this->type = $type;
-
-        if ($this->type == null) {
-            throw new \Exception("Ranking Model cannot be null.");
-        }
     }
 
     /**
@@ -51,6 +47,7 @@ class Ranking extends AbstractRanking
         //∑(Document, Query)
         foreach ($this->query->getDocumentData() as $term){
             $documentFrequency = $this->stats->documentFrequency($term);
+            $keyFrequency = $this->keyFrequency($this->query->getDocumentData(), $term);
             $termFrequency = $this->stats->termFrequency($term);
             $collectionLength = $this->stats->numberofCollectionTokens();
             $collectionCount = $this->stats->numberofDocuments();
@@ -59,7 +56,7 @@ class Ranking extends AbstractRanking
                 $docLength = $this->stats->numberofDocumentTokens($i);
                 $tf = $this->stats->tf($i, $term); 
                 if($tf != 0) {
-                    $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount);
+                    $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount);
                 }
             }
         }

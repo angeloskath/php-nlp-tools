@@ -66,6 +66,7 @@ class DFRRanking extends AbstractRanking
         foreach ($this->query->getDocumentData() as $term){
             $documentFrequency = $this->stats->documentFrequency($term);
             $termFrequency = $this->stats->termFrequency($term);
+            $keyFrequency = $this->keyFrequency($this->query->getDocumentData(), $term);
             $collectionLength = $this->stats->numberofCollectionTokens();
             $collectionCount = $this->stats->numberofDocuments();
             for($i = 0; $i < $collectionCount; $i++){
@@ -84,8 +85,8 @@ class DFRRanking extends AbstractRanking
                     if ($this->aftereffect) {
                         $gain = $this->aftereffect->gain($tfn, $documentFrequency, $termFrequency);
                     }
-
-                    $this->score[$i] += $gain * $this->basicmodel->score($tfn, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount);
+                    // ∑qtf x gain x Inf1(tf)
+                    $this->score[$i] += $keyFrequency * $gain * $this->basicmodel->score($tfn, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount);
                 }
                 
             }

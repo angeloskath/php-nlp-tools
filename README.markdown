@@ -87,10 +87,10 @@ $search->search($query_tokenized);
 
 1. Probabilistic Models (BM25/+).
 2. Divergence-From-Randomness Models
-..* Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
-..* [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) - where DFR Model is obtained by instantiating three components.
+ * Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
+ * [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) - where DFR Model is obtained by instantiating three components.
 3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM, TwoStageLM)
-4. Divergence-From-Independence Models (DFI(<1 to 3>))
+4. Divergence-From-Independence Models (DFI(1..3), IRRA12)
 
 
 ##### Algebraic Models #####
