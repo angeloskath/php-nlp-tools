@@ -45,7 +45,7 @@ class DFI implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount, $uniqueTermsCount)
     {
         $score = 0;
         $expected = ($termFrequency * $docLength) / $collectionLength;

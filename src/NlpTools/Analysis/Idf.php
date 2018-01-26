@@ -23,6 +23,7 @@ class Idf
     protected $documentFrequency;
     protected $numberofDocumentTokens;
     protected $tf;
+    protected $hapaxes;
 
 
     /**
@@ -45,6 +46,7 @@ class Idf
             $this->numberofDocuments++;
             $tokens = $ff->getFeatureArray($class,$doc);
             $flag = array();
+            $this->hapaxes[$class] = array();
             foreach ($tokens as $term) {
                     $this->numberofDocumentTokens[$class]++;
                     $this->numberofCollectionTokens++;
@@ -54,6 +56,7 @@ class Idf
                         $this->tf[$class][$term] = 0;
                     }
                     $this->tf[$class][$term]++;
+
 
                     if (isset($this->termFrequency[$term])){
                         $this->termFrequency[$term]++;
@@ -70,6 +73,11 @@ class Idf
                         $flag[$term] = true;
                         $this->documentFrequency[$term] = 1;
                     }
+            }
+            foreach ($this->tf[$class] as $sample => $count) {
+                if ($count == 1) {
+                    $this->hapaxes[$class][] = $sample;
+                }
             }
         }
 
@@ -180,6 +188,18 @@ class Idf
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Returns unique terms from a known $key.
+     * (hapax legomena)
+     *
+     * @param  int $key
+     * @return array
+     */
+    public function hapaxes($key)
+    {
+        return $this->hapaxes[$key];
     }
 
 

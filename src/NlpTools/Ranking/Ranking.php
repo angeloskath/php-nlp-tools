@@ -54,9 +54,10 @@ class Ranking extends AbstractRanking
             for($i = 0; $i < $collectionCount; $i++){
                 $this->score[$i] = isset($this->score[$i]) ? $this->score[$i] : 0;
                 $docLength = $this->stats->numberofDocumentTokens($i);
+                $uniqueTermsCount = count($this->stats->hapaxes($i));
                 $tf = $this->stats->tf($i, $term); 
                 if($tf != 0) {
-                    $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount);
+                    $this->score[$i] += $this->type->score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount, $uniqueTermsCount);
                 }
             }
         }

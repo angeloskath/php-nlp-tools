@@ -11,6 +11,8 @@ use NlpTools\Ranking\Normalization\NormalizationInterface;
 
 /**
  * DFRWeightingModel is a framework for ranking documents against a query based on Harter's 2-Poisson index-model.
+ * S.P. Harter. A probabilistic approach to automatic keyword indexing. PhD thesis, Graduate Library, The University of
+ * Chicago, Thesis No. T25146, 1974
  * This class provides an alternative way of specifying an arbitrary DFR weighting model, by mixing the used components.
  *
  * The implementation is strictly based on G. Amati, C. Rijsbergen paper:
