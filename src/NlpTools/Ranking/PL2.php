@@ -53,7 +53,7 @@ class PL2 implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount)
     {
         $score = 0;
 
@@ -62,7 +62,7 @@ class PL2 implements ScoringInterface
             $TF = $tf * $this->getTfN2($docLength, $avg_dl);
             $NORM = 1 / ($TF + 1);
             $f = $termFrequency / $collectionCount;
-            $score += $NORM  * $keyFrequency 
+            $score += $NORM
                       * ($TF * $this->math->log(1/$f)
                       + $f * $this->math->log2ofE()
                       + 0.5 * $this->math->log(2 * pi() * $TF)

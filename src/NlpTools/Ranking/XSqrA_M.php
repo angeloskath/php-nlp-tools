@@ -33,7 +33,7 @@ class XSqrA_M implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount)
     {
         $score = 0;
 
@@ -48,7 +48,7 @@ class XSqrA_M implements ScoringInterface
 
             $InformationDelta =  (($tf+1) * $this->math->log($smoothedProbability/$collectionPrior) - $tf*$this->math->log($mle /$collectionPrior) +0.5*$this->math->log($smoothedProbability/$mle));
 
-            $score += $keyFrequency * $tf * $XSqrA * $InformationDelta;
+            $score += $tf * $XSqrA * $InformationDelta;
         }
 
         return $score;

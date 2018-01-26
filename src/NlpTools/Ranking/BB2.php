@@ -47,9 +47,9 @@ class BB2 implements ScoringInterface
         return $this->math->log(1 + ($this->c * $avg_dl)/$docLength);
     }
 
-    private function getBB2($NORM, $keyFrequency, $numberOfDocuments, $termFrequency, $TF)
+    private function getBB2($NORM, $numberOfDocuments, $termFrequency, $TF)
     {
-        return $NORM * $keyFrequency
+        return $NORM 
                         * ( -($this->math->log($numberOfDocuments  - 1))
                             - $this->math->log2ofE()
                             + $this->math->stirlingPower(
@@ -68,7 +68,7 @@ class BB2 implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount)
     {
 
         $score = 0;
@@ -77,7 +77,7 @@ class BB2 implements ScoringInterface
             $avg_dl = $docLength/$collectionLength;
             $TF = $tf * $this->getTfN2($docLength, $avg_dl);
             $NORM = ($termFrequency + 1) / ($documentFrequency * ($TF + 1));
-            $score += $this->getBB2($NORM, $keyFrequency, $collectionCount, $termFrequency, $TF);
+            $score += $this->getBB2($NORM, $collectionCount, $termFrequency, $TF);
         }
 
         return $score;

@@ -66,10 +66,13 @@ $tset = new TrainingSet();
 
 $query_tokenized = new TokensDocument(array("big","salmon"));
 
-// select probabilistic model
+// select Probabilistic model
 $search = new Ranking(new BM25(), $tset);
 $search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
 
+// or basic DFR model
+$search = new DFRRanking(new In(), new B(), new NormalizationH1(), $tset);
+$search->search($query_tokenized);
 // or
 
 // select algebraic model
@@ -83,7 +86,9 @@ $search->search($query_tokenized);
 ##### Probabilistic Models #####
 
 1. Probabilistic Models (BM25/+).
-2. Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
+2. Divergence-From-Randomness Models
+..* Divergence-From-Randomness Models (BB2, IFB2, InB2, InL2, PL2, XSqrA_M)
+..* [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) - where DFR Model is obtained by instantiating three components.
 3. Language Models (HiemstraLM, DirichletLM, JelinekMercerLM, TwoStageLM)
 4. Divergence-From-Independence Models (DFI(<1 to 3>))
 

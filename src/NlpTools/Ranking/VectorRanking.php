@@ -31,6 +31,10 @@ class VectorRanking extends AbstractRanking
     {
         parent::__construct($tset);
         $this->type = $type;
+
+        if ($this->type == null) {
+            throw new \Exception("Ranking Model cannot be null.");
+        }
     }
 
     /**

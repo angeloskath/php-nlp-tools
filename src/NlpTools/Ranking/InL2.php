@@ -55,7 +55,7 @@ class InL2 implements ScoringInterface
      * @param  string $term
      * @return float
      */
-    public function score($tf, $docLength, $documentFrequency, $keyFrequency, $termFrequency, $collectionLength, $collectionCount)
+    public function score($tf, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount)
     {
         $score = 0;
 
@@ -63,7 +63,7 @@ class InL2 implements ScoringInterface
             $avg_dl = $docLength/$collectionLength;
             $TF = $tf * $this->getTfN2($docLength, $avg_dl);
             $NORM = 1 / ($TF + 1);
-            $score += ($TF * $this->math->log(($documentFrequency+1)/0.5) * $keyFrequency * $NORM);
+            $score += ($TF * $this->math->log(($documentFrequency+1)/0.5) * $NORM);
         }
 
         return $score;
