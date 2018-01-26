@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 
@@ -21,14 +20,11 @@ class HiemstraLM implements ScoringInterface
 
     const C = 0.15;
 
-    protected $math;
-
     protected $c;
 
     public function __construct($c = self::C)
     {
         $this->c    = $c;
-        $this->math = new Math();
     }
 
     /**
@@ -40,7 +36,7 @@ class HiemstraLM implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $score += $this->math->mathlog(1 + ( ($this->c * $tf * $collectionLength) / ((1-$this->c) * $termFrequency * $docLength)));
+            $score += log(1 + ( ($this->c * $tf * $collectionLength) / ((1-$this->c) * $termFrequency * $docLength)));
         }
 
         return $score;

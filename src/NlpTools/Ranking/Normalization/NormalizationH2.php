@@ -22,7 +22,7 @@ class NormalizationH2 extends Normalization implements NormalizationInterface
 
     public function normalise($tf, $docLength, $termFrequency, $collectionLength) {
     	$avg_dl = $docLength/$collectionLength;
-    	return $tf * $this->math->log(1 + $this->c * $avg_dl / $docLength);
+    	return $tf * $this->math->DFRlog(1 + $this->c * $avg_dl / $docLength);
     }
 
 }

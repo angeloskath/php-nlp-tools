@@ -29,7 +29,7 @@ class BE extends BasicModel implements BasicModelInterface
      */
     public function score($tfn, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount){
 		return (
-				- $this->math->log($collectionCount - 1)
+				- $this->math->DFRlog($collectionCount - 1)
 				- $this->math->log2ofE()
 				+ $this->math->stirlingPower(
 					$collectionCount

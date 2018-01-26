@@ -44,13 +44,13 @@ class BB2 implements ScoringInterface
      */
     private function getTfN2($docLength, $avg_dl)
     {
-        return $this->math->log(1 + ($this->c * $avg_dl)/$docLength);
+        return $this->math->DFRlog(1 + ($this->c * $avg_dl)/$docLength);
     }
 
     private function getBB2($NORM, $keyFrequency, $numberOfDocuments, $termFrequency, $TF)
     {
         return $NORM * $keyFrequency
-                        * ( -($this->math->log($numberOfDocuments  - 1))
+                        * ( -($this->math->DFRlog($numberOfDocuments  - 1))
                             - $this->math->log2ofE()
                             + $this->math->stirlingPower(
                                 $numberOfDocuments

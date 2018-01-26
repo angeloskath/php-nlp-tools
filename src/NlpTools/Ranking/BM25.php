@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 /**
@@ -40,14 +39,11 @@ class BM25 implements ScoringInterface
 
     protected $d;
 
-    protected $math;
-
     public function __construct($b = self::B, $k = self::K, $d = self::D)
     {
         $this->b = $b;
         $this->k = $k;
         $this->d = $d;
-        $this->math = new Math();
     }
 
     /**
@@ -61,7 +57,7 @@ class BM25 implements ScoringInterface
         $score = 0;
 
         if($tf != 0){
-            $idf = $this->math->mathLog(1 + (($collectionCount-$documentFrequency+0.5)/($documentFrequency + 0.5)));
+            $idf = log(1 + (($collectionCount-$documentFrequency+0.5)/($documentFrequency + 0.5)));
             $avg_dl = $docLength/$collectionLength;
             $num = $tf * ($this->k + 1);
             $denom = $tf + $this->k * (1 - $this->b + $this->b * ($docLength / $avg_dl));

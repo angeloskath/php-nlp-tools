@@ -59,9 +59,9 @@ class DFI implements ScoringInterface
             } elseif($this->type == self::STANDARDIZED) {
                 $measure = ($tf - $expected) / sqrt($expected);
             } elseif($this->type == self::CHI_SQUARED) {
-                $measure = $this->math->pow(($tf - $expected), 2)/$expected;
+                $measure = pow(($tf - $expected), 2)/$expected;
             }
-            $score += $keyFrequency * $this->math->log($measure + 1);
+            $score += $keyFrequency * $this->math->DFRlog($measure + 1);
             return $score;
         
 

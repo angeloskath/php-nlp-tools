@@ -18,7 +18,7 @@ abstract class BasicModel
     abstract protected function score($tfn, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount);
 
     protected function idfDFR($collectionCount, $d) {
-        return $this->math->log(($collectionCount+1)/($d+0.5));
+        return $this->math->DFRlog(($collectionCount+1)/($d+0.5));
     }
 
 }

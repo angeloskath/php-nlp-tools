@@ -63,10 +63,10 @@ class PL2 implements ScoringInterface
             $NORM = 1 / ($TF + 1);
             $f = $termFrequency / $collectionCount;
             $score += $NORM  * $keyFrequency 
-                      * ($TF * $this->math->log(1/$f)
+                      * ($TF * $this->math->DFRlog(1/$f)
                       + $f * $this->math->log2ofE()
-                      + 0.5 * $this->math->log(2 * pi() * $TF)
-                      + $TF * ($this->math->log($TF) - $this->math->log2ofE()));
+                      + 0.5 * $this->math->DFRlog(2 * pi() * $TF)
+                      + $TF * ($this->math->DFRlog($TF) - $this->math->log2ofE()));
         }
 
         return $score;

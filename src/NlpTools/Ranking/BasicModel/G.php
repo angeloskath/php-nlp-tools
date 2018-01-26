@@ -33,7 +33,7 @@ class G extends BasicModel implements BasicModelInterface
 
     	// original formula provides negative result, so rewrite to make positive
     	// -log(1 / (lambda + 1)) -> log(lambda + 1)
-		return (($this->math->log($lambda + 1)) - $tfn) * ($this->math->log((1 + $lambda) / $lambda)) ;
+		return (($this->math->DFRlog($lambda + 1)) - $tfn) * ($this->math->DFRlog((1 + $lambda) / $lambda)) ;
 
 	}
 

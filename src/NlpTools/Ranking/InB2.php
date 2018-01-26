@@ -46,7 +46,7 @@ class InB2 implements ScoringInterface
      */
     private function getTfN2($docLength, $avg_dl)
     {
-        return $this->math->log(1 + ($this->c * $avg_dl)/$docLength);
+        return $this->math->DFRlog(1 + ($this->c * $avg_dl)/$docLength);
     }
 
 
@@ -63,7 +63,7 @@ class InB2 implements ScoringInterface
             $avg_dl = $docLength/$collectionLength;
             $TF = $tf * $this->getTfN2($docLength, $avg_dl);
             $NORM = ($termFrequency + 1) / ($documentFrequency * ($TF + 1));
-            $score += ($TF * $this->math->log(($documentFrequency+1)/0.5) * $keyFrequency * $NORM);
+            $score += ($TF * $this->math->DFRlog(($documentFrequency+1)/0.5) * $keyFrequency * $NORM);
         }
 
         return $score;

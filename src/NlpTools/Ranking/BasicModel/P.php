@@ -30,10 +30,10 @@ class P extends BasicModel implements BasicModelInterface
     public function score($tfn, $docLength, $documentFrequency, $termFrequency, $collectionLength, $collectionCount){
 
         $f = (1 * $termFrequency) / (1 * $collectionCount);
-		return ($tfn * $this->math->log(1 / $f)
+		return ($tfn * $this->math->DFRlog(1 / $f)
                 + $f * $this->math->log2ofE()
-                + 0.5 * $this->math->log(2 * pi() * $tfn)
-                + $tfn * ($this->math->log($tfn) - $this->math->log2ofE()));
+                + 0.5 * $this->math->DFRlog(2 * pi() * $tfn)
+                + $tfn * ($this->math->DFRlog($tfn) - $this->math->log2ofE()));
 
 	}
 

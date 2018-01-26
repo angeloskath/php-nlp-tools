@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 
@@ -32,7 +31,6 @@ class JelinekMercerLM implements ScoringInterface
     public function __construct($mu = self::MU)
     {
         $this->mu = $mu;
-        $this->math = new Math();
 
     }
  
@@ -46,7 +44,7 @@ class JelinekMercerLM implements ScoringInterface
 
         if($tf != 0){
             $smoothed_probability = $termFrequency / $collectionLength;
-            $score += $this->math->mathLog(1 + (((1 - $this->mu) * $tf) / $docLength) + ($this->mu * $smoothed_probability));
+            $score += log(1 + (((1 - $this->mu) * $tf) / $docLength) + ($this->mu * $smoothed_probability));
         }
 
         return $score;

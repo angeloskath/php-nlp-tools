@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 
@@ -19,15 +18,6 @@ use NlpTools\Ranking\ScoringInterface;
 class IRRA12 implements ScoringInterface
 {
 
-
-    protected $math;
-
-
-    public function __construct()
-    {
-        $this->math = new Math();
-    }
- 
     /**
      * ∑qtf × ∆(Iij) × Λij
      * @param  string $term
@@ -48,7 +38,7 @@ class IRRA12 implements ScoringInterface
             // Λij
             $suppress_junk = pow($alpha, (3/4)) * pow($beta, (1/4));
             // ∆(Iij)
-            $score += (($tf + 1) * $this->math->log(($tf + 1)/sqrt($expected))) - ($tf * $this->math->log($tf/sqrt($expected)));
+            $score += (($tf + 1) * log(($tf + 1)/sqrt($expected))) - ($tf * log($tf/sqrt($expected)));
             return $score * $keyFrequency * $suppress_junk;
         
 

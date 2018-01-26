@@ -14,35 +14,14 @@ class Math
 
     /**
      * The base 2 log of the given expression
+     * mostly used in DFR models
      * 
      * @param  mixed $expression
      * @return mixed
      */
-    public function log($expression)
+    public function DFRlog($expression)
     {
         return log($expression) * $this->log2ofE();
-    }
-
-    /**
-     * The log of the given expression
-     * 
-     * @param  mixed $expression
-     * @return mixed
-     */
-    public function mathLog($expression)
-    {
-        return log($expression);
-    }
-
-    /**
-     * Returns $base raised to the power of $exp.
-     * 
-     * @param  mixed $expression
-     * @return mixed
-     */
-    public function pow($base, $exp)
-    {
-        return pow($base, $exp);
     }
 
     /**

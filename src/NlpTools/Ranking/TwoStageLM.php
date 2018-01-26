@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 
@@ -32,8 +31,6 @@ class TwoStageLM implements ScoringInterface
 
     const LAMBDA = 2500;
 
-    protected $math;
-
     protected $lambda;
 
     protected $mu;
@@ -42,7 +39,6 @@ class TwoStageLM implements ScoringInterface
     {
         $this->mu = $mu;
         $this->lambda = $lambda;
-        $this->math = new Math();
     }
  
     /**
@@ -55,7 +51,7 @@ class TwoStageLM implements ScoringInterface
 
         if($tf != 0){
             $smoothed_probability = $termFrequency / $collectionLength;
-            $score += $this->math->mathLog(1 + (((1 - $this->mu) * ($tf + ($this->lambda * $smoothed_probability)) / ($docLength + $this->lambda)) + ($this->mu * $smoothed_probability)));
+            $score += log(1 + (((1 - $this->mu) * ($tf + ($this->lambda * $smoothed_probability)) / ($docLength + $this->lambda)) + ($this->mu * $smoothed_probability)));
 
         }
 

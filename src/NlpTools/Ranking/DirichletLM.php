@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 
@@ -25,14 +24,11 @@ class DirichletLM implements ScoringInterface
 
     const LAMBDA = 2500;
 
-    protected $math;
-
     protected $lambda;
 
     public function __construct($lambda = self::LAMBDA)
     {
         $this->lambda = $lambda;
-        $this->math = new Math();
 
     }
  
@@ -46,7 +42,7 @@ class DirichletLM implements ScoringInterface
 
         if($tf != 0){
             $smoothed_probability = $termFrequency / $collectionLength;
-            $score += $this->math->mathLog(1 + ($tf + $this->lambda * $smoothed_probability) / ($docLength + $this->lambda));
+            $score += log(1 + ($tf + $this->lambda * $smoothed_probability) / ($docLength + $this->lambda));
 
         }
 

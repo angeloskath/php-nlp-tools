@@ -2,7 +2,6 @@
 
 namespace NlpTools\Ranking;
 
-use NlpTools\Math\Math;
 use NlpTools\Ranking\ScoringInterface;
 
 /**
@@ -22,13 +21,6 @@ use NlpTools\Ranking\ScoringInterface;
 class XSqrA_M implements ScoringInterface
 {
 
-    protected $math;
-    
-    public function __construct()
-    {
-        $this->math = new Math();
-    }
-
     /**
      * @param  string $term
      * @return float
@@ -44,9 +36,9 @@ class XSqrA_M implements ScoringInterface
 
             $collectionPrior = $termFrequency/$collectionLength;
 
-            $XSqrA = $this->math->pow(1-$mle,2)/($tf+1);  
+            $XSqrA = pow(1-$mle,2)/($tf+1);  
 
-            $InformationDelta =  (($tf+1) * $this->math->log($smoothedProbability/$collectionPrior) - $tf*$this->math->log($mle /$collectionPrior) +0.5*$this->math->log($smoothedProbability/$mle));
+            $InformationDelta =  ($tf+1) * log($smoothedProbability/$collectionPrior) - $tf*log($mle /$collectionPrior) +0.5*log($smoothedProbability/$mle);
 
             $score += $keyFrequency * $tf * $XSqrA * $InformationDelta;
         }
