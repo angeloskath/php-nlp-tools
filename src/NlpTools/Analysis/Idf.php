@@ -7,93 +7,61 @@ use NlpTools\FeatureFactories\FeatureFactoryInterface;
 use NlpTools\FeatureFactories\DataAsFeatures;
 
 /**
- * Idf implements the inverse document frequency measure.
- * Idf is a measure of whether a term T is common or rare accross
- * a set of documents.
- *
- * Idf implements the ArrayAccess interface so it should be used
- * as a read only array that contains tokens as keys and idf values
- * as values.
+ * tf is the number of occurences of the $term in a document with a known $key.
+ * idf is the inverse function of the number of documents in which it occurs.
  */
-class Idf implements \ArrayAccess
+
+class Idf extends Statistics
 {
-    protected $logD;
-    protected $idf;
+
+    protected $tf;
 
     /**
-     * @param TrainingSet             $tset The set of documents for which we will compute the idf
-     * @param FeatureFactoryInterface $ff   A feature factory to translate the document data to single tokens
+     * @param TrainingSet $tset The set of documents for which we will compute token stats
+     * @param FeatureFactoryInterface $ff A feature factory to translate the document data to 
+     * single tokens
      */
     public function __construct(TrainingSet $tset, FeatureFactoryInterface $ff=null)
     {
-        if ($ff===null)
-            $ff = new DataAsFeatures();
-
-        $tset->setAsKey(TrainingSet::CLASS_AS_KEY);
-        foreach ($tset as $class=>$doc) {
-            $tokens = $ff->getFeatureArray($class,$doc); // extract tokens from the document
-            $tokens = array_fill_keys($tokens,1); // make them occur once
-            foreach ($tokens as $token=>$v) {
-                if (isset($this->idf[$token]))
-                    $this->idf[$token]++;
-                else
-                    $this->idf[$token] = 1;
-            }
-        }
-
-        // this idf so far contains the doc frequency
-        // we will now inverse it and take the log
-        $D = count($tset);
-        foreach ($this->idf as &$v) {
-            $v = log($D/$v);
-        }
-        $this->logD = log($D);
+        parent::__construct($tset, $ff);
     }
 
     /**
-     * Implements the array access interface. Return the computed idf or
-     * the logarithm of the count of the documents for a token we have not
-     * seen before.
-     *
-     * @param  string $token The token to return the idf for
-     * @return float  The idf
+     * Returns the idf weight containing the query word in the entire collection.
+     * 
+     * @param  string $term
+     * @return mixed
      */
-    public function offsetGet($token)
+    public function idf($term)
     {
-        if (isset($this->idf[$token])) {
-            return $this->idf[$token];
+
+        if (isset($this->documentFrequency[$term])) {
+            return log($this->numberofDocuments/$this->documentFrequency[$term]);
         } else {
-            return $this->logD;
+            return log($this->numberofDocuments);
+        }
+
+    }
+
+    /**
+     * Returns number of occurences of the $term in a document with a known $key.
+     * (tf)
+     * While FreqDist Class is originally implemented as a one-off use to get tf from a collection of 
+     * tokens, this should be used to get tf in relation to the entire corpus collection. Using this in 
+     * Ranking should reduce reindexing time.
+     *
+     * @param  string $term
+     * @param  int $key
+     * @return int
+     */
+    public function tf($key, $term)
+    {
+        if (isset($this->tf[$key][$term])) {
+            return $this->tf[$key][$term];
+        } else {
+            return 0;
         }
     }
 
-    /**
-     * Implements the array access interface. Return true if the token exists
-     * in the corpus.
-     *
-     * @param  string $token The token to check if it exists in the corpus
-     * @return bool
-     */
-    public function offsetExists($token)
-    {
-        return isset($this->idf[$token]);
-    }
 
-    /**
-     * Will not be implemented. Throws \BadMethodCallException because
-     * one should not be able to alter the idf values directly.
-     */
-    public function offsetSet($token, $value)
-    {
-        throw new \BadMethodCallException("The idf of a specific token cannot be set explicitly");
-    }
-
-    /**
-     * Will not be implemented. Throws \BadMethodCallException because
-     * one should not be able to alter the idf values directly.
-     */
-    public function offsetUnset($token)
-    {
-        throw new \BadMethodCallException("The idf of a specific token cannot be unset");
-    }
 }

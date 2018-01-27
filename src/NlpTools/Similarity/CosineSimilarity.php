@@ -19,10 +19,10 @@ namespace NlpTools\Similarity;
  * vector is supposed to have been passed as a mapping between the feature name
  * and a value like the following
  * array(
- * 	'feature_1'=>1,
- * 	'feature_2'=>0.55,
- * 	'feature_3'=>12.7,
- * 	....
+ *  'feature_1'=>1,
+ *  'feature_2'=>0.55,
+ *  'feature_3'=>12.7,
+ *  ....
  * )
  */
 class CosineSimilarity implements SimilarityInterface, DistanceInterface

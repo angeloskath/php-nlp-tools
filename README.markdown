@@ -4,6 +4,177 @@
 NlpTools is a set of php 5.3+ classes for beginner to
 semi advanced natural language processing work.
 
+This is forked from [php-nlp-tools](https://github.com/angeloskath/php-nlp-tools) and it contains some additions that was helpful for me at the time.
+
+### Added Features ###
+
+1. [Tversky Index](https://en.wikipedia.org/wiki/Tversky_index)
+2. [Overlap Coefficient Similarity](https://en.wikipedia.org/wiki/Overlap_coefficient)
+3. [Sørensen/Dice Coefficient Similarity](http://en.wikipedia.org/wiki/Sørensen–Dice_coefficient)
+4. [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) - because PHP's levenshtein() implementation is limitted to 255 characters.
+5. [Jaro-Winkler Distance](https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance)
+6. WeightedScoring - NLP meets IR.
+
+### Changes ###
+
+1. Optimized getHapaxes method.
+2. Extending FreqDist's Term Weighing feature.
+```
+$freqDist = new FreqDist(array("time", "flies", "like", "an", "arrow"));
+$freqDist->getTotalByToken('an');
+$freqDist->getTokenWeight('an');
+```
+3. Extending Idf's global collection stats.
+```
+$ts = new TrainingSet();
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","b","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a","c","d"))
+        );
+        $ts->addDocument(
+            "",
+            new TokensDocument(array("a"))
+        );
+
+$idf = new Idf($ts);
+printf($idf->idf("b")); //1.098 (exposing it thru a method)
+printf($idf->numberofDocuments()); //3
+printf($idf->termFrequency("a"));  //3
+printf($idf->documentFrequency("b"));  //1
+printf($idf->numberofCollectionTokens());  //8
+```
+4. WeightedScoring.
+```
+// your documents
+$tset = new TrainingSet();
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("this","is","a","big", "fish"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("deadpool","is","a","big", "jerk"))
+        );
+        $tset->addDocument(
+            "",
+            new TokensDocument(array("i","love","a","big", "salmon"))
+        );
+
+$query_tokenized = new TokensDocument(array("big","salmon"));
+
+// select Probabilistic model
+
+$search = new Ranking(new BM25(), $tset);
+$search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
+
+// or mixing DFR framework
+
+$search = new DFRRanking(new In(), new B(), new NormalizationH1(), $tset);
+$search->search($query_tokenized);
+
+// or select algebraic model
+
+$search = new VectorSpaceModel($tset);
+  // or
+$search = new PivotedNormalizedVSM($tset);
+  // or
+$search = new LemurTfIdfVSM($tset);
+$search->search($query_tokenized);
+```
+
+
+[Scoring Options](https://github.com/jtejido/php-nlp-tools/tree/master/src/NlpTools/Ranking)
+-------------
+
+### Probabilistic Models ###
+
+These are specified via the **Ranking(model, documentset)** class.
+
+***Probabilistic Relevance Models***
+
+1. BM25() - Okapi's Best Matching algorithm.
+
+
+***Divergence-From-Randomness (DFR)***
+
+1. BB2() - Bernoulli-Einstein model with Bernoulli after-effect and normalization 2.
+2. IFB2() - Inverse Term Frequency model with Bernoulli after-effect and normalization 2.
+3. InB2() - Inverse Document Frequency model with Bernoulli after-effect and normalization 2.
+4. InL2() - Inverse Document Frequency model with Laplace after-effect and normalization 2.
+5. PL2() - Poisson model with Laplace after-effect and normalization 2.
+6. XSqrA_M() - Inner product of Pearson's X^2 with the information growth computed with the multinomial M.
+
+
+***Language Models***
+
+1. HiemstraLM() - Based on Hiemstra's [work](https://pdfs.semanticscholar.org/67ba/b01706d3aada95e383f1296e5f019b869ae6.pdf)
+2. DirichletLM() - Bayesian smoothing with Dirichlet Prior.
+3. JelinekMercerLM() - Based on the Jelinek-Mercer smoothing method.
+4. AbsoluteDiscountingLM() - Absolute Discounting smoothing method.
+5. TwoStageLM() - Leave-one-out method. This is also a generalization of both DirichletLM and JelinekMercerLM methods.
+
+
+***Divergence-From-Independence (DFI)***
+
+1. DFI(1) - Saturated measure of distance from independence.
+2. DFI(2) - Normalized chi-squared measure of distance from independence.
+3. DFI(3) - Standardized measure of distance from independence.
+4. IRRA12() -  Term weighting model developed on the basis of Shannon’s [Information Theory](https://en.wikipedia.org/wiki/Information_theory). 
+
+
+#### [DFR Framework](http://terrier.org/docs/v4.2/dfr_description.html) ####
+
+DFR models are obtained by instantiating the three components of the framework: 
+
+1. Selecting a basic randomness model.
+2. Applying the first normalisation.
+3. Normalising the term frequencies.
+
+These are all used via the **DFRRanking(model, aftereffect, normalization, documentset)** class.
+
+
+***Models:***
+
+1. P() - Approximation of the binomial.
+2. BE() - Bose-Einstein distribution.
+3. G() - Geometric approximation of the Bose-Einstein.
+4. In() - Inverse Document Frequency model.
+5. InFreq() - Inverse Term Frequency model.
+6. InExp() - Inverse Expected Document Frequency model.
+
+
+***After Effect:***
+
+1. L() - Laplace’s law of succession.
+2. B() - Ratio of two Bernoulli processes.
+
+
+***Normalization:***
+
+1. NormalizationH1() - Uniform distribution of the term frequency.
+2. NormalizationH2() - The term frequency density is inversely related to the length.
+
+
+### Algebraic Models ###
+
+These are used separately.
+
+1. VectorSpaceModel(documentset) - Classic (D,Q) tf-idf vectors computed thru Cosine similarity.
+2. PivotedNormalizedVSM(documentset) - Alternative to cosine normalization that removes a bias inherent in standard length normalization.
+3. LemurTfIdfVSM(documentset) - Implementation of Robertson's Tf in tf-idf Vector.
+
+
+### Work-In-Progress ###
+
+1. Persistent support for indexing.
+2. Generalized Vector Space Model (TO-DO)
+3. Latent Semantic Indexing (TO-DO, not very much focused on, due to PHP's current speed at SVD's complexity)
+
+
 Documentation
 -------------
 
