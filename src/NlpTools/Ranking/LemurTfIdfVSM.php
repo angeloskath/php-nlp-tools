@@ -5,17 +5,20 @@ namespace NlpTools\Ranking;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Ranking\VectorScoringInterface;
 use NlpTools\Documents\DocumentInterface;
-use NlpTools\FeatureFactories\TfIdfFeatureFactory;
+use NlpTools\FeatureFactories\LemurTfIdfFeatureFactory;
+use NlpTools\Analysis\Idf;
+use NlpTools\Math\Math;
 
 
 /**
- * A Wrapper for weighted retrieval using a specific IR scheme
+ * This class implements the TF_IDF weighting model as it is implemented in Lemur Project.
+ * See http://www.cs.cmu.edu/~lemur/1.0/tfidf.ps Notes on the Lemur TFIDF model. Chenxiang Zhai, 2001</a>.
  *
- * The class receives an implementation of VectorScoringInterface, and TrainingSet, then tokenized 
- * queries to search and compute each TrainingSet document's score.
+ * @author Jericko Tejido <jtbibliomania@gmail.com>
  */
 
-class VectorRanking extends AbstractRanking
+
+class LemurTfIdfVSM extends AbstractRanking
 {
 
 
@@ -23,18 +26,17 @@ class VectorRanking extends AbstractRanking
 
     protected $score;
 
-    protected $type;
+    protected $stats;
 
     protected $tfidf;
 
-    public function __construct(VectorScoringInterface $type, TrainingSet $tset)
+    protected $math;
+
+    public function __construct(TrainingSet $tset)
     {
         parent::__construct($tset);
-        $this->type = $type;
-
-        if ($this->type == null) {
-            throw new \Exception("Ranking Model cannot be null.");
-        }
+        $this->stats = new Idf($this->tset);
+        $this->math = new Math();
     }
 
     /**
@@ -46,7 +48,7 @@ class VectorRanking extends AbstractRanking
     public function search(DocumentInterface $q)
     {
 
-        $this->tfidf = new TfIdfFeatureFactory(
+        $this->tfidf = new LemurTfIdfFeatureFactory(
             $this->stats,
             array(
                 function ($c, $d) {
@@ -62,11 +64,22 @@ class VectorRanking extends AbstractRanking
         for($i = 0; $i < count($this->tset); $i++){
             $query = $this->tfidf->getFeatureArray('', $this->query);
             $documents = $this->tfidf->getFeatureArray('', $this->tset->offsetGet($i));
-            $this->score[$i] = $this->type->score($query, $documents);
+            $this->score[$i] = $this->score($query, $documents);
         }
 
         arsort($this->score);
         return $this->score;
+
+    }
+
+    private function score($query, $documents)
+    {
+
+        $normA = $this->math->norm($query);
+        $normB = $this->math->norm($documents);
+        return (($normA * $normB) != 0)
+               ? $this->math->dotProduct($query, $documents) / ($normA * $normB)
+               : 0;
 
     }
 

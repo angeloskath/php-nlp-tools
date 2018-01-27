@@ -11,9 +11,6 @@ abstract class AbstractRanking
 
     protected $tset;
 
-    protected $stats;
-
-
     public function __construct(TrainingSet $tset)
     {
         $this->tset = $tset;
@@ -23,7 +20,6 @@ abstract class AbstractRanking
             ); 
         }
 
-        $this->stats = new Idf($this->tset);
         
     }
 

@@ -71,15 +71,18 @@ $query_tokenized = new TokensDocument(array("big","salmon"));
 $search = new Ranking(new BM25(), $tset);
 $search->search($query_tokenized); // Array ( [2] => 2.877.. [0] => 1.660.. [1] => 1.660..) 
 
-// or basic DFR model
+// or mixing DFR framework
 
 $search = new DFRRanking(new In(), new B(), new NormalizationH1(), $tset);
 $search->search($query_tokenized);
 
-// or
+// or select algebraic model
 
-// select algebraic model
-$search = new VectorRanking(new VectorSpaceModel(), $tset);
+$search = new VectorSpaceModel($tset);
+  // or
+$search = new PivotedNormalizedVSM($tset);
+  // or
+$search = new LemurTfIdfVSM($tset);
 $search->search($query_tokenized);
 ```
 
@@ -158,17 +161,18 @@ These are all used via the **DFRRanking(model, aftereffect, normalization, docum
 
 ### Algebraic Models ###
 
-These are specified via the **VectorRanking(model, documentset)** class.
+These are used separately.
 
-1. Vector Space Model
-2. Generalized Vector Space Model (TO-DO)
-3. Latent Semantic Indexing (TO-DO, not very much focused on, due to PHP's current speed at SVD's complexity)
-4. Lemur TF_IDF (TO-DO)
+1. VectorSpaceModel(documentset) - Classic (D,Q) tf-idf vectors computed thru Cosine similarity.
+2. PivotedNormalizedVSM(documentset) - Alternative to cosine normalization that removes a bias inherent in standard length normalization.
+3. LemurTfIdfVSM(documentset) - Implementation of Robertson's Tf in tf-idf Vector.
 
 
 ### Work-In-Progress ###
 
 1. Persistent support for indexing.
+2. Generalized Vector Space Model (TO-DO)
+3. Latent Semantic Indexing (TO-DO, not very much focused on, due to PHP's current speed at SVD's complexity)
 
 
 Documentation

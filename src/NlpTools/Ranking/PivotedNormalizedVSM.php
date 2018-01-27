@@ -5,26 +5,23 @@ namespace NlpTools\Ranking;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Ranking\VectorScoringInterface;
 use NlpTools\Documents\DocumentInterface;
-use NlpTools\FeatureFactories\TfIdfFeatureFactory;
-use NlpTools\Analysis\Idf;
+use NlpTools\FeatureFactories\PivotTfIdfFeatureFactory;
+use NlpTools\Analysis\PivotIdf;
 use NlpTools\Math\Math;
 
 
 /**
- * Vector Space Model is a Class for calculating Relevance ranking by comparing the deviation of angles
- * between each document vector and the original query vector.
+ * PivotedNormalizedVSM is using a pivoted normalized idf.
  *
- * It uses Cosine Similarity as similarity measure between tfidf vector matrices.
- * You can use current implementation of cosine similarity but it was made to return an
- * Exception in case of 0 vector product instead of 0.
- *
- * https://en.wikipedia.org/wiki/Vector_space_model#Example:_tf-idf_weights
+ * Amit Singhal, John Choi, Donald Hindle, David Lewis, and Fernando Pereira. AT&T at TREC-7. In
+ * Proceedings of the Seventh Text REtrieval Conference (TREC-7), pages 239–252. NIST Special Publication
+ * 500-242, July 1999.
  *
  * @author Jericko Tejido <jtbibliomania@gmail.com>
  */
 
 
-class VectorSpaceModel extends AbstractRanking
+class PivotedNormalizedVSM extends AbstractRanking
 {
 
 
@@ -43,7 +40,7 @@ class VectorSpaceModel extends AbstractRanking
     public function __construct(TrainingSet $tset)
     {
         parent::__construct($tset);
-        $this->stats = new Idf($this->tset);
+        $this->stats = new PivotIdf($this->tset);
         $this->math = new Math();
     }
 
@@ -56,7 +53,7 @@ class VectorSpaceModel extends AbstractRanking
     public function search(DocumentInterface $q)
     {
 
-        $this->tfidf = new TfIdfFeatureFactory(
+        $this->tfidf = new PivotTfIdfFeatureFactory(
             $this->stats,
             array(
                 function ($c, $d) {

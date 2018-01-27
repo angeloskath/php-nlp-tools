@@ -5,6 +5,7 @@ namespace NlpTools\Ranking;
 use NlpTools\Documents\TrainingSet;
 use NlpTools\Ranking\ScoringInterface;
 use NlpTools\Documents\DocumentInterface;
+use NlpTools\Analysis\Idf;
 
 
 /**
@@ -24,10 +25,17 @@ class Ranking extends AbstractRanking
 
     protected $type;
 
+    protected $stats;
+
     public function __construct(ScoringInterface $type, TrainingSet $tset)
     {
         parent::__construct($tset);
+        $this->stats = new Idf($this->tset);
         $this->type = $type;
+
+        if ($this->type == null) {
+            throw new \Exception("Ranking Model cannot be null.");
+        }
     }
 
     /**
