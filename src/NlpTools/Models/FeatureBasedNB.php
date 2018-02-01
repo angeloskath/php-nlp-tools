@@ -18,11 +18,11 @@ class FeatureBasedNB implements MultinomialNBModelInterface
     // probability for each unknown word in a class a/(len(terms[class])+a*len(V))
     protected $unknown;
 
-    public function __construct()
+    public function __construct($priors = [], $condprob = [], $unknown = [])
     {
-        $this->priors = array();
-        $this->condprob = array();
-        $this->unknown = array();
+        $this->priors = $priors;
+        $this->condprob = $condprob;
+        $this->unknown = $unknown;
     }
 
     /**
