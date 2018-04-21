@@ -240,7 +240,7 @@ class Lda
          $count_topics_docs = array();
          foreach ($this->count_docs_topics as $doc=>$topics) {
              foreach ($topics as $t=>$c)
-                $count_topics_docs[$doc][$t]++;
+                $count_topics_docs[$doc][$t]+=$c;
          }
 
          foreach ($p_t_d as $topic=>&$p) {
@@ -253,7 +253,7 @@ class Lda
              }
          }
 
-         return $p;
+         return $p_t_d;
      }
 
      /**
