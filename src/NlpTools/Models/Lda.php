@@ -247,9 +247,9 @@ class Lda
              foreach ($count_topics_docs as $doc=>$tc) {
                  $p[$doc] = ($tc[$topic] + $this->a)/$denom;
              }
-             if ($limit_words>0) {
+             if ($limit_docs>0) {
                  arsort($p);
-                 $p = array_slice($p,0,$limit_words,true); // true to preserve the keys
+                 $p = array_slice($p,0,$limit_docs,true); // true to preserve the keys
              }
          }
 
