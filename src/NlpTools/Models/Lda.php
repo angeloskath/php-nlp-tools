@@ -246,7 +246,7 @@ class Lda
                  if (!isset($count_topics_docs[$doc][$t])) {
                      $count_topics_docs[$doc][$t] = 0;
                  }
-                 $count_topics_docs[$doc][$t]++;
+                 $count_topics_docs[$doc][$t]+=$c;
              }
          }
 
