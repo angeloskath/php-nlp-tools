@@ -259,9 +259,9 @@ class Lda
      /**
       * Shortcut to getDocumentsPerTopicsProbabilities
       */
-     public function getTheta($limit_docs=-1)
+     public function getTheta($limit_words=-1)
      {
-         return $this->getDocumentsPerTopicsProbabilities($limit_docs);
+         return $this->getDocumentsPerTopicsProbabilities($limit_words);
      }
 
      /**
