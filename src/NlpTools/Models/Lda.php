@@ -260,7 +260,7 @@ class Lda
              }
          }
 
-         return $p;
+         return $p_t_d;
      }
 
      /**
