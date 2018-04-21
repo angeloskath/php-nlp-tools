@@ -225,10 +225,10 @@ class Lda
       * Get the probability of a document given a topic (theta according
       * to Griffiths and Steyvers)
       *
-      * @param $limit_docs Limit the results to the top n docs
+      * @param $limit_words Limit the results to the top n words
       * @return array A two dimensional array that contains the probabilities for each document
       */
-     public function getDocumentsPerTopicsProbabilities($limit_docs=-1)
+     public function getDocumentsPerTopicsProbabilities($limit_words=-1)
      {
          $p_t_d = array_fill_keys(
             range(0,$this->ntopics-1),
