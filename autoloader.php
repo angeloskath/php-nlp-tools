@@ -7,7 +7,7 @@ spl_autoload_register(function ($className) {
     $lastNsPos = strrpos($className,'\\');
     if ($lastNsPos!==false) {
         $namespace = substr($className,0,$lastNsPos);
-        $className = substr($className,$lastNsPos+1);
+        //$className = substr($className,$lastNsPos+1);
         $fileName .= str_replace('\\',DIRECTORY_SEPARATOR,$namespace).DIRECTORY_SEPARATOR;
     }
     $fileName .= str_replace('_',DIRECTORY_SEPARATOR,$className).'.php';
