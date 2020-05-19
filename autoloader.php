@@ -13,5 +13,5 @@ spl_autoload_register(function ($className) {
     $fileName .= str_replace('_',DIRECTORY_SEPARATOR,$className).'.php';
 
     if (file_exists($fileName))
-        require($fileName);
+        //require($fileName);
 });
