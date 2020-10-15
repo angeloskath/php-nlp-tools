@@ -150,7 +150,13 @@ class FeatureBasedNB implements MultinomialNBModelInterface
         foreach ($tset as $tdoc) {
             $ndocs++;
             $c = $tdoc->getClass();
-            $ndocs_per_class[$c]++;
+
+            if (isset($ndocs_per_class[$c])) {
+                $ndocs_per_class[$c]++;
+            } else {
+                $ndocs_per_class[$c] = 1;
+            }
+
             $features = $ff->getFeatureArray($c,$tdoc);
             if (is_int(key($features)))
                 $features = array_count_values($features);
@@ -158,7 +164,12 @@ class FeatureBasedNB implements MultinomialNBModelInterface
                 if (!isset($voc[$f]))
                     $voc[$f] = 0;
 
-                $termcount_per_class[$c]+=$fcnt;
+                if (isset($termcount_per_class[$c])) {
+                    $termcount_per_class[$c]+=$fcnt;
+                } else {
+                    $termcount_per_class[$c] = $fcnt;
+                }
+
                 if (isset($termcount[$c][$f]))
                     $termcount[$c][$f]+=$fcnt;
                 else
