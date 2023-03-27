@@ -14,6 +14,6 @@ class WhitespaceTokenizer implements TokenizerInterface
     {
         $arr = array();
 
-        return preg_split(self::PATTERN,$str,null,PREG_SPLIT_NO_EMPTY);
+        return preg_split(self::PATTERN,$str,0,PREG_SPLIT_NO_EMPTY);
     }
 }
