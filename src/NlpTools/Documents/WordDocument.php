@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Documents;
 
 use NlpTools\Utils\TransformationInterface;
@@ -10,21 +12,30 @@ use NlpTools\Utils\TransformationInterface;
  */
 class WordDocument implements DocumentInterface
 {
-    protected $word;
-    protected $before;
-    protected $after;
-    public function __construct(array $tokens, $index, $context)
+    protected string $word;
+
+    /**
+     * @var array<int, string>
+     */
+    protected array $before = [];
+
+    /**
+     * @var array<int, string>
+     */
+    protected array $after = [];
+
+    /**
+     * @param array<int, string> $tokens
+     */
+    public function __construct(array $tokens, int $index, int $context)
     {
         $this->word = $tokens[$index];
-
-        $this->before = array();
-        for ($start = max($index-$context,0);$start<$index;$start++) {
+        for ($start = max($index - $context, 0); $start < $index; $start++) {
             $this->before[] = $tokens[$start];
         }
 
-        $this->after = array();
-        $end = min($index+$context+1,count($tokens));
-        for ($start = $index+1;$start<$end;$start++) {
+        $end = min($index + $context + 1, count($tokens));
+        for ($start = $index + 1; $start < $end; $start++) {
             $this->after[] = $tokens[$start];
         }
     }
@@ -34,11 +45,11 @@ class WordDocument implements DocumentInterface
      * the second element being an array of previous words, and the
      * third an array of following words
      *
-     * @return array
+     * @return array<int, mixed>
      */
-    public function getDocumentData()
+    public function getDocumentData(): array
     {
-        return array($this->word,$this->before,$this->after);
+        return [$this->word, $this->before, $this->after];
     }
 
     /**
@@ -46,20 +57,18 @@ class WordDocument implements DocumentInterface
      * Filter out the null tokens from the context. If the word is transformed
      * to null it is for the feature factory to decide what to do.
      *
-     * @param TransformationInterface $transform The transformation to be applied
+     * @param TransformationInterface $transformation The transformation to be applied
      */
-    public function applyTransformation(TransformationInterface $transform)
+    public function applyTransformation(TransformationInterface $transformation): void
     {
-        $null_filter = function ($token) {
-            return $token!==null;
-        };
+        $null_filter = fn($token): bool => $token !== null;
 
-        $this->word = $transform->transform($this->word);
+        $this->word = $transformation->transform($this->word);
         // array_values for re-indexing
         $this->before = array_values(
             array_filter(
                 array_map(
-                    array($transform,"transform"),
+                    $transformation->transform(...),
                     $this->before
                 ),
                 $null_filter
@@ -68,11 +77,16 @@ class WordDocument implements DocumentInterface
         $this->after = array_values(
             array_filter(
                 array_map(
-                    array($transform,"transform"),
+                    $transformation->transform(...),
                     $this->after
                 ),
                 $null_filter
             )
         );
+    }
+
+    public function getClass(): string
+    {
+        return self::class;
     }
 }

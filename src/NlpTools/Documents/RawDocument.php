@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Documents;
 
 use NlpTools\Utils\TransformationInterface;
@@ -9,20 +11,22 @@ use NlpTools\Utils\TransformationInterface;
  */
 class RawDocument implements DocumentInterface
 {
-    protected $data;
-
-    public function __construct($data)
+    public function __construct(protected ?string $data)
     {
-        $this->data = $data;
     }
 
-    public function getDocumentData()
+    public function getDocumentData(): ?string
     {
         return $this->data;
     }
 
-    public function applyTransformation(TransformationInterface $transform)
+    public function applyTransformation(TransformationInterface $transformation): void
     {
-        $this->data = $transform->transform($this->data);
+        $this->data = $transformation->transform($this->data);
+    }
+
+    public function getClass(): string
+    {
+        return self::class;
     }
 }

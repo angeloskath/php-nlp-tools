@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
 /**
@@ -12,20 +14,22 @@ class HammingDistance implements DistanceInterface
     /**
      * Count the number of positions that A and B differ.
      *
-     * @param  string $A
-     * @param  string $B
-     * @return int    The hamming distance of the two strings A and B
+     * @param  array<int|string, mixed> $a Either a vector or a collection of tokens to be transformed to a vector
+     * @param  array<int|string, mixed> $b Either a vector or a collection of tokens to be transformed to a vector
      */
-    public function dist(&$A, &$B)
+    public function dist(array &$a, array &$b): float
     {
-        $l1 = strlen($A);
-        $l2 = strlen($B);
-        $l = min($l1,$l2);
+        $aa = $a[0];
+        $bb = $b[0];
+
+        $l1 = strlen((string) $aa);
+        $l2 = strlen((string) $bb);
+        $l = min($l1, $l2);
         $d = 0;
-        for ($i=0;$i<$l;$i++) {
-            $d += (int) ($A[$i]!=$B[$i]);
+        for ($i = 0; $i < $l; $i++) {
+            $d += (int) ($aa[$i] !== $bb[$i]);
         }
 
-        return $d + (int) abs($l1-$l2);
+        return $d + (int) abs($l1 - $l2);
     }
 }

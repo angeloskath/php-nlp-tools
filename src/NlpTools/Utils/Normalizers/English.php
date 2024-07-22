@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils\Normalizers;
 
 /**
@@ -9,8 +11,8 @@ namespace NlpTools\Utils\Normalizers;
  */
 class English extends Normalizer
 {
-    public function normalize($w)
+    public function normalize(string $w): string
     {
-        return mb_strtolower($w,"utf-8");
+        return mb_strtolower($w, "utf-8");
     }
 }

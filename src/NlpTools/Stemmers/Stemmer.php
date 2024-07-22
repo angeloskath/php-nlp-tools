@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Stemmers;
 
 use NlpTools\Utils\TransformationInterface;
@@ -9,29 +11,27 @@ use NlpTools\Utils\TransformationInterface;
  */
 abstract class Stemmer implements TransformationInterface
 {
-
     /**
      * Remove the suffix from $word
-     *
-     * @return string
      */
-    abstract public function stem($word);
+    abstract public function stem(string $word): string;
 
     /**
      * Apply the stemmer to every single token.
      *
-     * @return array
+     * @param array<int, string> $tokens
+     * @return array<int, string>
      */
-    public function stemAll(array $tokens)
+    public function stemAll(array $tokens): array
     {
-        return array_map(array($this,'stem'),$tokens);
+        return array_map($this->stem(...), $tokens);
     }
 
     /**
      * A stemmer's transformation is simply the replacing of a word
      * with its stem.
      */
-    public function transform($word)
+    public function transform(string $word): ?string
     {
         return $this->stem($word);
     }

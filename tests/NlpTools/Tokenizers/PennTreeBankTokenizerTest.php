@@ -1,54 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Tokenizers;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @author Dan Cardin
  */
-class PennTreeBankTokenizerTest extends \PHPUnit_Framework_TestCase
+class PennTreeBankTokenizerTest extends TestCase
 {
-    
-    public function testTokenizer()
+    public function testTokenizer(): void
     {
-        $tokenizer = new PennTreeBankTokenizer();
-        $tokens = $tokenizer->tokenize("Good muffins cost $3.88\nin New York.  Please buy me\ntwo of them.\nThanks.");
+        $pennTreeBankTokenizer = new PennTreeBankTokenizer();
+        $tokens = $pennTreeBankTokenizer->tokenize("Good muffins cost $3.88\nin New York.  Please buy me\ntwo of them.\nThanks.");
         $this->assertCount(16, $tokens);
     }
 
-    public function testTokenizer2()
+    public function testTokenizer2(): void
     {
-        $tokenizer = new PennTreeBankTokenizer();
-        $this->assertCount(7, $tokenizer->tokenize("They'll save and invest more."));
-    }
-    
-    public function testTokenizer3()
-    {
-        $tokenizer = new PennTreeBankTokenizer();
-        $this->assertCount(4, $tokenizer->tokenize("I'm some text"));
-    }
-    
-    public function testAgainstOriginalSedImplementation()
-    {
-        $tokenizer = new PennTreeBankTokenizer();
-        $tokenized = new \SplFileObject(TEST_DATA_DIR."/Tokenizers/PennTreeBankTokenizerTest/tokenized");
-        $tokenized->setFlags(\SplFileObject::DROP_NEW_LINE);
-        $sentences = new \SplFileObject(TEST_DATA_DIR."/Tokenizers/PennTreeBankTokenizerTest/test.txt");
-        $sentences->setFlags(\SplFileObject::DROP_NEW_LINE);
- 
-        $tokenized->rewind();
-        foreach ($sentences as $sentence) {
-            if ($sentence) // skip empty lines
-            {
-                $this->assertEquals(
-                    $tokenized->current(),
-                    implode(" ",$tokenizer->tokenize($sentence)),
-                    "Sentence: '$sentence' was not tokenized correctly"
-                );
-            }
-            $tokenized->next();
-        }
-                
+        $pennTreeBankTokenizer = new PennTreeBankTokenizer();
+        $this->assertCount(7, $pennTreeBankTokenizer->tokenize("They'll save and invest more."));
     }
 
+    public function testTokenizer3(): void
+    {
+        $pennTreeBankTokenizer = new PennTreeBankTokenizer();
+        $this->assertCount(4, $pennTreeBankTokenizer->tokenize("I'm some text"));
+    }
+
+    public function testAgainstOriginalSedImplementation(): void
+    {
+        $pennTreeBankTokenizer = new PennTreeBankTokenizer();
+        $tokenized = new \SplFileObject(TEST_DATA_DIR . "/Tokenizers/PennTreeBankTokenizerTest/tokenized");
+        $tokenized->setFlags(\SplFileObject::DROP_NEW_LINE);
+
+        $sentences = new \SplFileObject(TEST_DATA_DIR . "/Tokenizers/PennTreeBankTokenizerTest/test.txt");
+        $sentences->setFlags(\SplFileObject::DROP_NEW_LINE);
+
+        $tokenized->rewind();
+        foreach ($sentences as $sentence) {
+            if ($sentence) { // skip empty lines
+                $this->assertEquals(
+                    $tokenized->current(),
+                    implode(" ", $pennTreeBankTokenizer->tokenize($sentence)),
+                    sprintf("Sentence: '%s' was not tokenized correctly", $sentence)
+                );
+            }
+
+            $tokenized->next();
+        }
+    }
 }

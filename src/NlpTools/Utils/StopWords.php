@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 /**
@@ -12,25 +14,28 @@ namespace NlpTools\Utils;
  */
 class StopWords implements TransformationInterface
 {
-    protected $stopwords;
-    protected $inner_transform;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $stopwords;
 
-    public function __construct(array $stopwords, TransformationInterface $transform = null)
+    /**
+     * @param array<int, string> $stopwords
+     */
+    public function __construct(array $stopwords, protected ?TransformationInterface $transformation = null)
     {
         $this->stopwords = array_fill_keys(
             $stopwords,
             true
         );
-
-        $this->inner_transform = $transform;
     }
 
-    public function transform($token)
+    public function transform(string $token): ?string
     {
         $tocheck = $token;
 
-        if ($this->inner_transform) {
-            $tocheck = $this->inner_transform->transform($token);
+        if ($this->transformation instanceof TransformationInterface) {
+            $tocheck = $this->transformation->transform($token);
         }
 
         return isset($this->stopwords[$tocheck]) ? null : $token;

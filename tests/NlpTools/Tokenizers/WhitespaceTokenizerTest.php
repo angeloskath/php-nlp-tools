@@ -1,44 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Tokenizers;
 
-class WhitespaceTokenizerTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class WhitespaceTokenizerTest extends TestCase
 {
-    public function testTokenizerOnAscii()
+    public function testTokenizerOnAscii(): void
     {
-        $tok = new WhitespaceTokenizer();
+        $whitespaceTokenizer = new WhitespaceTokenizer();
 
         $s = "This is a simple space delimited string
         with new lines and many     spaces between the words.
         Also	tabs	tabs	tabs	tabs";
-        $tokens = array('This','is','a','simple','space','delimited','string',
-        'with','new','lines','and','many','spaces','between','the','words.',
-        'Also','tabs','tabs','tabs','tabs');
+        $tokens = ['This', 'is', 'a', 'simple', 'space', 'delimited', 'string', 'with', 'new', 'lines', 'and', 'many', 'spaces', 'between', 'the', 'words.', 'Also', 'tabs', 'tabs', 'tabs', 'tabs'];
 
         $this->assertEquals(
             $tokens,
-            $tok->tokenize($s)
+            $whitespaceTokenizer->tokenize($s)
         );
     }
 
-    public function testTokenizerOnUtf8()
+    public function testTokenizerOnUtf8(): void
     {
-        $tok = new WhitespaceTokenizer();
+        $whitespaceTokenizer = new WhitespaceTokenizer();
 
         $s = "Ελληνικό κείμενο για παράδειγμα utf-8 χαρακτήρων";
-        $tokens = array('Ελληνικό','κείμενο','για','παράδειγμα','utf-8','χαρακτήρων');
+        $tokens = ['Ελληνικό', 'κείμενο', 'για', 'παράδειγμα', 'utf-8', 'χαρακτήρων'];
         // test tokenization of multibyte non-whitespace characters
         $this->assertEquals(
             $tokens,
-            $tok->tokenize($s)
+            $whitespaceTokenizer->tokenize($s)
         );
 
         $s = "Here exists non-breaking space   ";
-        $tokens = array('Here','exists','non-breaking','space');
+        $tokens = ['Here', 'exists', 'non-breaking', 'space'];
         // test tokenization of multibyte whitespace
         $this->assertEquals(
             $tokens,
-            $tok->tokenize($s)
+            $whitespaceTokenizer->tokenize($s)
         );
     }
 }

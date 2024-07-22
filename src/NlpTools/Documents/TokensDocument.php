@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Documents;
 
 use NlpTools\Utils\TransformationInterface;
@@ -9,16 +11,19 @@ use NlpTools\Utils\TransformationInterface;
  */
 class TokensDocument implements DocumentInterface
 {
-    protected $tokens;
-    public function __construct(array $tokens)
+    /**
+     * @param array<int|string, mixed> $tokens
+     */
+    public function __construct(protected array $tokens)
     {
-        $this->tokens = $tokens;
     }
+
     /**
      * Simply return the tokens received in the constructor
-     * @return array The tokens array
+     *
+     * @return array<int, string>
      */
-    public function getDocumentData()
+    public function getDocumentData(): array
     {
         return $this->tokens;
     }
@@ -26,21 +31,24 @@ class TokensDocument implements DocumentInterface
     /**
      * Apply the transform to each token. Filter out the null tokens.
      *
-     * @param TransformationInterface $transform The transformation to be applied
+     * @param TransformationInterface $transformation The transformation to be applied
      */
-    public function applyTransformation(TransformationInterface $transform)
+    public function applyTransformation(TransformationInterface $transformation): void
     {
         // array_values for re-indexing
         $this->tokens = array_values(
             array_filter(
                 array_map(
-                    array($transform, 'transform'),
+                    $transformation->transform(...),
                     $this->tokens
                 ),
-                function ($token) {
-                    return $token!==null;
-                }
+                fn($token): bool => $token !== null
             )
         );
+    }
+
+    public function getClass(): string
+    {
+        return self::class;
     }
 }

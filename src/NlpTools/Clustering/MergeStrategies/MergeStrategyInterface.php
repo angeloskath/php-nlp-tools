@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Clustering\MergeStrategies;
 
 use NlpTools\Similarity\DistanceInterface;
@@ -15,14 +17,16 @@ interface MergeStrategyInterface
     /**
      * Study the docs and preprocess anything required for
      * computing the merges
+     *
+     * @param array<int, mixed> $docs
      */
-    public function initializeStrategy(DistanceInterface $d, array &$docs);
+    public function initializeStrategy(DistanceInterface $distance, array &$docs): void;
 
     /**
      * Return the next two clusters for merging and assume
      * they are merged (ex. update a similarity matrix)
      *
-     * @return array An array with two numbers which are the cluster ids
+     * @return array<int, mixed> An array with two numbers which are the cluster ids
      */
-    public function getNextMerge();
+    public function getNextMerge(): array;
 }

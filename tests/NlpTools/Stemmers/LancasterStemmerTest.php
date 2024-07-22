@@ -1,36 +1,40 @@
 <?php
+
+declare(strict_types=1);
+
 namespace NlpTools\Stemmers;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of LancasterStemmerTest
  *
  * @author Dan Cardin
  */
-class LancasterStemmerTest extends \PHPUnit_Framework_TestCase
-{    
-    public function testLancasterStemmper()
+class LancasterStemmerTest extends TestCase
+{
+    public function testLancasterStemmper(): void
     {
-        $stemmer = new LancasterStemmer();
-        $this->assertEquals('maxim', $stemmer->stem('maximum'));
-        $this->assertEquals('presum', $stemmer->stem('presumably'));       
-        $this->assertEquals('multiply', $stemmer->stem('multiply'));     
-        $this->assertEquals('provid', $stemmer->stem('provision'));  
-        $this->assertEquals('ow', $stemmer->stem('owed'));            
-        $this->assertEquals('ear', $stemmer->stem('ear'));           
-        $this->assertEquals('say', $stemmer->stem('saying'));      
-        $this->assertEquals('cry', $stemmer->stem('crying'));
-        $this->assertEquals('string', $stemmer->stem('string'));
-        $this->assertEquals('meant', $stemmer->stem('meant')); 
-        $this->assertEquals('cem', $stemmer->stem('cement')); 
+        $lancasterStemmer = new LancasterStemmer();
+        $this->assertEquals('maxim', $lancasterStemmer->stem('maximum'));
+        $this->assertEquals('presum', $lancasterStemmer->stem('presumably'));
+        $this->assertEquals('multiply', $lancasterStemmer->stem('multiply'));
+        $this->assertEquals('provid', $lancasterStemmer->stem('provision'));
+        $this->assertEquals('ow', $lancasterStemmer->stem('owed'));
+        $this->assertEquals('ear', $lancasterStemmer->stem('ear'));
+        $this->assertEquals('say', $lancasterStemmer->stem('saying'));
+        $this->assertEquals('cry', $lancasterStemmer->stem('crying'));
+        $this->assertEquals('string', $lancasterStemmer->stem('string'));
+        $this->assertEquals('meant', $lancasterStemmer->stem('meant'));
+        $this->assertEquals('cem', $lancasterStemmer->stem('cement'));
     }
 
     /**
      * Added to cover issue #34
      */
-    public function testEmptyStringForWord()
+    public function testEmptyStringForWord(): void
     {
-        $stemmer = new LancasterStemmer();
-        $this->assertEquals("", $stemmer->stem(""));
+        $lancasterStemmer = new LancasterStemmer();
+        $this->assertEquals("", $lancasterStemmer->stem(""));
     }
 }
-

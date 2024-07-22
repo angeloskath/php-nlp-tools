@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace NlpTools\Exceptions;
 
 /**
@@ -7,8 +10,8 @@ namespace NlpTools\Exceptions;
  */
 class InvalidExpression extends \Exception
 {
-    public static function invalidRegex($pattern, $replacement)
+    public static function invalidRegex(string $pattern, string $replacement): never
     {
-        throw new InvalidExpression("The pattern '{$pattern}', and the replacement '{$replacement}' caused an error.");
+        throw new InvalidExpression(sprintf("The pattern '%s', and the replacement '%s' caused an error.", $pattern, $replacement));
     }
 }

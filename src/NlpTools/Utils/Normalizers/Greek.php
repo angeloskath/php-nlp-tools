@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils\Normalizers;
 
 /**
@@ -9,14 +11,17 @@ namespace NlpTools\Utils\Normalizers;
  */
 class Greek extends Normalizer
 {
-    protected static $dirty = array(
-        'ά','έ','ό','ή','ί','ύ','ώ','ς'
-    );
-    protected static $clean = array(
-        'α','ε','ο','η','ι','υ','ω','σ'
-    );
+    /**
+     * @var array<int, string>
+     */
+    protected static array $dirty = ['ά', 'έ', 'ό', 'ή', 'ί', 'ύ', 'ώ', 'ς'];
 
-    public function normalize($w)
+    /**
+     * @var array<int, string>
+     */
+    protected static array $clean = ['α', 'ε', 'ο', 'η', 'ι', 'υ', 'ω', 'σ'];
+
+    public function normalize(string $w): string
     {
         return str_replace(self::$dirty, self::$clean, mb_strtolower($w, "utf-8"));
     }

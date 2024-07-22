@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Clustering\CentroidFactories;
 
 /**
@@ -9,42 +11,45 @@ to only contain the characters 1 and 0).
  */
 class Hamming implements CentroidFactoryInterface
 {
-
     /**
      * Return a number in binary encoding in a string such that the sum of its
      * hamming distances of each document is minimized.
      *
      * Assumptions: The docs array should contain strings that are properly padded
-     * 			 binary (they should all be the same length).
+     *           binary (they should all be the same length).
+     *
+     * @param array<int, mixed> $docs
+     * @param array<int, int> $choose
      */
-    public function getCentroid(array &$docs, array $choose=array())
+    public function getCentroid(array &$docs, array $choose = []): string
     {
-        $bitl = strlen($docs[0]);
+        $bitl = strlen((string) $docs[0]);
         $buckets = array_fill_keys(
-            range(0,$bitl-1),
+            range(0, $bitl - 1),
             0
         );
-        if (empty($choose))
-            $choose = range(0,count($docs)-1);
+        if ($choose === []) {
+            $choose = range(0, count($docs) - 1);
+        }
+
         foreach ($choose as $idx) {
             $s = $docs[$idx];
-            foreach ($buckets as $i=>&$v) {
-                if ($s[$i]=='1')
+            foreach ($buckets as $i => &$v) {
+                if ($s[$i] == '1') {
                     $v += 1;
-                else
+                } else {
                     $v -= 1;
+                }
             }
         }
 
         return implode(
             '',
             array_map(
-                function ($v) {
-                    return ($v>0) ? '1' : '0';
-                },
+                // @phpstan-ignore-next-line
+                fn($v): string => ($v > 0) ? '1' : '0',
                 $buckets
             )
         );
     }
-
 }

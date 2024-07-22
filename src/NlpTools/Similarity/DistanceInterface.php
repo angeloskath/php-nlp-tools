@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
 /**
@@ -8,5 +10,9 @@ namespace NlpTools\Similarity;
  */
 interface DistanceInterface
 {
-    public function dist(&$A, &$B);
+    /**
+     * @param  array<int|string, mixed> $a Either feature vector or simply vector
+     * @param  array<int|string, mixed> $b Either feature vector or simply vector
+     */
+    public function dist(array &$a, array &$b): float;
 }

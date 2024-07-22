@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Clustering\MergeStrategies;
 
 /**
@@ -10,8 +12,8 @@ namespace NlpTools\Clustering\MergeStrategies;
  */
 class CompleteLink extends HeapLinkage
 {
-    protected function newDistance($xi,$yi,$x,$y)
+    protected function newDistance(int $xi, int $yi, int $x, int $y): float
     {
-        return max($this->dm[$xi],$this->dm[$yi]);
+        return max($this->dm[$xi], $this->dm[$yi]);
     }
 }

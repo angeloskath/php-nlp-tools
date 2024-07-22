@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Classifiers;
 
 use NlpTools\Documents\DocumentInterface;
@@ -11,15 +13,8 @@ use NlpTools\Models\MultinomialNBModelInterface;
  */
 class MultinomialNBClassifier implements ClassifierInterface
 {
-    // The feature factory
-    protected $feature_factory;
-    // The NBModel
-    protected $model;
-
-    public function __construct(FeatureFactoryInterface $ff, MultinomialNBModelInterface $m)
+    public function __construct(protected FeatureFactoryInterface $featureFactory, protected MultinomialNBModelInterface $multinomialNBModel)
     {
-        $this->feature_factory = $ff;
-        $this->model = $m;
     }
 
     /**
@@ -27,17 +22,15 @@ class MultinomialNBClassifier implements ClassifierInterface
      * successively and return that class that has the maximum
      * probability.
      *
-     * @param  array             $classes The classes from which to choose
-     * @param  DocumentInterface $d       The document to classify
-     * @return string            $class The class that has the maximum probability
+     * @param array<int, string> $classes
      */
-    public function classify(array $classes, DocumentInterface $d)
+    public function classify(array $classes, DocumentInterface $document): string
     {
         $maxclass = current($classes);
-        $maxscore = $this->getScore($maxclass,$d);
-        while ($class=next($classes)) {
-            $score = $this->getScore($class,$d);
-            if ($score>$maxscore) {
+        $maxscore = $this->getScore($maxclass, $document);
+        while ($class = next($classes)) {
+            $score = $this->getScore($class, $document);
+            if ($score > $maxscore) {
                 $maxclass = $class;
                 $maxscore = $score;
             }
@@ -53,22 +46,19 @@ class MultinomialNBClassifier implements ClassifierInterface
      *
      * @todo perhaps MultinomialNBModel should have precomputed the logs
      *       ex.: getLogPrior() and getLogCondProb()
-     *
-     * @param string $class The class for which we are getting a score
-     * @param DocumentInterface The document whose score we are getting
-     * @return float The log of the probability of $d belonging to $class
      */
-    public function getScore($class, DocumentInterface $d)
+    public function getScore(string $class, DocumentInterface $document): float
     {
-        $score = log($this->model->getPrior($class));
-        $features = $this->feature_factory->getFeatureArray($class,$d);
-        if (is_int(key($features)))
+        $score = log($this->multinomialNBModel->getPrior($class));
+        $features = $this->featureFactory->getFeatureArray($class, $document);
+        if (is_int(key($features))) {
             $features = array_count_values($features);
-        foreach ($features as $f=>$fcnt) {
-            $score += $fcnt*log($this->model->getCondProb($f,$class));
+        }
+
+        foreach ($features as $f => $fcnt) {
+            $score += $fcnt * log($this->multinomialNBModel->getCondProb($f, $class));
         }
 
         return $score;
     }
-
 }

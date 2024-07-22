@@ -1,41 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
-class SimhashTest extends \PHPUnit_Framework_TestCase
-{
-    public function testSimhash()
-    {
-        $sim = new Simhash(64);
+use PHPUnit\Framework\TestCase;
 
-        $A = array(1,2,3);
-        $B = array(1,2,3,4,5,6);
-        $b = array(1,2,3,4,5);
-        $e = array();
+class SimhashTest extends TestCase
+{
+    public function testSimhash(): void
+    {
+        $simhash = new Simhash(64);
+
+        $A = [1, 2, 3];
+        $B = [1, 2, 3, 4, 5, 6];
+        $b = [1, 2, 3, 4, 5];
 
         $this->assertEquals(
             1,
-            $sim->similarity($A,$A),
+            $simhash->similarity($A, $A),
             "Two identical sets should have the same hash therefore a similarity of 1"
         );
 
         $this->assertGreaterThan(
-            $sim->similarity($A,$B),
-            $sim->similarity($b,$B),
+            $simhash->similarity($A, $B),
+            $simhash->similarity($b, $B),
             "The more elements in common the more similar the two sets should be"
         );
     }
 
-    public function testWeightedSets()
+    public function testWeightedSets(): void
     {
-        $sim = new Simhash(64);
+        $simhash = new Simhash(64);
 
-        $A = array("a","a","a","b","b",);
-        $B = array("a"=>3,"b"=>2);
+        $A = ["a", "a", "a", "b", "b"];
+        $B = ["a" => 3, "b" => 2];
 
         $this->assertEquals(
             1,
-            $sim->similarity($A,$B),
+            $simhash->similarity($A, $B),
             "The two sets are identical given that one is the weighted version of the other"
         );
     }

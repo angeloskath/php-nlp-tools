@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Tokenizers;
 
 /**
@@ -10,9 +12,9 @@ namespace NlpTools\Tokenizers;
  */
 class WhitespaceAndPunctuationTokenizer implements TokenizerInterface
 {
-    public function tokenize($str)
+    public function tokenize(string $str): array
     {
-        $arr = array();
+        $arr = [];
         // for the character classes
         // see http://php.net/manual/en/regexp.reference.unicode.php
         $pat = '/
@@ -28,7 +30,7 @@ class WhitespaceAndPunctuationTokenizer implements TokenizerInterface
                     ([\pZ\pC]*)			# match a sequence of separators
                                         # that follows
                 /xu';
-        preg_match_all($pat,$str,$arr);
+        preg_match_all($pat, $str, $arr);
 
         return $arr[2];
     }

@@ -1,32 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
-class OverlapCoefficientTest extends \PHPUnit_Framework_TestCase
-{
-    public function testOverlapCoefficient()
-    {
-        $sim = new OverlapCoefficient();
+use PHPUnit\Framework\TestCase;
 
-        $A = array("my","name","is","john");
-        $B = array("your","name","is","joe");
-        $e = array();
+class OverlapCoefficientTest extends TestCase
+{
+    public function testOverlapCoefficient(): void
+    {
+        $overlapCoefficient = new OverlapCoefficient();
+
+        $A = ["my", "name", "is", "john"];
+        $B = ["your", "name", "is", "joe"];
+        $e = [];
 
         $this->assertEquals(
             1,
-            $sim->similarity($A,$A),
+            $overlapCoefficient->similarity($A, $A),
             "The similarity of a set with itsself is 1"
         );
 
         $this->assertEquals(
             0,
-            $sim->similarity($A,$e),
+            $overlapCoefficient->similarity($A, $e),
             "The similarity of any set with the empty set is 0"
         );
 
         $this->assertEquals(
             0.5,
-            $sim->similarity($A,$B),
+            $overlapCoefficient->similarity($A, $B),
             "similarity({'my','name','is','john'},{'your','name','is','joe'}) = 0.5"
         );
     }

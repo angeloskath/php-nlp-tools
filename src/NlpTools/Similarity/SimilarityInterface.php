@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
 /**
@@ -9,5 +11,9 @@ namespace NlpTools\Similarity;
  */
 interface SimilarityInterface
 {
-    public function similarity(&$A, &$B);
+    /**
+     * @param  array<int|string, mixed> $a Either feature vector or simply vector
+     * @param  array<int|string, mixed> $b Either feature vector or simply vector
+     */
+    public function similarity(array &$a, array &$b): float;
 }

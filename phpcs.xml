@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="phpcs.xsd">
+    <description>The coding standard.</description>
+
+    <config name="testVersion" value="8.0-"/>
+
+    <file>src</file>
+    <file>tests</file>
+    <exclude-pattern>*/tests/sentiment_maxent.php</exclude-pattern>
+
+    <arg name="basepath" value="./"/>
+    <arg name="colors"/>
+    <arg name="parallel" value="5"/>
+    <arg value="np"/>
+
+    <!-- Don't hide tokenizer exceptions -->
+    <rule ref="Internal.Tokenizer.Exception">
+        <type>error</type>
+    </rule>
+
+    <!-- Include the whole PSR12 standard -->
+    <rule ref="PSR12"/>
+
+</ruleset>

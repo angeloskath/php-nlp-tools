@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Analysis;
 
 use NlpTools\Documents\TrainingSet;
@@ -14,39 +16,48 @@ use NlpTools\FeatureFactories\DataAsFeatures;
  * Idf implements the ArrayAccess interface so it should be used
  * as a read only array that contains tokens as keys and idf values
  * as values.
+ *
+ * @implements \ArrayAccess<mixed, mixed>
  */
 class Idf implements \ArrayAccess
 {
-    protected $logD;
-    protected $idf;
+    protected float $logD;
 
     /**
-     * @param TrainingSet             $tset The set of documents for which we will compute the idf
-     * @param FeatureFactoryInterface $ff   A feature factory to translate the document data to single tokens
+     * @var array<mixed, mixed>
      */
-    public function __construct(TrainingSet $tset, FeatureFactoryInterface $ff=null)
-    {
-        if ($ff===null)
-            $ff = new DataAsFeatures();
+    protected array $idf;
 
-        $tset->setAsKey(TrainingSet::CLASS_AS_KEY);
-        foreach ($tset as $class=>$doc) {
-            $tokens = $ff->getFeatureArray($class,$doc); // extract tokens from the document
-            $tokens = array_fill_keys($tokens,1); // make them occur once
-            foreach ($tokens as $token=>$v) {
-                if (isset($this->idf[$token]))
+    /**
+     * @param TrainingSet $trainingSet The set of documents for which we will compute the idf
+     * @param FeatureFactoryInterface $featureFactory A feature factory to translate the document data to single tokens
+     */
+    public function __construct(TrainingSet $trainingSet, FeatureFactoryInterface $featureFactory = null)
+    {
+        if (!$featureFactory instanceof FeatureFactoryInterface) {
+            $featureFactory = new DataAsFeatures();
+        }
+
+        $trainingSet->setAsKey(TrainingSet::CLASS_AS_KEY);
+        foreach ($trainingSet as $class => $doc) {
+            $tokens = $featureFactory->getFeatureArray($class, $doc); // extract tokens from the document
+            $tokens = array_fill_keys($tokens, 1); // make them occur once
+            foreach (array_keys($tokens) as $token) {
+                if (isset($this->idf[$token])) {
                     $this->idf[$token]++;
-                else
+                } else {
                     $this->idf[$token] = 1;
+                }
             }
         }
 
         // this idf so far contains the doc frequency
         // we will now inverse it and take the log
-        $D = count($tset);
+        $D = count($trainingSet);
         foreach ($this->idf as &$v) {
-            $v = log($D/$v);
+            $v = log($D / $v);
         }
+
         $this->logD = log($D);
     }
 
@@ -54,27 +65,17 @@ class Idf implements \ArrayAccess
      * Implements the array access interface. Return the computed idf or
      * the logarithm of the count of the documents for a token we have not
      * seen before.
-     *
-     * @param  string $token The token to return the idf for
-     * @return float  The idf
      */
-    public function offsetGet($token)
+    public function offsetGet(mixed $token): mixed
     {
-        if (isset($this->idf[$token])) {
-            return $this->idf[$token];
-        } else {
-            return $this->logD;
-        }
+        return $this->idf[$token] ?? $this->logD;
     }
 
     /**
      * Implements the array access interface. Return true if the token exists
      * in the corpus.
-     *
-     * @param  string $token The token to check if it exists in the corpus
-     * @return bool
      */
-    public function offsetExists($token)
+    public function offsetExists(mixed $token): bool
     {
         return isset($this->idf[$token]);
     }
@@ -83,7 +84,7 @@ class Idf implements \ArrayAccess
      * Will not be implemented. Throws \BadMethodCallException because
      * one should not be able to alter the idf values directly.
      */
-    public function offsetSet($token, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new \BadMethodCallException("The idf of a specific token cannot be set explicitly");
     }
@@ -92,7 +93,7 @@ class Idf implements \ArrayAccess
      * Will not be implemented. Throws \BadMethodCallException because
      * one should not be able to alter the idf values directly.
      */
-    public function offsetUnset($token)
+    public function offsetUnset(mixed $offset): void
     {
         throw new \BadMethodCallException("The idf of a specific token cannot be unset");
     }

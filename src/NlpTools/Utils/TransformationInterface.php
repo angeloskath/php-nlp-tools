@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 /**
@@ -20,8 +22,6 @@ interface TransformationInterface
 {
     /**
      * Return the value transformed.
-     * @param  mixed $value The value to transform
-     * @return mixed
      */
-    public function transform($value);
+    public function transform(string $value): ?string;
 }

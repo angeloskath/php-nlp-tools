@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Clustering\MergeStrategies;
 
 use NlpTools\Similarity\DistanceInterface;
@@ -14,32 +16,41 @@ use NlpTools\Similarity\DistanceInterface;
  */
 class GroupAverage extends HeapLinkage
 {
-    protected $cluster_size;
+    /**
+     * @var array<int, int>
+     */
+    protected array $clusterSize;
 
-    public function initializeStrategy(DistanceInterface $d, array &$docs)
+    /**
+     * @param array<int, mixed> $docs
+     */
+    public function initializeStrategy(DistanceInterface $distance, array &$docs): void
     {
-        parent::initializeStrategy($d,$docs);
+        parent::initializeStrategy($distance, $docs);
 
-        $this->cluster_size = array_fill_keys(
-            range(0,$this->L-1),
+        $this->clusterSize = array_fill_keys(
+            range(0, $this->L - 1),
             1
         );
     }
 
-    protected function newDistance($xi,$yi,$x,$y)
+    protected function newDistance(int $xi, int $yi, int $x, int $y): float
     {
-        $size_x = $this->cluster_size[$x];
-        $size_y = $this->cluster_size[$y];
+        $size_x = $this->clusterSize[$x];
+        $size_y = $this->clusterSize[$y];
 
-        return ($this->dm[$xi]*$size_x + $this->dm[$yi]*$size_y)/($size_x + $size_y);
+        return ($this->dm[$xi] * $size_x + $this->dm[$yi] * $size_y) / ($size_x + $size_y);
     }
 
-    public function getNextMerge()
+    /**
+     * @return array<int, mixed>
+     */
+    public function getNextMerge(): array
     {
         $r = parent::getNextMerge();
 
-        $this->cluster_size[$r[0]] += $this->cluster_size[$r[1]];
-        unset($this->cluster_size[$r[1]]);
+        $this->clusterSize[$r[0]] += $this->clusterSize[$r[1]];
+        unset($this->clusterSize[$r[1]]);
 
         return $r;
     }

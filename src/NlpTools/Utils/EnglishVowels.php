@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 /**
@@ -13,14 +16,12 @@ class EnglishVowels extends VowelsAbstractFactory
      * @param  int     $index the index in the string to inspect
      * @return boolean True letter at the provided index is a vowel
      */
-    public function isVowel($word, $index)
+    public function isVowel(string $word, int $index): bool
     {
         if (strpbrk($word[$index], 'aeiou') !== false) {
             return true;
-        } elseif ($word[$index] === 'y' && strpbrk($word[--$index], 'aeiou') === false) {
-            return true;
         }
 
-        return false;
+        return $word[$index] === 'y' && strpbrk($word[--$index], 'aeiou') === false;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
 /**
@@ -19,38 +21,32 @@ class TverskyIndex implements SimilarityInterface, DistanceInterface
      * @param $alpha Set to 0.5 to get either Jaccard Index or Dice Similarity
      * @param $beta  Set to 1 to get Jaccard Index and 2 for Dice Similarity
      */
-    public function __construct($alpha=0.5, $beta=1)
+    public function __construct(public float $alpha = 0.5, public int $beta = 1)
     {
-        $this->alpha = $alpha;
-        $this->beta = $beta;
     }
 
     /**
      * Compute the similarity using the alpha and beta values given in the
      * constructor.
-     *
-     * @param  array $A
-     * @param  array $B
-     * @return float
      */
-    public function similarity(&$A, &$B)
+    public function similarity(array &$a, array &$b): float
     {
         $alpha = $this->alpha;
         $beta = $this->beta;
 
-        $a = array_fill_keys($A,1);
-        $b = array_fill_keys($B,1);
+        $aa = array_fill_keys($a, 1);
+        $bb = array_fill_keys($b, 1);
 
-        $min = min(count(array_diff_key($a,$b)),count(array_diff_key($b, $a)));
-        $max = max(count(array_diff_key($a,$b)),count(array_diff_key($b, $a)));
+        $min = min(count(array_diff_key($aa, $bb)), count(array_diff_key($bb, $aa)));
+        $max = max(count(array_diff_key($aa, $bb)), count(array_diff_key($bb, $aa)));
 
-        $intersect = count(array_intersect_key($a,$b));
+        $intersect = count(array_intersect_key($aa, $bb));
 
-        return $intersect/($intersect + ($beta * ($alpha * $min + $max*(1-$alpha)) ));
+        return $intersect / ($intersect + ($beta * ($alpha * $min + $max * (1 - $alpha)) ));
     }
 
-    public function dist(&$A, &$B)
+    public function dist(array &$a, array &$b): float
     {
-        return 1-$this->similarity($A,$B);
+        return 1 - $this->similarity($a, $b);
     }
 }

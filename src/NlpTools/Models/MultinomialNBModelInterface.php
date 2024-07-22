@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Models;
 
 /**
@@ -9,6 +11,7 @@ namespace NlpTools\Models;
  */
 interface MultinomialNBModelInterface
 {
-    public function getPrior($class);
-    public function getCondProb($term,$class);
+    public function getPrior(string $class): float;
+
+    public function getCondProb(string $term, string $class): float;
 }

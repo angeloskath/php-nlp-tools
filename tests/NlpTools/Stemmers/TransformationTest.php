@@ -1,37 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Stemmers;
 
 use NlpTools\Documents\TokensDocument;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class TransformationTest extends \PHPUnit_Framework_TestCase
+class TransformationTest extends TestCase
 {
-    public function provideStemmers()
+    /**
+     * @return array<string, mixed>
+     */
+    public static function provideStemmers(): array
     {
-        return array(
-            array(new LancasterStemmer()),
-            array(new PorterStemmer())
-        );
+        return [
+            'LancasterStemmer' => [new LancasterStemmer()],
+            'PorterStemmer' => [new PorterStemmer()]
+        ];
     }
 
-    /**
-     * @dataProvider provideStemmers
-     */
-    public function testStemmer(Stemmer $stemmer)
+    #[DataProvider('provideStemmers')]
+    public function testStemmer(Stemmer $stemmer): void
     {
-        $tokens = explode(" ","this renowned monster who had come off victorious in a hundred fights with his pursuers was an old bull whale of prodigious size and strength from the effect of age or more probably from a freak of nature a singular consequence had resulted he was white as wool");
+        $tokens = explode(" ", "this renowned monster who had come off victorious in a hundred fights with his pursuers was an old bull whale of prodigious size and strength from the effect of age or more probably from a freak of nature a singular consequence had resulted he was white as wool");
         $stemmed = $stemmer->stemAll($tokens);
-        $doc = new TokensDocument($tokens);
+        $tokensDocument = new TokensDocument($tokens);
 
         $this->assertNotEquals(
             $stemmed,
-            $doc->getDocumentData()
+            $tokensDocument->getDocumentData()
         );
 
-        $doc->applyTransformation($stemmer);
+        $tokensDocument->applyTransformation($stemmer);
         $this->assertEquals(
             $stemmed,
-            $doc->getDocumentData()
+            $tokensDocument->getDocumentData()
         );
     }
 }

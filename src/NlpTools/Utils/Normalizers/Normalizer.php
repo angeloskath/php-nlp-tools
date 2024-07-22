@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils\Normalizers;
 
 use NlpTools\Utils\TransformationInterface;
@@ -25,27 +27,27 @@ abstract class Normalizer implements TransformationInterface
      * Transform the word according to the class description
      *
      * @param  string $w The word to normalize
-     * @return string
      */
-    abstract public function normalize($w);
+    abstract public function normalize(string $w): ?string;
 
     /**
      * {@inheritdoc}
      */
-    public function transform($w)
+    public function transform(string $w): ?string
     {
         return $this->normalize($w);
     }
 
     /**
      * Apply the normalize function to all the items in the array
-     * @param  array $items
-     * @return array
+     *
+     * @param array<int, string> $items
+     * @return array<int, string>
      */
-    public function normalizeAll(array $items)
+    public function normalizeAll(array $items): array
     {
         return array_map(
-            array($this, 'normalize'),
+            $this->normalize(...),
             $items
         );
     }
@@ -54,12 +56,10 @@ abstract class Normalizer implements TransformationInterface
      * Just instantiate the normalizer using a factory method.
      * Keep in mind that this is NOT required. The constructor IS
      * visible.
-     *
-     * @param string $language
      */
-    public static function factory($language = "English")
+    public static function factory(string $language = "English"): self
     {
-        $classname = __NAMESPACE__."\\$language";
+        $classname = __NAMESPACE__ . ('\\' . $language);
 
         return new $classname();
     }

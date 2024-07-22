@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Random\Generators;
 
 /**
@@ -9,15 +11,15 @@ namespace NlpTools\Random\Generators;
  */
 class FromFile implements GeneratorInterface
 {
-    protected $h;
+    protected mixed $handle;
 
     /**
      * Construct a FromFile generator
      * @param string $f A file name to read from
      */
-    public function __construct($f)
+    public function __construct(string $f)
     {
-        $this->h = fopen($f,'r');
+        $this->handle = fopen($f, 'r');
     }
 
     /**
@@ -29,11 +31,12 @@ class FromFile implements GeneratorInterface
      *
      * @return float A random float in the range (0,1)
      */
-    public function generate()
+    public function generate(): float
     {
-        if (feof($this->h))
-            rewind($this->h);
+        if (feof($this->handle)) {
+            rewind($this->handle);
+        }
 
-        return (float) fgets($this->h);
+        return (float) fgets($this->handle);
     }
 }

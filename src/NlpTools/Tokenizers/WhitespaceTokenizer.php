@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Tokenizers;
 
 /**
@@ -8,12 +10,10 @@ namespace NlpTools\Tokenizers;
  */
 class WhitespaceTokenizer implements TokenizerInterface
 {
-    const PATTERN = '/[\pZ\pC]+/u';
+    public const PATTERN = '/[\pZ\pC]+/u';
 
-    public function tokenize($str)
+    public function tokenize(string $str): array
     {
-        $arr = array();
-
-        return preg_split(self::PATTERN,$str,null,PREG_SPLIT_NO_EMPTY);
+        return preg_split(self::PATTERN, $str, -1, PREG_SPLIT_NO_EMPTY);
     }
 }

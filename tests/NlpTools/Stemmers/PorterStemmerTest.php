@@ -1,6 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Stemmers;
+
+use NlpTools\Stemmers\PorterStemmer;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Check the correctness of the porter stemmer implementation
@@ -13,18 +18,17 @@ class PorterStemmerTest extends StemmerTestBase
     /**
      * Load a set of words and their stems and check if the stemmer
      * produces the correct stems
-     *
-     * @group Slow
      */
-    public function testStemmer()
+    #[Group('Slow')]
+    public function testStemmer(): void
     {
-        $words = new \SplFileObject(TEST_DATA_DIR.'/Stemmers/PorterStemmerTest/words.txt');
-        $stems = new \SplFileObject(TEST_DATA_DIR.'/Stemmers/PorterStemmerTest/stems.txt');
+        $words = new \SplFileObject(TEST_DATA_DIR . '/Stemmers/PorterStemmerTest/words.txt');
+        $stems = new \SplFileObject(TEST_DATA_DIR . '/Stemmers/PorterStemmerTest/stems.txt');
         $words->setFlags(\SplFileObject::DROP_NEW_LINE | \SplFileObject::SKIP_EMPTY);
         $stems->setFlags(\SplFileObject::DROP_NEW_LINE | \SplFileObject::SKIP_EMPTY);
         $stems->rewind();
 
-        $stemmer = new PorterStemmer();
-        $this->checkStemmer($stemmer, $words, $stems);
+        $porterStemmer = new PorterStemmer();
+        $this->checkStemmer($porterStemmer, $words, $stems);
     }
 }

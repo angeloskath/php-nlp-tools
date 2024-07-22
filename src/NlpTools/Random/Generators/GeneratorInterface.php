@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Random\Generators;
 
 /**
@@ -15,5 +17,5 @@ interface GeneratorInterface
      *
      * @return float The "random" number
      */
-    public function generate();
+    public function generate(): float;
 }

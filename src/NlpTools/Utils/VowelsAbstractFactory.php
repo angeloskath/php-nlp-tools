@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 /**
@@ -8,28 +11,21 @@ namespace NlpTools\Utils;
 abstract class VowelsAbstractFactory
 {
     /**
-     * Protected from use
-     */
-    protected function __construct(){}
-
-    /**
      * Return the correct language vowel checker
-     * @param  string                               $language
-     * @return \NlpTools\Utils\VowelAbstractFactory
      * @throws \Exception
      */
-    public static function factory($language = 'English')
+    public static function factory(string $language = 'English'): self
     {
-        $className = "\\".__NAMESPACE__."\\{$language}Vowels";
+        $className = "\\" . __NAMESPACE__ . sprintf('\%sVowels', $language);
         if (class_exists($className)) {
             return new $className();
         }
-        throw new \Exception("Class $className does not exist");
+
+        throw new \Exception(sprintf('Class %s does not exist', $className));
     }
 
     /**
      * Check if the the letter at the given index is a vowel
      */
-    abstract public function isVowel($word, $index);
-
+    abstract public function isVowel(string $word, int $index): bool;
 }

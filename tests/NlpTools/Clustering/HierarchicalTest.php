@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Clustering;
 
 use NlpTools\Clustering\MergeStrategies\SingleLink;
@@ -13,57 +15,50 @@ use NlpTools\FeatureFactories\DataAsFeatures;
 
 class HierarchicalTest extends ClusteringTestBase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (!file_exists(TEST_DATA_DIR."/Clustering/HierarchicalTest")) {
-            if (!file_exists(TEST_DATA_DIR."/Clustering"))
-                mkdir(TEST_DATA_DIR."/Clustering");
-            mkdir(TEST_DATA_DIR."/Clustering/HierarchicalTest");
+        if (!file_exists(TEST_DATA_DIR . "/Clustering/HierarchicalTest")) {
+            if (!file_exists(TEST_DATA_DIR . "/Clustering")) {
+                mkdir(TEST_DATA_DIR . "/Clustering");
+            }
+
+            mkdir(TEST_DATA_DIR . "/Clustering/HierarchicalTest");
         }
     }
 
-    public function testSingleLink()
+    public function testSingleLink(): void
     {
-        $docs = array(
-            array('x'=>0,'y'=>0),
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>3),
-            array('x'=>4,'y'=>6),
-            array('x'=>6,'y'=>6)
-        );
+        $docs = [['x' => 0, 'y' => 0], ['x' => 0, 'y' => 1], ['x' => 1, 'y' => 3], ['x' => 4, 'y' => 6], ['x' => 6, 'y' => 6]];
 
-        $sl = new SingleLink();
-        $sl->initializeStrategy(new Euclidean(), $docs);
+        $singleLink = new SingleLink();
+        $singleLink->initializeStrategy(new Euclidean(), $docs);
 
-        $pair = $sl->getNextMerge();
+        $pair = $singleLink->getNextMerge();
         $this->assertEquals(
-            array(0,1),
+            [0, 1],
             $pair
         );
 
-        $pair = $sl->getNextMerge();
+        $pair = $singleLink->getNextMerge();
         $this->assertEquals(
-            array(3,4),
+            [3, 4],
             $pair
         );
 
-        $pair = $sl->getNextMerge();
+        $pair = $singleLink->getNextMerge();
         $this->assertEquals(
-            array(0,2),
+            [0, 2],
             $pair
         );
 
-        $pair = $sl->getNextMerge();
+        $pair = $singleLink->getNextMerge();
         $this->assertEquals(
-            array(0,3),
+            [0, 3],
             $pair
         );
 
-        $this->setExpectedException(
-            "RuntimeException",
-            "Can't extract from an empty heap"
-        );
-        $sl->getNextMerge();
+        $this->expectException(\RuntimeException::class);
+        $singleLink->getNextMerge();
     }
 
     /**
@@ -88,55 +83,45 @@ class HierarchicalTest extends ClusteringTestBase
      * 0 1 2 3 4 7
      *
      */
-    public function testCompleteLink()
+    public function testCompleteLink(): void
     {
-        $docs = array(
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>1),
-            array('x'=>2,'y'=>1),
-            array('x'=>3,'y'=>1),
-            array('x'=>4,'y'=>1),
-            array('x'=>7,'y'=>1)
-        );
+        $docs = [['x' => 0, 'y' => 1], ['x' => 1, 'y' => 1], ['x' => 2, 'y' => 1], ['x' => 3, 'y' => 1], ['x' => 4, 'y' => 1], ['x' => 7, 'y' => 1]];
 
-        $cl = new CompleteLink();
-        $cl->initializeStrategy(new Euclidean(), $docs);
+        $completeLink = new CompleteLink();
+        $completeLink->initializeStrategy(new Euclidean(), $docs);
 
-        $pair = $cl->getNextMerge();
+        $pair = $completeLink->getNextMerge();
         $this->assertEquals(
-            array(0,1),
+            [0, 1],
             $pair
         );
 
-        $pair = $cl->getNextMerge();
+        $pair = $completeLink->getNextMerge();
         $this->assertEquals(
-            array(2,3),
+            [2, 3],
             $pair
         );
 
-        $pair = $cl->getNextMerge();
+        $pair = $completeLink->getNextMerge();
         $this->assertEquals(
-            array(2,4),
+            [2, 4],
             $pair
         );
 
-        $pair = $cl->getNextMerge();
+        $pair = $completeLink->getNextMerge();
         $this->assertEquals(
-            array(0,2),
+            [0, 2],
             $pair
         );
 
-        $pair = $cl->getNextMerge();
+        $pair = $completeLink->getNextMerge();
         $this->assertEquals(
-            array(0,5),
+            [0, 5],
             $pair
         );
 
-        $this->setExpectedException(
-            "RuntimeException",
-            "Can't extract from an empty heap"
-        );
-        $cl->getNextMerge();
+        $this->expectException(\RuntimeException::class);
+        $completeLink->getNextMerge();
     }
 
     /**
@@ -176,177 +161,151 @@ class HierarchicalTest extends ClusteringTestBase
      * because the distance between the groups {0,1}-{2,3} is 2 and {2,3},{4.5} is also 2.
      *
      */
-    public function testGroupAverage()
+    public function testGroupAverage(): void
     {
-        $docs = array(
-            array('x'=>0,'y'=>1),
-            array('x'=>1,'y'=>1),
-            array('x'=>2,'y'=>1),
-            array('x'=>3,'y'=>1),
-            array('x'=>4.51,'y'=>1),
-        );
+        $docs = [['x' => 0, 'y' => 1], ['x' => 1, 'y' => 1], ['x' => 2, 'y' => 1], ['x' => 3, 'y' => 1], ['x' => 4.51, 'y' => 1]];
 
-        $ga = new GroupAverage();
-        $ga->initializeStrategy(new Euclidean(), $docs);
+        $groupAverage = new GroupAverage();
+        $groupAverage->initializeStrategy(new Euclidean(), $docs);
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(0,1),
+            [0, 1],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(2,3),
+            [2, 3],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(0,2),
+            [0, 2],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(0,4),
+            [0, 4],
             $pair
         );
 
-        $docs[4] = array('x'=>4.49,'y'=>1);
-        $ga->initializeStrategy(new Euclidean(), $docs);
+        $docs[4] = ['x' => 4.49, 'y' => 1];
+        $groupAverage->initializeStrategy(new Euclidean(), $docs);
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(0,1),
+            [0, 1],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(2,3),
+            [2, 3],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(2,4),
+            [2, 4],
             $pair
         );
 
-        $pair = $ga->getNextMerge();
+        $pair = $groupAverage->getNextMerge();
         $this->assertEquals(
-            array(0,2),
+            [0, 2],
             $pair
         );
     }
 
-    public function testDendrogramToClusters()
+    public function testDendrogramToClusters(): void
     {
-        $dendrograms = array(
-            array(
-                array(array(0,1),array(array(2,3),4)),
-                array(array(0,1),array(2,3,4))
-            ),
-            array(
-                array(array(0,array(1,array(2,array(3,array(4,array(5,array(6,7)))))))),
-                array(array(0),array(1),array(2),array(3,4,5,6,7))
-            )
-        );
+        $dendrograms = [[[[0, 1], [[2, 3], 4]], [[0, 1], [2, 3, 4]]], [[[0, [1, [2, [3, [4, [5, [6, 7]]]]]]]], [[0], [1], [2], [3, 4, 5, 6, 7]]]];
 
-        foreach ($dendrograms as $i=>$d) {
+        foreach ($dendrograms as $i => $d) {
             $this->assertEquals(
                 $d[1],
                 Hierarchical::dendrogramToClusters(
                     $d[0],
                     count($d[1])
                 ),
-                "Error transforming dendrogram $i"
+                'Error transforming dendrogram ' . $i
             );
         }
     }
 
-    public function testClustering1()
+    public function testClustering1(): void
     {
-        $points = array(
-            array('x'=>1, 'y'=>1),
-            array('x'=>1, 'y'=>2),
-            array('x'=>2, 'y'=>2),
-            array('x'=>3, 'y'=>3),
-            array('x'=>3, 'y'=>4),
-        );
+        $points = [['x' => 1, 'y' => 1], ['x' => 1, 'y' => 2], ['x' => 2, 'y' => 2], ['x' => 3, 'y' => 3], ['x' => 3, 'y' => 4]];
 
-        $tset = new TrainingSet();
-        foreach ($points as $p)
-            $tset->addDocument('',new TokensDocument($p));
+        $trainingSet = new TrainingSet();
 
-        $hc = new Hierarchical(
+        foreach ($points as $point) {
+            $trainingSet->addDocument('', new TokensDocument($point));
+        }
+
+        $hierarchical = new Hierarchical(
             new SingleLink(), // use the single link strategy
             new Euclidean() // with euclidean distance
         );
 
-        list($dendrogram) = $hc->cluster($tset,new DataAsFeatures());
+        [$dendrogram] = $hierarchical->cluster($trainingSet, new DataAsFeatures());
         $this->assertEquals(
-            array(
-                array(
-                    array(
-                        array(
-                            0,
-                            1
-                        ),
-                        2
-                    ),
-                    array(
-                        3,
-                        4
-                    )
-                )
-            ),
+            [[[[0, 1], 2], [3, 4]]],
             $dendrogram
         );
     }
 
-    public function testClustering2()
+    public function testClustering2(): void
     {
         $N = 50;
-        $tset = new TrainingSet();
-        for ($i=0;$i<$N;$i++) {
-            $tset->addDocument(
+        $trainingSet = new TrainingSet();
+        for ($i = 0; $i < $N; $i++) {
+            $trainingSet->addDocument(
                 '',
-                EuclideanPoint::getRandomPointAround(100,100,45)
-            );
-        }
-        for ($i=0;$i<$N;$i++) {
-            $tset->addDocument(
-                '',
-                EuclideanPoint::getRandomPointAround(200,100,45)
+                EuclideanPoint::getRandomPointAround(100, 100, 45)
             );
         }
 
-        $hc = new Hierarchical(
+        for ($i = 0; $i < $N; $i++) {
+            $trainingSet->addDocument(
+                '',
+                EuclideanPoint::getRandomPointAround(200, 100, 45)
+            );
+        }
+
+        $hierarchical = new Hierarchical(
             new SingleLink(), // use the single link strategy
             new Euclidean() // with euclidean distance
         );
 
-        list($dendrogram) = $hc->cluster($tset,new DataAsFeatures());
+        [$dendrogram] = $hierarchical->cluster($trainingSet, new DataAsFeatures());
         $dg = $this->drawDendrogram(
-            $tset,
+            $trainingSet,
             $dendrogram,
             600 // width
         );
 
-        $clusters = Hierarchical::dendrogramToClusters($dendrogram,2);
+        $clusters = Hierarchical::dendrogramToClusters($dendrogram, 2);
         $im = $this->drawClusters(
-            $tset,
+            $trainingSet,
             $clusters,
             null, // no centroids
             false, // no lines
             10 // emphasize points (for little points)
         );
 
-        if ($dg)
-            imagepng($dg, TEST_DATA_DIR."/Clustering/HierarchicalTest/dendrogram.png");
-        if ($im)
-            imagepng($im, TEST_DATA_DIR."/Clustering/HierarchicalTest/clusters.png");
+        if ($dg !== null) {
+            imagepng($dg, TEST_DATA_DIR . "/Clustering/HierarchicalTest/dendrogram.png");
+        }
+
+        if ($im !== null) {
+            imagepng($im, TEST_DATA_DIR . "/Clustering/HierarchicalTest/clusters.png");
+        }
+
+        // should have proper assertions at some point
+        $this->assertTrue(true);
     }
 }

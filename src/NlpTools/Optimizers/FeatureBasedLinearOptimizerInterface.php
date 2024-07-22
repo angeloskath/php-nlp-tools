@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Optimizers;
 
 interface FeatureBasedLinearOptimizerInterface
@@ -15,8 +17,8 @@ interface FeatureBasedLinearOptimizerInterface
      * model we would try to maximize the CLogLik that can be calculated
      * from this array.
      *
-     * @param  array &$feature_array
-     * @return array The parameteres $l
+     * @param array<string, mixed>  $featureArray
+     * @return array<string, mixed>
      */
-    public function optimize(array &$feature_array);
+    public function optimize(array &$featureArray): array;
 }

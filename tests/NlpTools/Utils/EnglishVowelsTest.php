@@ -1,23 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  * @author Dan Cardin
  */
-class EnglishVowelsTest extends \PHPUnit_Framework_TestCase
+class EnglishVowelsTest extends TestCase
 {
-    public function testIsVowel()
-    {       
-        $vowelChecker = VowelsAbstractFactory::factory("English");
-        $this->assertTrue($vowelChecker->isVowel("man", 1));
-    }
-    
-    public function testYIsVowel()
+    public function testIsVowel(): void
     {
-        $vowelChecker = VowelsAbstractFactory::factory("English");
-        $this->assertTrue($vowelChecker->isVowel("try", 2));
+        $vowelsAbstractFactory = VowelsAbstractFactory::factory("English");
+        $this->assertTrue($vowelsAbstractFactory->isVowel("man", 1));
+    }
+
+    public function testYIsVowel(): void
+    {
+        $vowelsAbstractFactory = VowelsAbstractFactory::factory("English");
+        $this->assertTrue($vowelsAbstractFactory->isVowel("try", 2));
     }
 }
-
-

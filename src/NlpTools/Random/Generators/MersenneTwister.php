@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Random\Generators;
 
 /**
@@ -7,15 +9,19 @@ namespace NlpTools\Random\Generators;
  */
 class MersenneTwister implements GeneratorInterface
 {
-    public function generate()
+    public function generate(): float
     {
-        return mt_rand()/mt_getrandmax();
+        return mt_rand() / mt_getrandmax();
     }
 
-    protected static $instance;
-    public static function get()
+    protected static ?MersenneTwister $instance = null;
+
+    public static function get(): self
     {
-        if (self::$instance!=null) return self::$instance;
+        if (self::$instance instanceof MersenneTwister) {
+            return self::$instance;
+        }
+
         self::$instance = new MersenneTwister();
 
         return self::$instance;

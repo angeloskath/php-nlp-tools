@@ -1,0 +1,5 @@
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuite name="NlpTools" >
+            <directory>./tests/NlpTools/</directory>
+    </testsuite>
+</phpunit>

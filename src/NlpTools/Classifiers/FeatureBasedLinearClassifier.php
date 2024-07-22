@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Classifiers;
 
-use \NlpTools\Documents\DocumentInterface;
-use \NlpTools\FeatureFactories\FeatureFactoryInterface;
-use \NlpTools\Models\LinearModel;
+use NlpTools\Documents\DocumentInterface;
+use NlpTools\FeatureFactories\FeatureFactoryInterface;
+use NlpTools\Models\LinearModel;
 
 /**
  * Classify using a linear model. A model that assigns a weight l for
@@ -12,32 +14,23 @@ use \NlpTools\Models\LinearModel;
  */
 class FeatureBasedLinearClassifier implements ClassifierInterface
 {
-    // The feature factory
-    protected $feature_factory;
-    // The LinearModel
-    protected $model;
-
-    public function __construct(FeatureFactoryInterface $ff, LinearModel $m)
+    public function __construct(protected FeatureFactoryInterface $featureFactory, protected LinearModel $linearModel)
     {
-        $this->feature_factory = $ff;
-        $this->model = $m;
     }
 
     /**
      * Compute the vote for every class. Return the class that
      * receive the maximum vote.
      *
-     * @param  array             $classes A set of classes
-     * @param  DocumentInterface $d       A Document
-     * @return string            A class
+     * @param array<int, string> $classes
      */
-    public function classify(array $classes, DocumentInterface $d)
+    public function classify(array $classes, DocumentInterface $document): string
     {
         $maxclass = current($classes);
-        $maxvote = $this->getVote($maxclass,$d);
+        $maxvote = $this->getVote($maxclass, $document);
         while ($class = next($classes)) {
-            $v = $this->getVote($class,$d);
-            if ($v>$maxvote) {
+            $v = $this->getVote($class, $document);
+            if ($v > $maxvote) {
                 $maxclass = $class;
                 $maxvote = $v;
             }
@@ -49,17 +42,13 @@ class FeatureBasedLinearClassifier implements ClassifierInterface
     /**
      * Compute the features that fire for the Document $d. The sum of
      * the weights of the features is the vote.
-     *
-     * @param  string            $class The vote for class $class
-     * @param  DocumentInterface $d     The vote for Document $d
-     * @return float             The vote of the model for class $class and Document $d
      */
-    public function getVote($class, DocumentInterface $d)
+    public function getVote(string $class, DocumentInterface $document): float
     {
         $v = 0;
-        $features = $this->feature_factory->getFeatureArray($class,$d);
-        foreach ($features as $f) {
-            $v += $this->model->getWeight($f);
+        $features = $this->featureFactory->getFeatureArray($class, $document);
+        foreach ($features as $feature) {
+            $v += $this->linearModel->getWeight($feature);
         }
 
         return $v;

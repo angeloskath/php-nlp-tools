@@ -1,7 +1,7 @@
 [PHP NlpTools](http://php-nlp-tools.com/)
 =============
 
-NlpTools is a set of php 5.3+ classes for beginner to
+NlpTools is a set of php 8.1+ classes for beginner to
 semi advanced natural language processing work.
 
 Documentation
@@ -92,3 +92,29 @@ Lda is still experimental and quite slow but it works. [See an example](http://p
 2. Stop words
 3. Language based normalizers
 4. Classifier based transformation for creating flexible preprocessing pipelines
+
+Testing information
+===================
+
+
+Writing Tests
+-------------
+
+* Test classes should be in the same namespace as the class that is being tested
+* Any data needed for the test or produced by the test should be in the 'data' directory
+  under the same folder as the namespace. Only data needed (not produced) are commited to
+  the repository.
+* Tests should be marked with the groups **Slow** and **VerySlow** if they require more than
+  10 seconds and 1 minute respectively. If a test is marked as VerySlow it should also be marked
+  as Slow.
+* Both functional and unit tests are welcome.
+
+Executing Tests
+---------------
+
+Currently only one testsuite is defined (all tests). Because some tests take a long time to
+run you can try running `phpunit --exclude-group Slow` or `phpunit --exclude-group VerySlow`
+to avoid some slow tests.
+
+PHPUnit should be run from inside the tests folder or the phpunit.xml file should be provided
+as config.

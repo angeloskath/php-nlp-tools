@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Random\Distributions;
 
+use NlpTools\Random\Distributions\Gamma;
 use NlpTools\Random\Generators\GeneratorInterface;
 
 /**
@@ -10,38 +13,42 @@ use NlpTools\Random\Generators\GeneratorInterface;
  */
 class Dirichlet extends AbstractDistribution
 {
-    protected $gamma;
+    /**
+     * @var array<int, Gamma>
+     */
+    protected array $gamma;
 
-    public function __construct($a,$k,GeneratorInterface $rnd=null)
+    public function __construct(mixed $a, float $k, GeneratorInterface $generator = null)
     {
-        parent::__construct($rnd);
+        parent::__construct($generator);
 
         $k = (int) abs($k);
         if (!is_array($a)) {
-            $a = array_fill_keys(range(0,$k-1),$a);
+            $a = array_fill_keys(range(0, $k - 1), $a);
         }
 
-        $rnd = $this->rnd;
+        $generator = $this->rnd;
         $this->gamma = array_map(
-            function ($a) use ($rnd) {
-                return new Gamma($a,1,$rnd);
-            },
+            fn($a): Gamma => new Gamma($a, 1, $generator),
             $a
         );
     }
 
-    public function sample()
+    /**
+     * @return array<int, float>
+     */
+    public function sample(): array
     {
-        $y = array();
+        $y = [];
+        /** @var Gamma $g */
         foreach ($this->gamma as $g) {
             $y[] = $g->sample();
         }
+
         $sum = array_sum($y);
 
         return array_map(
-            function ($y) use ($sum) {
-                return $y/$sum;
-            },
+            fn($y): float => $y / $sum,
             $y
         );
     }

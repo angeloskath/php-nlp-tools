@@ -1,32 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Similarity;
 
-class JaccardIndexTest extends \PHPUnit_Framework_TestCase
-{
-    public function testJaccardIndex()
-    {
-        $sim = new JaccardIndex();
+use PHPUnit\Framework\TestCase;
 
-        $A = array(1,2,3);
-        $B = array(1,2,3,4,5,6);
-        $e = array();
+class JaccardIndexTest extends TestCase
+{
+    public function testJaccardIndex(): void
+    {
+        $jaccardIndex = new JaccardIndex();
+
+        $A = [1, 2, 3];
+        $B = [1, 2, 3, 4, 5, 6];
+        $e = [];
 
         $this->assertEquals(
             1,
-            $sim->similarity($A,$A),
+            $jaccardIndex->similarity($A, $A),
             "The similarity of a set with itsself is 1"
         );
 
         $this->assertEquals(
             0,
-            $sim->similarity($A,$e),
+            $jaccardIndex->similarity($A, $e),
             "The similarity of any set with the empty set is 0"
         );
 
         $this->assertEquals(
             0.5,
-            $sim->similarity($A,$B),
+            $jaccardIndex->similarity($A, $B),
             "J({1,2,3},{1,2,3,4,5,6}) = 0.5"
         );
     }

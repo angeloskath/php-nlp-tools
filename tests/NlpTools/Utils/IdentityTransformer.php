@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 /**
@@ -9,7 +11,7 @@ namespace NlpTools\Utils;
  */
 class IdentityTransformer implements TransformationInterface
 {
-    public function transform($value)
+    public function transform(string $value): ?string
     {
         return $value;
     }

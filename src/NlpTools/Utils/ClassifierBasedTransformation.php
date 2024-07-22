@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NlpTools\Utils;
 
 use NlpTools\Classifiers\ClassifierInterface;
@@ -13,31 +15,33 @@ use NlpTools\Documents\RawDocument;
  */
 class ClassifierBasedTransformation implements TransformationInterface
 {
-    protected $cls;
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $transforms;
 
-    protected $transforms;
-    protected $classes = array();
+    /**
+     * @var array<int, string>
+     */
+    protected array $classes = [];
 
     /**
      * In order to classify anything with NlpTools we need something
      * that implements the ClassifierInterface. We also need the set
      * of classes but that will be calculated by the classes for which
      * we register a transformation.
-     *
-     * @param ClassifierInterface $cls
      */
-    public function __construct(ClassifierInterface $cls)
+    public function __construct(protected ClassifierInterface $classifier)
     {
-        $this->cls = $cls;
     }
 
     /**
      * Classify the passed in variable w and then apply each transformation
      * to the output of the previous one.
      */
-    public function transform($w)
+    public function transform(string $w): string
     {
-        $class = $this->cls->classify(
+        $class = $this->classifier->classify(
             $this->classes,
             new RawDocument($w)
         );
@@ -52,14 +56,14 @@ class ClassifierBasedTransformation implements TransformationInterface
     /**
      * Register a set of transformations for a given class.
      *
-     * @param string $class
-     * @param array|TransformationInterface Either an array of transformations or a single transformation
+     * @param array<string, mixed>|TransformationInterface $transforms Either an array of transformations or a single transformation
      */
-    public function register($class, $transforms)
+    public function register(string $class, array|TransformationInterface $transforms): void
     {
         if (!is_array($transforms)) {
-            $transforms = array($transforms);
+            $transforms = [$transforms];
         }
+
         foreach ($transforms as $t) {
             if (!($t instanceof TransformationInterface)) {
                 throw new \InvalidArgumentException("Only instances of TransformationInterface can be registered");
@@ -68,11 +72,11 @@ class ClassifierBasedTransformation implements TransformationInterface
 
         if (!isset($this->transforms[$class])) {
             $this->classes[] = $class;
-            $this->transforms[$class] = array();
+            $this->transforms[$class] = [];
         }
 
-        foreach ($transforms as $t) {
-            $this->transforms[$class][] = $t;
+        foreach ($transforms as $transform) {
+            $this->transforms[$class][] = $transform;
         }
     }
 }
